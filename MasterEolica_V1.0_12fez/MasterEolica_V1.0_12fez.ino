@@ -26,8 +26,7 @@ Adafruit_BMP280 bmp; //OBJETO DO TIPO Adafruit_BMP280 (I2C)
 byte outData = 1;
 float inByte = 0;
 String inString = "";        //string para armazenar bytes enviados pelo slave
-                                                           // D11 será Rx e o D10 será TX no Arduino(2)
-
+                                                           
 
 // Assign output variables to GPIO pins
 const int output26 = 26;
@@ -42,6 +41,8 @@ const int output27 = 27;
 #define GPIOpotpitch 36 //leitura da tensão do sistema de controle
 #define GPIOpotnacele 39 //leitura da tensão do sistema de pontência
 #define sinlight 15 //luz de sinalização 
+#define rtFree 8
+#define rtBrake 12
 
 
 //Variáveis da mediçnao de RPM
@@ -71,6 +72,8 @@ String ncState = "liberate";
 String rtState = "liberate";
 String Tgerador = "";
 String ponto = "";
+
+
 
 //variáveis sensores
 float tempgerador = 0;
@@ -114,9 +117,10 @@ int olddeg = 0; //guarda o último valor de deg
 int tent = 0; //tentativas de correção de posição
 int tent1 = 0; //tentativas de correção de posição com precisão
 int i1 = 0;
-int mediapot = 0; //media do potenciomentro 200 medições
+int medpot = 0; //media do potenciomentro 200 medições
 int tempo14 = 0;//tempo máximo para anular o loop de giro da nacele
 int brake = 0;
+
 
 //SET da mini met
 //biblioteca ro recepção via RF
@@ -168,6 +172,8 @@ bmp.begin(0x76);
   pinMode(arref, OUTPUT);
   pinMode(ncBrake, OUTPUT);
   pinMode(ncFree, OUTPUT);
+   pinMode(rtBrake, OUTPUT);
+  pinMode(rtFree, OUTPUT);
   pinMode(sinlight, OUTPUT);
     //set dos pinos do motor de rotaão da nacele
   pinMode(pwmH, OUTPUT);
@@ -191,6 +197,8 @@ bmp.begin(0x76);
   digitalWrite(arref, HIGH);
   digitalWrite(ncBrake, HIGH);
   digitalWrite(ncFree, HIGH);
+    digitalWrite(rtBrake, LOW);
+  digitalWrite(rtFree, LOW);
   digitalWrite(sinlight, HIGH);
     digitalWrite(pwmH, LOW);
   digitalWrite(pwmA, LOW);
@@ -385,15 +393,6 @@ tPot = tPot/20;
 b=0;
 
 
-//para a leitura da posição da nacele
-posiAt=0;
-while(b <= 30){
-posiAt = analogRead(GPIOpotnacele)+posiAt;
-b++;
-} 
-posiAt = posiAt/30;
-posiAt = map(posiAt, 0, 3000, 0, 359);
-b=0;
 
 
 //para a leitura da posição de angulo de pitch
@@ -419,12 +418,12 @@ attachInterrupt(digitalPinToInterrupt(35), addcount, FALLING);
   }
 
 
-mediapotnacele();
+mediapot();
   
  
 }
 
-void mediapotnacele(){
+void mediapot(){
   while(i1<20)  {
   medpot = medpot + (map(analogRead(pot), 68, 945, 0, 359));
   i1++;
@@ -765,7 +764,7 @@ if(deg < medpot){
 }
 
 //para um ajuste de precisão -> inter <= 10
-if(deg != mediapot & tent1 <= 2 & inter <= 10){
+if(deg != medpot & tent1 <= 2 & inter <= 10){
 Serial.print("Ajuste de precisão");
 lcd.setCursor(5, 1);
 lcd.print(deg);
@@ -994,17 +993,17 @@ void brakerotor(){
 
 if((millis() - tempo3) >= 80 & pwmbrake < 255 & brake == 1){
   pwmbrake++; 
-  analogWrite(rtBreak, pwmbreak);
+  analogWrite(rtBrake, pwmbrake);
   tempo3 = millis();
   rtState = "locking";
 }
 
 if(pwmbreak == 255 & (millis()-tempo3) >= 200 & brake == 1){
-  analogWrite(rtBreak, LOW);
+  digitalWrite(rtBrake, LOW);
   brake=0;
   tempo3=0;
   rtState = "locked";
-  pwmBreak=0;
+  pwmbrake=0;
 }
   
 
@@ -1014,13 +1013,13 @@ if(pwmbreak == 255 & (millis()-tempo3) >= 200 & brake == 1){
 //function to free the rotor rotation
 void freerotor(){
 
-analogWrite(rtFree, HIGH);
+digitalWrite(rtFree, HIGH);
 delay(500);
-analogWrite(rtFree, LOW);
+digitalWrite(rtFree, LOW);
 delay(100):
-analogWrite(rtFree, HIGH);
+digitalWrite(rtFree, HIGH);
 delay(200);
-analogWrite(rtFree, LOW);
+digitalWrite(rtFree, LOW);
   
 rtState = "liberate"; 
 
