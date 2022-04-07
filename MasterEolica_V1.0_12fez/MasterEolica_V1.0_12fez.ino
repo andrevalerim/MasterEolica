@@ -522,6 +522,9 @@ a=0;
 //bloaqueio automático do rotor com base em alta rpm - para entrar nesta função o pitch deve ter falhado.
 if(rpm >= 3500 & brake == 0){
   brake = 1;
+
+
+  
 }
 if(rpm < 500 & brake == 1){ //liberação do rotor
   freerotor();
@@ -534,7 +537,7 @@ if(brake == 1){
 }
 
 
-
+ajustenacele();
 
 }//fim do operation()
 
@@ -596,7 +599,7 @@ if((medpot-posi) > (inter*0.25)  & (millis()-tempo1) > 150){
      }
 }
 
-analogWrite(pwmH, valpwm);//envia os dados para a pontencia
+ledcWrite(pwmH, valpwm);//envia os dados para a pontencia
 
 //printa os novos valores na serial e lcd
 if(millis()-tempo3 > 500){
@@ -643,8 +646,8 @@ Serial.println(valpwm);
 
 /*/anula o loop se passar de 4 min
  if((millis()-tempo14) > (300000)){
- analogWrite(pwmH, 0);
- analogWrite(pwmA, 0);
+ ledcWrite(pwmH, 0);
+ ledcWrite(pwmA, 0);
  tent=10;
  tent1=10;
  lcd.clear();
@@ -657,8 +660,8 @@ Serial.println(valpwm);
  }*/
  
 }
- analogWrite(pwmH, 0);
- analogWrite(pwmA, 0);
+ ledcWrite(pwmH, 0);
+ ledcWrite(pwmA, 0);
  lcd.clear();
 
 mediapot();//atualiza os valores de posição
@@ -688,7 +691,7 @@ if((posi-medpot) > (inter*0.25)  & (millis()-tempo1) > 150){
      }
 }
 
-analogWrite(pwmA, valpwm);//envia os dados para a pontencia
+ledcWrite(pwmA, valpwm);//envia os dados para a pontencia
 
 //printa os novos valores na serial e lcd
 if(millis()-tempo3 > 500){
@@ -735,8 +738,8 @@ Serial.println(valpwm);
 
 /*/anula o loop se passar de 2.5 min
  if((millis()-tempo14) > (300000)){
- analogWrite(pwmH, 0);
- analogWrite(pwmA, 0);
+ ledcWrite(pwmH, 0);
+ ledcWrite(pwmA, 0);
  tent=10;
  tent1=10;
  lcd.clear();
@@ -749,8 +752,8 @@ Serial.println(valpwm);
  }*/
  
 }
- analogWrite(pwmH, 0);
- analogWrite(pwmA, 0);
+ ledcWrite(pwmH, 0);
+ ledcWrite(pwmA, 0);
   lcd.clear();
 }//fim do ajuste normal
 
@@ -791,7 +794,7 @@ if((millis()-tempo1) > 50){
      }
 }
 
-analogWrite(pwmH, valpwm);//envia os dados para a pontencia
+ledcWrite(pwmH, valpwm);//envia os dados para a pontencia
 
 //printa os novos valores na serial e lcd
 if(millis()-tempo3 > 500){
@@ -837,8 +840,8 @@ Serial.println(valpwm);
  }
  /*/anula o loop se passar de 30 seg
  if((millis()-tempo14) > (120000)){
- analogWrite(pwmH, 0);
- analogWrite(pwmA, 0);
+ ledcWrite(pwmH, 0);
+ ledcWrite(pwmA, 0);
  tent=10;
  tent1=10;
  lcd.clear();
@@ -850,8 +853,8 @@ Serial.println(valpwm);
   break;
  }*/
 }
- analogWrite(pwmH, 0);
- analogWrite(pwmA, 0);
+ ledcWrite(pwmH, 0);
+ ledcWrite(pwmA, 0);
 lcd.clear();
 mediapot();//atualiza os valores de posição
 
@@ -871,7 +874,7 @@ if((millis()-tempo1) > 10){
      }
 }
 
-analogWrite(pwmA, valpwm);//envia os dados para a pontencia
+ledcWrite(pwmA, valpwm);//envia os dados para a pontencia
 
 //printa os novos valores na serial e lcd
 if(millis()-tempo3 > 500){
@@ -917,8 +920,8 @@ Serial.println(valpwm);
  }
  /*/anula o loop se passar de 30 seg
  if((millis()-tempo14) > (120000)){
- analogWrite(pwmH, 0);
- analogWrite(pwmA, 0);
+ ledcWrite(pwmH, 0);
+ ledcWrite(pwmA, 0);
  tent=10;
  tent1=10;
  lcd.clear();
@@ -930,8 +933,8 @@ Serial.println(valpwm);
   break;
  }*/
 }
- analogWrite(pwmH, 0);
- analogWrite(pwmA, 0);
+ ledcWrite(pwmH, 0);
+ ledcWrite(pwmA, 0);
  lcd.clear();
 }//fim do ajuste de presisão
 
@@ -993,12 +996,12 @@ void brakerotor(){
 
 if((millis() - tempo3) >= 80 & pwmbrake < 255 & brake == 1){
   pwmbrake++; 
-  analogWrite(rtBrake, pwmbrake);
+  ledcWrite(rtBrake, pwmbrake);
   tempo3 = millis();
   rtState = "locking";
 }
 
-if(pwmbreak == 255 & (millis()-tempo3) >= 200 & brake == 1){
+if(pwmbrake == 255 & (millis()-tempo3) >= 200 & brake == 1){
   digitalWrite(rtBrake, LOW);
   brake=0;
   tempo3=0;
@@ -1016,7 +1019,7 @@ void freerotor(){
 digitalWrite(rtFree, HIGH);
 delay(500);
 digitalWrite(rtFree, LOW);
-delay(100):
+delay(100);
 digitalWrite(rtFree, HIGH);
 delay(200);
 digitalWrite(rtFree, LOW);
