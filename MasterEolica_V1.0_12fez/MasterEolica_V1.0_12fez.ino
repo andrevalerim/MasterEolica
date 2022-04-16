@@ -1,7 +1,7 @@
 /*********
 Sistema de Controle Torre Eolica - Plus Energy
 Alef J.
-André V de Freitas
+André V. de Freitas
 *********/
 
 // Load Wi-Fi library
@@ -9,6 +9,10 @@ André V de Freitas
 #include <ESPmDNS.h>
 #include <WiFiUdp.h>
 #include <ArduinoOTA.h>
+
+// Load tratar os dados em tempo real
+#include <ESPAsyncWebServer.h>
+#include <DHT.h>
 
 //for liquidcristal_I2C
 #include <LiquidCrystal_I2C.h>;
@@ -72,7 +76,6 @@ String ncState = "liberate";
 String rtState = "liberate";
 String Tgerador = "";
 String ponto = "";
-
 
 
 //variáveis sensores
@@ -1144,7 +1147,7 @@ void sinalization(){
             client.println("function pedeSenha(){var senha = prompt(\"Digite a senha para continuar\")if (senha != null) {if (senha == \"pluseamelhor\") {alert(\"Deu bom!\")} else {alert(\"Senha Incorreta!\")}}}function alerta() {var escolha = confirm(\"Essa operacao pode comprometer o sistema, deseja continuar?\")if (escolha == true) {pedeSenha();}}</script></html>");
 
 
-
+  
 
             
             // Display the HTML web page
