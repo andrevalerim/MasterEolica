@@ -34,8 +34,11 @@ AsyncWebServer server(80);
 // Lendo sensores e criando as Strings para exibicao
 int cont = 0;
 int cont1 = 0;
-int btnLed = 0;
-int btnCont = 0;
+
+//Declarando as variaveis de captura dos paramentros
+String btnNaceleMsg1;
+String btnNaceleMsg2;
+int btnNaceleMsg2int = 0;
 
 //Controle webpage
 const char* PARAM_INPUT_1 = "output";
@@ -197,7 +200,11 @@ String processor(const String &var)
   if(var == "BUTTONPLACEHOLDER"){
     String buttons = "";
     buttons += "<div><p class=\"dht-labels\">Velocidade</p><input type=\"text\" name=\"velocidade\" id=\"velocidade\" placeholder=\"30 Km/h\" value="" disabled></div>";
-    buttons += "<div><p class=\"dht-labels\">Led Placa</p><button id=\"freioNacele\" class=\"button button-off\" onclick='mudaEstado(\"freioNacele\");toggleBtn(\"freioNacele\")'>OFF</button></div>";
+    if(btnNaceleMsg2int == 0){
+      buttons += "<div><p class=\"dht-labels\">Led Placa</p><button id=\"freioNacele\" class=\"button button-off\" onclick='mudaEstado(\"freioNacele\");toggleBtn(\"freioNacele\")'>OFF</button></div>";
+    }else if(btnNaceleMsg2int == 1){
+      buttons += "<div><p class=\"dht-labels\">Led Placa</p><button id=\"freioNacele\" class=\"button button-on\" onclick='mudaEstado(\"freioNacele\");toggleBtn(\"freioNacele\")'>ON</button></div>";
+    }
     return buttons;
     }else if (var == "TEMPERATURE")
   {
@@ -241,9 +248,6 @@ void setup()
  
   // Send a GET request to <ESP_IP>/update?output=<btnNaceleMsg1>&state=<btnNaceleMsg2>
   server.on("/atualizaBtn", HTTP_GET, [](AsyncWebServerRequest *request){
-            //Declarando as variaveis
-            String btnNaceleMsg1;
-            String btnNaceleMsg2;
 
             // GET input1 value on <ESP_IP>/atualizaBtn?output=<btnNaceleMsg1>&state=<btnNaceleMsg2>
             if(request->hasParam(PARAM_INPUT_1) && request->hasParam(PARAM_INPUT_2)){
@@ -252,7 +256,6 @@ void setup()
                 btnNaceleMsg1 = request->getParam(PARAM_INPUT_1)->value();
                 btnNaceleMsg2 = request->getParam(PARAM_INPUT_2)->value();
 
-                int btnNaceleMsg2int = 0;
                 btnNaceleMsg2int = btnNaceleMsg2.toInt();
 
                 //(TEORICAMENTE MUDARIA O ESTADO DO OBJETO LIGADO AO GPIO)
