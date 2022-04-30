@@ -278,6 +278,11 @@ const char index_html[] PROGMEM = R"rawliteral(
             background-color: #348137;
             border: #dfdddd solid 3px;
         }
+
+  
+
+
+        
   </style>
 </head>
 <body>
@@ -537,34 +542,34 @@ void setup()
   //---------------------------
   //  Send a GET request to <ESP_IP>/update?output=<btnNaceleMsg1>&state=<btnNaceleMsg2>
   server.on("/atualizaBtn", HTTP_GET, [](AsyncWebServerRequest *request)
-            {
+          {
 
-            // GET input1 value on <ESP_IP>/atualizaBtn?output=<btnNaceleMsg1>&state=<btnNaceleMsg2>
-            if(request->hasParam(PARAM_INPUT_1) && request->hasParam(PARAM_INPUT_2)){
+          // GET input1 value on <ESP_IP>/atualizaBtn?output=<btnNaceleMsg1>&state=<btnNaceleMsg2>
+          if(request->hasParam(PARAM_INPUT_1) && request->hasParam(PARAM_INPUT_2)){
 
-                //Captura os valores do request
-                btnParam1 = request->getParam(PARAM_INPUT_1)->value();
-                btnParam2 = request->getParam(PARAM_INPUT_2)->value();
+              //Captura os valores do request
+              btnParam1 = request->getParam(PARAM_INPUT_1)->value();
+              btnParam2 = request->getParam(PARAM_INPUT_2)->value();
 
-                btnParam2Int = btnParam2.toInt();
+              btnParam2Int = btnParam2.toInt();
 
-                //(TEORICAMENTE MUDARIA O ESTADO DO OBJETO LIGADO AO GPIO)
-                //digitalWrite(btnNaceleMsg, btnNaceleMsg2.toInt());
+              //(TEORICAMENTE MUDARIA O ESTADO DO OBJETO LIGADO AO GPIO)
+              //digitalWrite(btnNaceleMsg, btnNaceleMsg2.toInt());
 
-                //MAS VAMOS FAZER DE OUTRA FORMA
-                if(btnParam2Int == 0){
-                  digitalWrite(LED_BUILTIN,LOW);
-                }else if(btnParam2Int == 1){
-                  digitalWrite(LED_BUILTIN, HIGH);
-                }
-            }else{
+              //MAS VAMOS FAZER DE OUTRA FORMA
+              if(btnParam2Int == 0){
+                digitalWrite(LED_BUILTIN,LOW);
+              }else if(btnParam2Int == 1){
+                digitalWrite(LED_BUILTIN, HIGH);
+              }else{
               btnParam1 = "--";
               btnParam2 = "--";
-            }
+              }
               Serial.print("GPIO: ");
               Serial.print(btnParam1);
               Serial.print(" - Set to: ");
               Serial.println(btnParam2);
+          }
               request->send(200, "text/plain", "OK"); });
   //---------------------------
 
@@ -604,7 +609,7 @@ void loop()
 {
 
   // INICIA AS FUNÇÕES
-  ------------------------
+  //------------------------
   readsensors(); 
   
   readminimet(); 
@@ -614,7 +619,7 @@ void loop()
   sinalization();
 
  //PPRINTA NO LCD
- -------------------------
+ //-------------------------
  //print no display
  while((millis()-time2) >= 500){
   time2 = millis();
