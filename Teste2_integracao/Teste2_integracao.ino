@@ -236,25 +236,77 @@ String readDHTVelocidade()
 
 // Configurando a pagina web
 const char index_html[] PROGMEM = R"rawliteral(
-<!DOCTYPE HTML><html>
+<!DOCTYPE html>
+<html lang="en">
 <head>
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <style>
-    html {
-     font-family: Arial;
-     display: inline-block;
-     margin: 0px auto;
-     text-align: center;
-    }
-    h2 { font-size: 3.0rem; }
-    p { font-size: 3.0rem; }
-    .units { font-size: 1.2rem; }
-    .dht-labels{
-      font-size: 1.5rem;
-      vertical-align:middle;
-      padding-bottom: 15px;
-    }
-    .button {
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- Icone barra-->
+    <!-- <link rel="icon" href="img/plus energy png em baixo.png"> -->
+    <title>Sistema de Gerenciamento Torre Eolica - Plus Energy</title>
+    
+    <!-- Estilizacao
+    ================ -->
+    <style type="text/css">
+        /* Geral */
+        html {  
+            font-family: Helvetica;
+            font-size: 16px;
+            /* margin: 20 auto; */
+            text-align: left;
+            /* Fundo */
+            /* background-color: #f8f8ff; */
+            background-color: #bff1fa;
+            /* background-image: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url(img/fundo.svg); */
+            background-repeat: repeat-y;
+            background-size: cover;}
+            
+        input {
+            padding: 2.5px 2.5px;
+            font-size: 1.5rem;
+            width: 7rem;
+            height: 2.5rem;
+            text-align: center;
+            border: #666666 solid 2px;
+            border-radius: 7%;
+            background-color: #e4e4e4;}
+
+        h2 {
+            color: #00777e;
+            margin: 0.5rem 0rem;
+            font-weight: 500;}
+
+        body::-webkit-scrollbar {
+            width: 12px;
+            /* width of the entire scrollbar */}
+
+        body::-webkit-scrollbar-track {
+            background: #00AAB4;
+            /* color of the tracking area */}
+
+        body::-webkit-scrollbar-thumb {
+            background-color: #b1ffb1;
+            /* color of the scroll thumb */
+            border-radius: 20px;
+            /* roundness of the scroll thumb */
+            border: 3px solid #00AAB4;
+            /* creates padding around scroll thumb */}
+
+        /* Elementos */
+
+        /* .button {
+            background-color: #555555;
+            border: none;
+            color: white;
+            padding: 16px 40px;
+            text-decoration: none;
+            font-size: 30px;
+            margin: 2px;
+            cursor: pointer;
+        } */
+
+        .button {
             color: white;
             padding: 0.5rem 1rem;
             text-decoration: none;
@@ -262,45 +314,556 @@ const char index_html[] PROGMEM = R"rawliteral(
             margin: 0.1rem;
             cursor: pointer;
             text-align: center;
-            border: #969595 solid 3px;
-        }
+            border: #969595 solid 3px;}
 
         .button:hover {
             background-color: #4CAF50;
-            border: #dfdddd solid 3px;
-        }
+            border: #dfdddd solid 3px;}
 
         .button-off {
-            background-color: #afafaf;
-        }
+            background-color: #afafaf;}
 
         .button-on {
             background-color: #348137;
-            border: #dfdddd solid 3px;
-        }
+            border: #dfdddd solid 3px;}
 
-  
+        /* input{
+            padding: 2.5px 2.5px;
+            font-size: 1.5rem;
+            margin: 1rem 0.5rem;
+            width: 7rem;
+            height: 2.5rem;
+            text-align: center;
+            border:#666666 dotted 2px;
+            border-radius: 7%;
+            box-shadow: #747474 -1px 1px 7px;
+            background-color: #e4e4e4;
+        } */
+
+        input#status_sistema {
+            padding: 2.5px 2.5px;
+            font-size: 1.5rem;
+            margin: 3rem 0.5rem;
+            width: 7rem;
+            height: 2.5rem;
+            text-align: center;
+            border: #666666 dotted 2px;
+            border-radius: 7%;
+            box-shadow: #747474 -1px 1px 7px;
+            background-color: #e4e4e4;}
+
+        input#status_sistema.status_sistema_ativo {
+            background-color: #4CAF50;
+            color: white;}
+
+        input#status_atual_nacele {
+            padding: 2.5px 2.5px;
+            font-size: 1.5rem;
+            text-align: center;
+            border: #666666 dotted 2px;
+            border-radius: 7%;
+            box-shadow: #747474 -1px 1px 7px;
+            background-color: #e4e4e4;}
+
+        input#status_atual_nacele.status_atual_nacele_ok {
+            background-color: #4CAF50;
+            color: white;}
+
+        input#status_atual_pitch {
+            padding: 2.5px 2.5px;
+            font-size: 1.5rem;
+            text-align: center;
+            border: #666666 dotted 2px;
+            border-radius: 7%;
+            box-shadow: #747474 -1px 1px 7px;
+            background-color: #e4e4e4;}
 
 
-        
-  </style>
+        input#status_atual_pitch.status_atual_pitch_ok {
+            background-color: #4CAF50;
+            color: white; }
+
+        input.mostra_info {
+            padding: 2.5px 2.5px;
+            font-size: 1.5rem;
+            margin: 1rem 0.5rem;
+            width: 7rem;
+            height: 2.5rem;
+            text-align: center;
+            border: #666666 solid 2px;
+            border-radius: 5%;
+            /* box-shadow: #747474 -1px 1px 7px; */
+            background-color: #e4e4e4;}
+
+        /* Formatacões blocos e coluna */
+
+        .title-container {
+            /* background-color: #04d500; */
+            background-color: #2377a2;
+            text-align: center;
+            margin-top: -0.01rem;
+            margin-left: -0.1;
+            margin-right: -0.1rem;
+            margin-bottom: 0.6rem;
+            /* padding: 1rem; */
+            position: sticky;
+            top: 0;
+            border: 2px solid #ffffff;
+            padding-left: 0.5rem;
+            padding-right: 0.5rem;}
+
+        .wrapper {
+            display: grid;
+            /* border: red solid 2px; */}
+
+        .column-gap {
+            column-gap: 0.5rem;}
+
+        /* COLUNAS LINHA */
+
+        .grid-titulo {
+            grid-template-columns: 1fr 9fr;}
+
+        .grid-col-2-8-4 {
+            grid-template-columns: 2fr 8fr 4fr;}
+
+        .grid-col-8-2 {
+            grid-template-columns: 8fr 2fr;}
+
+        /* Blocos */
+        .grid-col {
+            grid-template-columns: 1fr;}
+
+        .grid-col-2 {
+            grid-template-columns: 1fr 1fr;}
+
+        .grid-col-3-repeat {
+            grid-template-columns: repeat(3, 3fr);}
+
+        .grid-col-4-repeat {
+            grid-template-columns: repeat(2, 2fr) 3fr 3fr;}
+
+        /* .wrapper>div {
+            border: red solid 2px;
+        } */
+
+        .bloco-col {
+            border-right: #7c7c7c7c groove 0.1rem;
+            text-align: center;
+            padding-top: 0.5rem;
+            padding-bottom: 0.5rem;}
+
+        /* Formatacões gerais: alinhamentos, marges, paddings... */
+
+        /* .border-r {
+            border-right: #7c7c7c7c groove 0.1rem;
+            margin-right: 0rem;
+            padding-right: 1.2rem;
+        } */
+
+        .border-row {
+            border: #00AAB4 solid 0.2rem;
+            border-radius: 5px;}
+
+        .border-none {
+            border: none;}
+
+        .img-title {
+            margin-top: 0.5rem;}
+
+        .background-img {
+            background-color: #fff;
+            margin-left: -0.6rem;}
+
+        .hr {
+            width: 45%;
+            border: #999999b2 solid 0.5px;
+            background: #747474;
+            margin-top: -0.1rem;
+            margin-bottom: 0.7rem;}
+
+        .mt-05 {
+            margin-top: 0.5rem;}
+
+        .mt-1 {
+            margin-top: 1rem;}
+
+        .mt-105 {
+            margin-top: 1.5rem;}
+
+        .mb-05{
+            margin-bottom: 0.5rem;}
+
+        .mb-1{
+            margin-bottom: 1rem;}
+
+        .mb-105{
+            margin-bottom: 1.5rem; }
+
+        .pt-1 {
+            padding-top: 1rem;}
+
+        .pt-2 {
+            padding-top: 1.5rem;}
+
+        .py-2 {
+            padding-top: 3rem;
+            padding-bottom: 2rem;}
+
+        .align-center {
+            text-align: center;}
+
+        .center {
+            align-self: center;}
+
+        .background-rows {
+            background-color: #f8f8ff;}
+
+        /* Textos */
+
+        .p-col-title {
+            color: #00AAB4;
+            text-align: center;
+            font-size: 1.2rem;
+            margin-bottom: 0.2rem;
+            margin-top: 0.2rem;}
+
+        .p-dado-sensor{
+            color:#666666;
+            text-align: center;
+            font-size: 1.2rem;}
+
+        #h1-title {
+            font-size: 2.0rem;
+            text-align: center;
+            /* color: #0099D8; */
+            color: #fff;
+            text-transform: uppercase;
+            padding-right: 1.5rem;}  
+    </style>
 </head>
 <body>
-  <h2>ESP32 DHT Server</h2>
-  <p>
-    <span class="dht-labels">Temperature</span>
-    <!--%TEMPEREATURE% -> é um placeholder que é subtituido ao processar o codigo-->
-    <span id="temperature">%TEMPERATURE%</span>
-    <!--Acompanha o <p> principal-->
-    <sup class="units">&deg;C</sup>
-  </p>
-  <div>
-    %BUTTONPLACEHOLDER%
-  </div>
+     <!-- (CASO NECESSÁRIO) PLACEHOLDER BOTOES COL1_LIN1_1 Freio Nacele (COL = Coluna | LIN = Linha | Número = Parte)-->
+     <!--%BOTOES_COL1_LIN_1% -> é um placeholder que é subtituido ao processar o codigo-->
+     <!--%BOTOES_COL1_LIN1_1%-->
+    <div class="wrapper display-sticky title-container">
+        <div>
+            <h1 id="h1-title" class="">Sistema de Controle - Torre Eolica</h1>
+        </div>
+    </div>
+
+    <!-- Linha 1 -->
+    <div class="wrapper grid-col-8-2 column-gap ">
+
+        <!-- Coluna 1 -->
+        <div class="wrapper grid-col-4-repeat background-rows border-row">
+            <div class="bloco-col pt-1">       
+               <div>
+                    <p class="p-col-title">RPM Rotor</p>
+                    <p class="p-dado-sensor">
+                        <span id="rpm_rotor">%RPMROTOR%</span>
+                    </p>
+                    <!--<input type="text" name="rpm_rotor" id="rpm_rotor" class="mostra_info" placeholder="30 RPM"
+                        disabled>-->
+                </div>
+                <div class="mt-105 pt-1">
+                    <p class="p-col-title">RPM Gerador</p>
+                    <p class="p-dado-sensor">
+                        <span id="rpm_gerador">%RPMGERADOR%</span>
+                    </p>
+                </div>
+            </div>
+            <div class="bloco-col pt-1">
+              <div>
+                    <p class="p-col-title">Temperatura Externa</p>
+                    <p class="p-dado-sensor">
+                        <span id="temp_externa">%TEMPEXTERNA%</span>
+                        <sup class="units">&deg;C</sup>
+                    </p>
+                </div>
+                <div class="mt-105 pt-1">
+                    <p class="p-col-title">Temperatura Gerador</p>
+                    <p class="p-dado-sensor">
+                        <span id="temp_gerador">%TEMPGERADOR%</span>
+                        <sup class="units">&deg;C</sup>
+                    </p>
+                </div>
+            </div>
+            <div class="bloco-col pt-1">
+              <div>
+                    <p class="p-col-title">Temperatura Externa</p>
+                    <p class="p-dado-sensor">
+                        <span id="temp_externa">%TEMPEXTERNA%</span>
+                        <sup class="units">&deg;C</sup>
+                    </p>
+                </div>
+                <div class="mt-105 pt-1">
+                    <p class="p-col-title">Temperatura Gerador</p>
+                    <p class="p-dado-sensor">
+                        <span id="temp_gerador">%TEMPGERADOR%</span>
+                        <sup class="units">&deg;C</sup>
+                    </p>
+                </div>
+            </div>
+            <div class="bloco-col pt-1 border-none">
+              <div>
+                    <p class="p-col-title">Tensao Sistema</p>
+                    <p class="p-dado-sensor">
+                        <span id="tensao_sistema">%TENSAOSISTEMA%</span>
+                    </p>
+                </div>
+                <div class="mt-105 pt-1">
+                    <p class="p-col-title">Tensao Sis. Polo</p>
+                    <p class="p-dado-sensor">
+                        <span id="tensao_sistema_polo">%TENSAOSISTEMAPOLO%</span>
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Coluna 2 -->
+        <div class="bloco-col pt-1 background-rows border-row">
+            <p class="p-col-title">Status Sistema</p>
+            <input type="text" name="status_sistema" id="status_sistema" placeholder="OFF" disabled>
+        </div>
+    </div>
+
+    <!-- Linha 2 -->
+    <div class="wrapper grid-col background-rows border-row mt-1">
+        <div class="wrapper grid-col-3-repeat">
+        
+            <!-- Primeira coluna-->
+            <div class="bloco-col">
+
+                <!-- Titulo secao -->
+                <h2>Estacao Metereologica</h2>
+                <hr class="hr">
+
+                <div class="wrapper grid-col-2">
+                    <!-- Primeira Parte -->
+                    <div>
+                        <div>
+                            <p class="p-col-title">Velocidade</p>
+                            <p class="p-dado-sensor">
+                                <span id="velocidade_met">%VELOCIDADE%</span>
+                            </p>
+                        </div>
+                        <div class="mt-105 pt-1">
+                            <p class="p-col-title">Direcao Atual</p>
+                            <p class="p-dado-sensor">
+                                <span id="direcao_atual_met">%DIRECAOATUALMET%</span>
+                            </p>
+                        </div>
+                    </div>
+
+                    <!-- Segunda Parte -->
+                    <div>
+                        <div>
+                            <p class="p-col-title">Velocidade Media</p>
+                            <p class="p-dado-sensor">
+                                <span id="velocidade_media_met">%VELOCIDADEMEDIAMET%</span>
+                            </p> 
+                        </div>
+                        <div class="mt-105 pt-1">
+                            <p class="p-col-title">Direcao Final</p>
+                            <p class="p-dado-sensor">
+                                <span id="direcao_final_met">%DIRECAOFINALMET%</span>
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Segunda Coluna -->
+            <div class="bloco-col">
+
+                <!-- Titulo secao -->
+                <h2>Posicionamento da Nacele</h2>
+                <hr class="hr">
+
+                <div class="wrapper grid-col-2">
+
+                    <!-- Primeira Parte -->
+                    <div>
+                        <div>
+                            <p class="p-col-title">Posicao Atual</p>
+                            <p class="p-dado-sensor">
+                                <span id="posica_atual_nacele">%POSICAOATUALNACELE%</span>
+                            </p>
+                        </div>
+                        <div class="mt-105 pt-1">
+                            <p class="p-col-title">......</p>
+                            <button id="...." class="button button-off" onclick='mudaEstado("....")'>OFF</button>
+                        </div>
+                    </div>
+
+                    <!-- Segunda Parte -->
+                    <div>
+                        <div>
+                            <p class="p-col-title">Modo</p>
+                            <input type="text" name="modo_nacele" id="modo_nacele" class="mostra_info" placeholder=""
+                                disabled>
+                        </div>
+                        <div>
+                            <p class="p-col-title">Status Atual</p>
+                            <input type="text" name="status_atual_nacele" id="status_atual_nacele"
+                                class="status_atual_nacele_ok" placeholder="OK" disabled>
+                        </div>
+                    </div>
+                </div>
+            </div>
+             <!-- Terceira Coluna -->
+            <div class="bloco-col">
+
+                <!-- Titulo secao -->
+                <h2>Posicionamento Controle de Pitch</h2>
+                <hr class="hr">
+
+                <div class="wrapper grid-col-2">
+
+                    <!-- Primeira Parte -->
+                    <div class="center">
+                        <p class="p-col-title">Angulo Atual</p>
+                        <p class="p-dado-sensor">Velocidade</p>
+                    </div>
+
+                    <!-- Segunda Parte -->
+                    <div>
+                        <div>
+                            <p class="p-col-title">Modo</p>
+                            <input type="text" name="modo_atual_pitch" id="modo_atual_pitch" class="mostra_info"
+                                placeholder="30" disabled>
+                        </div>
+                        <div>
+                            <p class="p-col-title">Status Atual</p>
+
+                            <input type="text" name="status_atual_pitch" id="status_atual_pitch"
+                                class="status_atual_pitch_ok" placeholder="OK" disabled>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Linha 3 -->
+    <div class="wrapper grid-col-2-8-4 column-gap mt-1">
+
+        <!-- Coluna 1 -->
+        <div class="background-rows border-row">
+
+            <div class="bloco-col border-none">
+
+                <!-- Titulo secao -->
+                <h2>Manual</h2>
+                <hr class="hr">
+
+                <!-- PLACEHOLDER BOTOES COL1_LIN3_1-->
+                %BOTOES_COL1_LIN3_1%
+                
+             </div>
+         </div>
+         
+         <!-- Coluna 2 -->
+         <div class="wrapper grid-col-2 background-rows border-row">
+            <div class="bloco-col py-2">
+
+                <!-- Titulo secao -->
+                <h2>Ajuste de posicao</h2>
+                <hr class="hr">
+
+
+                <!-- Primeira Parte -->
+                <div>
+                    <div class="mt-105">
+                        <p class="p-col-title">Ativar Modo Manual</p>
+                        <button id="modoManualPosicao" class="button button-off"
+                            onclick='capturaElemento("modoManualPosicao");alerta();'>OFF</button>
+                    </div>
+                    <div class="mt-105">
+                        <p class="p-col-title">Posicionamento Manual em Graus</p>
+                        <form action="">
+                            <input type="number" min="0" max="359" id="posicaoManualGraus" name="posicaoManualGraus"
+                                onkeyup='controlaGrau("posicao")' placeholder="0º">
+                            <button id="modoManualPosicaoEnviar" class="button button-off">Enviar</button>
+                        </form>
+                        <!-- <button id="modoManual" class="button button-off" onclick='capturaElemento("modoManual");alerta();'>OFF</button> -->
+                    </div>
+                </div>
+            </div>
+
+            <div class="bloco-col py-2">
+                <!-- Titulo secao -->
+                <h2>Ajuste de Pitch</h2>
+                <hr class="hr">
+
+                <!-- Segunda Parte -->
+                <div>
+                    <div class="mt-105">
+                        <p class="p-col-title">Ativar Modo Manual</p>
+                        <button class="button button-off" onclick='capturaElemento("modoManualPitch");alerta();'>OFF</button>
+                    </div>
+                    <div class="mt-105">
+                        <p class="p-col-title">Posicionamento Manual em Graus</p>
+                        <form action="">
+                            <input type="number" min="0" max="359" id="pitchManualGraus" name="pitchManualGraus"
+                                onkeyup='controlaGrau("pitch")' placeholder="0º">
+                            <button id="modoManualPitchEnviar" class="button button-off">Enviar</button>
+                        </form>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Coluna 3 -->
+        <div class="background-rows border-row wrapper ">
+            <div class="bloco-col py-2 border-none">
+
+                <!-- Titulo secao -->
+                <h2>Seguranca</h2>
+                <hr class="hr">
+
+                <div class="wrapper grid-col-2">
+
+                    <!-- Primeira Parte -->
+                    <div>
+                        <div>
+                            <p class="p-col-title">Parada de <br>Emergencia</p>
+                            <button id="paradaEmergencia" class="button button-off" onclick='capturaElemento("paradaEmergencia");alerta();'>OFF</button>
+                        </div>
+                        <div class="mt-105">
+                            <p class="p-col-title">Auto</p>
+                            <button id="Auto" class="button button-off" onclick='capturaElemento("auto");alerta();'>OFF</button>
+
+                        </div>
+                    </div>
+
+                    <!-- Segunda Parte -->
+                    <div>
+                        <div>
+                            <p class="p-col-title">Reiniciar <br>Sistema</p>
+                            <button id="reinicarSistema" class="button button-off" onclick='capturaElemento("reinicarSistema");alerta();'>OFF</button>
+                        </div>
+                        <div class="mt-105">
+                            <p class="p-col-title">Atuali...</p>
+                            <button id="Atuali..." class="button button-off" onclick='capturaElemento("Atuali...");alerta();'>OFF</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+     </div>
 </body>
+
+<!-- JavaScript
+    ================ -->
+    
 <script>
 
+//Declarando as funcoes criadas (Declarar as funcoes usando - const = *nome funcao* function(){} - pq ele nao reconhce o function)
 //Declarando as variaveis
+const locker = "pluseamelhor";
 var elemento = ""
 
 //Faz as requisiçoes
@@ -326,7 +889,97 @@ setInterval(function ( ) {
   xhttp.send();
 }, 500 ) ;
 
-//Declarando as funcoes criadas (Declarar as funcoes usando - const = *nome funcao* function(){} - pq ele nao reconhce o function)
+const = function pedeSenha() {
+
+        var senha = prompt("Digite a senha para continuar")
+
+        if (senha != null) {
+            if (senha == "pluseamelhor") {
+                alert("Deu bom!")
+                mudaEstado(elemento);
+            } else {
+                alert("Senha Incorreta!")
+            }
+        }
+
+    }
+
+const = function alerta() {
+        var verifica = document.getElementById(elemento).classList.contains("button-on");
+
+        if (verifica == false) {
+            var escolha = confirm("Essa operacao pode comprometer o sistema, deseja continuar?")
+            if (escolha == true) {
+                pedeSenha();
+            }
+        } else {
+            mudaEstado(elemento);
+        }
+    }
+
+const = function capturaElemento(e) {
+        elemento = e;
+
+    }
+
+const mudaEstado = function(elemento) {
+        var verifica = document.getElementById(elemento).classList.contains("button-on")
+
+        if (verifica == false) {
+            document.getElementById(elemento).classList.toggle("button-off");
+            document.getElementById(elemento).classList.toggle("button-on");
+            document.getElementById(elemento).innerHTML = "ON"
+        } else {
+            document.getElementById(elemento).classList.toggle("button-on");
+            document.getElementById(elemento).classList.toggle("button-off");
+            document.getElementById(elemento).innerHTML = "OFF"
+        }
+    }
+
+const = function mudaEstadoStatus() {
+        var inputStatus = document.getElementById("status_sistema")
+
+        if (inputStatus.value == "OFF") {
+            inputStatus.classList.toggle("status_sistema_ativo")
+        } else if (inputStatus.value == "ON") {
+            inputStatus.classList.toggle("status_sistema_ativo")
+        }
+
+    }
+
+const = function controlaGrau(id) {
+        var input = "#" + id + "ManualGraus"
+        var inputGrau = document.querySelector(input)
+        var valor = inputGrau.value
+        var attrMax = inputGrau.getAttribute("max")
+        var attrMin = inputGrau.getAttribute("min")
+
+        // inputGrau.onkeyup = function(){}
+        console.log(inputGrau)
+        console.log(valor)
+        console.log(attrMax)
+        console.log(attrMin)
+
+        //Se for maior que o max altera para o min
+        if (valor > attrMax) {
+            inputGrau.value = 359 + "º"
+        }
+
+        //Se for menor que o min ele muda para o max
+        if (valor < attrMin) {
+            inputGrau.value = 359
+        }
+
+        //Se for vazio atribui vazio
+        if (valor == "") {
+            inputGrau.value = ""
+        }
+
+        //Se for valor certo forca ser certo 
+        if ((valor >= 0) && (valor <= 359)) {
+            inputGrau.value = valor
+        }
+    }
 
  //funcao nova
  const toggleBtn = function(botao){
@@ -341,24 +994,25 @@ setInterval(function ( ) {
   { xhr.open("GET", "/atualizaBtn?output="+botao+"&state=1", true); }
   else if (classeDesligada == true){ xhr.open("GET", "/atualizaBtn?output="+botao+"&state=0", true); }
   xhr.send();
- }
+ }      
 
-
-  const mudaEstado = function(elemento) {
-        var verifica = document.getElementById(elemento).classList.contains("button-on")
-
-        if (verifica == false) {
-            document.getElementById(elemento).classList.toggle("button-off");
-            document.getElementById(elemento).classList.toggle("button-on");
-            document.getElementById(elemento).innerHTML = "ON"
-        } else {
-            document.getElementById(elemento).classList.toggle("button-on");
-            document.getElementById(elemento).classList.toggle("button-off");
-            document.getElementById(elemento).innerHTML = "OFF"
-        }
-    }
-  
 </script>
+
+ <!-- BODY ANTIGO
+ =================
+  <h2>ESP32 DHT Server</h2>
+  <p>
+    <span class="dht-labels">Temperature</span>
+    <!--%TEMPEREATURE% -> é um placeholder que é subtituido ao processar o codigo-->
+    <span id="temperature">%TEMPERATURE%</span>
+    <!--Acompanha o <p> principal-->
+    <sup class="units">&deg;C</sup>
+  </p>
+  <div>
+    %BUTTONPLACEHOLDER%
+  </div>
+->
+
 </html>)rawliteral";
 
 // Captura e subsitui na variavel o valor do sensor em tempo real
@@ -404,21 +1058,20 @@ String processor(const String &var)
 
 void setup()
 {
-  Wire.begin(); //INICIALIZA O I2C BUS
+  Wire.begin(); // INICIALIZA O I2C BUS
   bmp.begin(0x76);
-  //Called this function to update de cod, it run for 3 minuts, automatically after this the ESP reset,
-  //reiniting it return on de updateWifiCode(), wait again 3 minuts and then, if does`t have cod for 
-  //for update the ESP return to setup and init the webserver and others functions.
-  //For update the code is ever necessary restart the ESP ou call de function updateWifiCode(),
-  //for get successe in this processe, is recommended restart de ESP, instead of call de function
+  // Called this function to update de cod, it run for 3 minuts, automatically after this the ESP reset,
+  // reiniting it return on de updateWifiCode(), wait again 3 minuts and then, if does`t have cod for
+  // for update the ESP return to setup and init the webserver and others functions.
+  // For update the code is ever necessary restart the ESP ou call de function updateWifiCode(),
+  // for get successe in this processe, is recommended restart de ESP, instead of call de function
 
-  
   // Intanciando o LED onboard [PODE SER TIRADO DEPOIS]
   pinMode(LED_BUILTIN, OUTPUT); // Habilita o LED onboard como saída.
 
   // INSTANCIANDO AS VARIÁVEIS
   //-----------------------
-  //OUTPUTs
+  // OUTPUTs
   pinMode(output26, OUTPUT);
   pinMode(output27, OUTPUT);
   pinMode(arref, OUTPUT);
@@ -427,11 +1080,11 @@ void setup()
   pinMode(rtBrake, OUTPUT);
   pinMode(rtFree, OUTPUT);
   pinMode(sinlight, OUTPUT);
-  //set dos pinos do motor de rotaão da nacele
+  // set dos pinos do motor de rotaão da nacele
   pinMode(pwmH, OUTPUT);
   pinMode(pwmA, OUTPUT);
 
-  //INPUTs
+  // INPUTs
   pinMode(GPIOreftemp1, INPUT);
   pinMode(GPIOreftemp2, INPUT);
   pinMode(GPIOtSis, INPUT);
@@ -440,7 +1093,6 @@ void setup()
   pinMode(5, INPUT);
   pinMode(GPIOpotpitch, INPUT);
   pinMode(GPIOpotnacele, INPUT);
-
 
   // Set outputs to off
   digitalWrite(output26, LOW);
@@ -454,14 +1106,14 @@ void setup()
   digitalWrite(pwmH, LOW);
   digitalWrite(pwmA, LOW);
 
-  //Abilitação do AttachInterrupt
+  // Abilitação do AttachInterrupt
   attachInterrupt(digitalPinToInterrupt(35), addcount, FALLING);
 
   // LCD ARDUINO
   //-----------------------
   lcd.init();
   lcd.backlight();
-  
+
   lcd.clear();
   lcd.setCursor(0, 0);
   lcd.print("LAZZARUS_Eolica v2.0");
@@ -486,21 +1138,21 @@ void setup()
   lcd.setCursor(0, 3);
   lcd.print("Wait..........");
 
-  //ATUALIZA O CÓDIGO VIA WIFI
+  // ATUALIZA O CÓDIGO VIA WIFI
   updateWifiCode();
-  
-  //Atualização de software encerrada, inicializando servidor
-  lcd.clear();  
+
+  // Atualização de software encerrada, inicializando servidor
+  lcd.clear();
   lcd.setCursor(0, 0);
   lcd.print("Atualizacao de");
   lcd.setCursor(0, 1);
   lcd.print("Software encerrada!");
-  
+
   lcd.setCursor(0, 2);
   lcd.print("Init_WebServer");
   delay(1000);
-  
-    // CRIANDO O WEBSERVER
+
+  // CRIANDO O WEBSERVER
   //-----------------------
   // Serial port for debugging purposes
   Serial.begin(115200);
@@ -542,7 +1194,7 @@ void setup()
   //---------------------------
   //  Send a GET request to <ESP_IP>/update?output=<btnNaceleMsg1>&state=<btnNaceleMsg2>
   server.on("/atualizaBtn", HTTP_GET, [](AsyncWebServerRequest *request)
-          {
+            {
 
           // GET input1 value on <ESP_IP>/atualizaBtn?output=<btnNaceleMsg1>&state=<btnNaceleMsg2>
           if(request->hasParam(PARAM_INPUT_1) && request->hasParam(PARAM_INPUT_2)){
@@ -578,10 +1230,9 @@ void setup()
   server.begin();
   //---------------------------
 
-
   // PARTE FINAL LED
   //--------------------------
-  lcd.clear();  
+  lcd.clear();
   lcd.setCursor(0, 0);
   lcd.print("WiFi connected:");
   lcd.setCursor(0, 1);
@@ -594,11 +1245,10 @@ void setup()
   delay(500);
   lcd.setCursor(4, 3);
   lcd.print(WiFi.localIP().toString());
-  lcd.clear(); 
+  lcd.clear();
   delay(3000);
-  
+
   digitalWrite(sinlight, LOW);
-  
 }
 
 //===============================================
@@ -610,63 +1260,63 @@ void loop()
 
   // INICIA AS FUNÇÕES
   //------------------------
-  readsensors(); 
-  
-  readminimet(); 
-  
+  readsensors();
+
+  readminimet();
+
   operation();
-  
+
   sinalization();
 
- //PPRINTA NO LCD
- //-------------------------
- //print no display
- while((millis()-time2) >= 500){
-  time2 = millis();
-  lcd.setCursor(0, 0);
-  lcd.print("LAZZARUS_Eolica V2.0");
-    
-  lcd.setCursor(0, 1);
-  lcd.print("TGer:");
-  lcd.print(tempgerador,1);
-  lcd.print("C");
-  
-  lcd.setCursor(11, 1);
-  lcd.print("Ts:");
-  lcd.print(tempsistema,2);
-  lcd.print("C");
-  
-  lcd.setCursor(11, 2);
-  lcd.print("ts:");
-  lcd.print(tSis,1);
-  lcd.print("V");
-  
-  lcd.setCursor(0, 2);
-  lcd.print("tPot:");
-  lcd.print(tPot,1);
-  lcd.print("V");
-  
-  lcd.setCursor(0, 3);
-  lcd.print("RPM:");
-  lcd.setCursor(4, 3);
-  lcd.print("     ");
-  lcd.setCursor(4, 3);
-  lcd.print(rpm);
-  
-  lcd.setCursor(8, 3);
-  lcd.print("U");
-  lcd.setCursor(9, 3);
-  lcd.print("     ");
-  lcd.setCursor(9, 3);
-  lcd.print(windspeed,1);
-  lcd.setCursor(13, 3);
-  lcd.print("D");
-  lcd.setCursor(14, 3);
-  lcd.print("     ");
-  lcd.setCursor(14, 3);
-  lcd.print(winddir,1);  
- }
-  
+  // PPRINTA NO LCD
+  //-------------------------
+  // print no display
+  while ((millis() - time2) >= 500)
+  {
+    time2 = millis();
+    lcd.setCursor(0, 0);
+    lcd.print("LAZZARUS_Eolica V2.0");
+
+    lcd.setCursor(0, 1);
+    lcd.print("TGer:");
+    lcd.print(tempgerador, 1);
+    lcd.print("C");
+
+    lcd.setCursor(11, 1);
+    lcd.print("Ts:");
+    lcd.print(tempsistema, 2);
+    lcd.print("C");
+
+    lcd.setCursor(11, 2);
+    lcd.print("ts:");
+    lcd.print(tSis, 1);
+    lcd.print("V");
+
+    lcd.setCursor(0, 2);
+    lcd.print("tPot:");
+    lcd.print(tPot, 1);
+    lcd.print("V");
+
+    lcd.setCursor(0, 3);
+    lcd.print("RPM:");
+    lcd.setCursor(4, 3);
+    lcd.print("     ");
+    lcd.setCursor(4, 3);
+    lcd.print(rpm);
+
+    lcd.setCursor(8, 3);
+    lcd.print("U");
+    lcd.setCursor(9, 3);
+    lcd.print("     ");
+    lcd.setCursor(9, 3);
+    lcd.print(windspeed, 1);
+    lcd.setCursor(13, 3);
+    lcd.print("D");
+    lcd.setCursor(14, 3);
+    lcd.print("     ");
+    lcd.setCursor(14, 3);
+    lcd.print(winddir, 1);
+  }
 }
 
 //===============================================
