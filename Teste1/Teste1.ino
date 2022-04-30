@@ -1,35 +1,53 @@
 /*********
-  Rui Santos
+  André Valerim de Freitas based in Rui Santos
   Complete project details at https://randomnerdtutorials.com
 *********/
 
-// Import required libraries
+// Importa as bibliotecas
 #include <WiFi.h>
 #include <ESPAsyncWebServer.h>
 #include <Adafruit_Sensor.h>
 #include <DHT.h>
 
-// Replace with your network credentials
-//const char *ssid = "Consultorio";
-//const char *password = "terapiaCris";
+//===============================================
+// CONEXAO WIFI
+//===============================================
+
+// Credenciais para conexão com o Wi-fi
+const char *ssid = "Consultorio";
+const char *password = "terapiaCris";
 
 //const char *ssid = "Quantum Team";
 //const char *password = "amotolia_oleosa";
 
-const char *ssid = "Andre Wifi";
-const char *password = "gostoso1";
+//const char *ssid = "Andre Wifi";
+//const char *password = "gostoso1";
 
+//===============================================
+// PINOS
+//===============================================
+
+//Definindo os pinos digitais conectados aos sensores
 #define DHTPIN 27 // Digital pin connected to the DHT sensor
 
-// Uncomment the type of sensor in use:
+// Tipo de sensor em uso
 //#define DHTTYPE    DHT11     // DHT 11
 #define DHTTYPE DHT22 // DHT 22 (AM2302)
 //#define DHTTYPE    DHT21     // DHT 21 (AM2301)
 
-DHT dht(DHTPIN, DHTTYPE);
+//===============================================
+// INSTANCIACAO E PORTA
+//===============================================
+
+//Intanciando o objeto DHT com o tipo de pin que foi definido
+//DHT dht(DHTPIN, DHTTYPE);
 
 // Create AsyncWebServer object on port 80
 AsyncWebServer server(80);
+
+//===============================================
+//VARIAVEIS
+//===============================================
 
 // Lendo sensores e criando as Strings para exibicao
 int cont = 0;
@@ -47,7 +65,33 @@ const char* PARAM_INPUT_2 = "state";
 // Led placa
 int LED_BUILTIN = 2;
 
+//===============================================
+// LENDO OS SENSORES E OS TRANSFORMANDO EM STRING
+//===============================================
 
+//Lê temperatura e converte para string
+ //String readDHTTemperature() {
+  // Sensor readings may also be up to 2 seconds 'old' (its a very slow sensor)
+  // Read temperature as Celsius (the default)
+
+  // Lê a temperatura do objeto declarado anteriomente, em float
+ // float t = dht.readTemperature();
+  
+  // Read temperature as Fahrenheit (isFahrenheit = true)
+ //float t = dht.readTemperature(true);
+  
+  // Check if any reads failed and exit early (to try again).
+ // if (isnan(t)) { 
+ //   Serial.println("Failed to read from DHT sensor!");
+ //   return "--";
+ // }
+ // else {
+ //   Serial.println(t);
+ //   return String(t);
+ // }
+ //}
+
+//Contadores de teste 
 String readDHTTemperature()
 {
   cont++;
@@ -55,6 +99,7 @@ String readDHTTemperature()
   return String(cont);
 }
 
+//Contadores de Teste
 String readDHTVelocidade()
 {
   cont1++;
@@ -66,7 +111,9 @@ String readDHTVelocidade()
 //OLHAR ESSE SITE A ADAPTAR O CODIGO
 //https://randomnerdtutorials.com/esp32-async-web-server-espasyncwebserver-library/
 
-//FAzer uma função que verifique os estados dos botoes e passe um array com todos eles e que seja sempre requisitada para atualizar a pagina para configurar os botoes de forma correta
+//===============================================
+// PAGINA WEB
+//===============================================
 
 // Configurando a pagina web
 const char index_html[] PROGMEM = R"rawliteral(
@@ -117,8 +164,10 @@ const char index_html[] PROGMEM = R"rawliteral(
 <body>
   <h2>ESP32 DHT Server</h2>
   <p>
-    <span class="dht-labels">Temperature</span> 
+    <span class="dht-labels">Temperature</span>
+    <!--%TEMPEREATURE% -> é um placeholder que é subtituido ao processar o codigo-->
     <span id="temperature">%TEMPERATURE%</span>
+    <!--Acompanha o <p> principal-->
     <sup class="units">&deg;C</sup>
   </p>
   <div>
@@ -222,7 +271,7 @@ void setup()
   // Serial port for debugging purposes
   Serial.begin(115200);
 
-  dht.begin();
+  //dht.begin();
 
   // Connect to Wi-Fi
   WiFi.begin(ssid, password);
