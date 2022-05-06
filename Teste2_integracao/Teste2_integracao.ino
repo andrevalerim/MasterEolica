@@ -1,5 +1,7 @@
 /*********
-  André Valerim de Freitas based in Rui Santos
+  Alef Júnior &
+  André V. de Freitas 
+  based in Rui Santos
   Complete project details at https://randomnerdtutorials.com
 *********/
 
@@ -28,8 +30,11 @@
 //===============================================
 
 // Credenciais para conexão com o Wi-fi
-const char *ssid = "Consultorio";
-const char *password = "terapiaCris";
+//const char *ssid = "Consultorio";
+//const char *password = "terapiaCris";
+
+const char *ssid = "Valter 2.4GHz";
+const char *password = "casa092614";
 
 // const char *ssid = "Quantum Team";
 // const char *password = "amotolia_oleosa";
@@ -72,7 +77,7 @@ const int output27 = 27;
 // DHT dht(DHTPIN, DHTTYPE);
 
 // Create AsyncWebServer object on port 80
-AsyncWebServer server(80);
+    AsyncWebServer server(80);
 
 //===============================================
 // VARIAVEIS
@@ -165,6 +170,7 @@ String ponto = "";
 
 // Led placa da própria placa LED DE TESTE (PODE SER TIRADO DEPOIS)
 int LED_BUILTIN = 2;
+int contaTudo = 0;
 
 //-------------------------------
 // Variaveis para o WebServer
@@ -180,6 +186,8 @@ String btnParam2; // Estado do botao
 
 // Receber o estado dos botoes
 int btnParam2Int = 0;
+int btnFreioRotor = 0;
+int btnFreioNacele = 0;
 
 // Controle webpage
 const char *PARAM_INPUT_1 = "output";
@@ -212,11 +220,17 @@ const char *PARAM_INPUT_2 = "state";
 //}
 
 // Contadores de teste
+String readContaTudo(){
+  contaTudo++;
+  Serial.println(contaTudo);
+  return String(contaTudo);
+}
+
 String readDHTTemperature()
 {
-  cont++;
-  Serial.println(cont);
-  return String(cont);
+  contaTudo++;
+  Serial.println(contaTudo);
+  return String(contaTudo);
 }
 
 // Contadores de Teste
@@ -246,19 +260,12 @@ const char index_html[] PROGMEM = R"rawliteral(
     <!-- <link rel="icon" href="img/plus energy png em baixo.png"> -->
     <title>Sistema de Gerenciamento Torre Eolica - Plus Energy</title>
     
-    <!-- Estilizacao
-    ================ -->
     <style type="text/css">
-        /* Geral */
         html {  
             font-family: Helvetica;
             font-size: 16px;
-            /* margin: 20 auto; */
             text-align: left;
-            /* Fundo */
-            /* background-color: #f8f8ff; */
             background-color: #bff1fa;
-            /* background-image: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url(img/fundo.svg); */
             background-repeat: repeat-y;
             background-size: cover;}
             
@@ -269,7 +276,61 @@ const char index_html[] PROGMEM = R"rawliteral(
             height: 2.5rem;
             text-align: center;
             border: #666666 solid 2px;
-            border-radius: 7%;
+            border-radius: 15px 50px;
+            background-color: #e4e4e4;}
+
+        input#status_sistema {
+            padding: 2.5px 2.5px;
+            font-size: 1.5rem;
+            margin: 3rem 0.5rem;
+            width: 7rem;
+            height: 2.5rem;
+            text-align: center;
+            border: #666666 dotted 2px;
+            border-radius: 15px 50px;
+            box-shadow: #747474 -1px 1px 7px;
+            background-color: #e4e4e4;}
+
+        input#status_sistema.status_sistema_ativo {
+            background-color: #4CAF50;
+            color: white;}
+
+        input#status_atual_nacele {
+            padding: 2.5px 2.5px;
+            font-size: 1.5rem;
+            text-align: center;
+            border: #666666 dotted 2px;
+            border-radius: 15px 50px;
+            box-shadow: #747474 -1px 1px 7px;
+            background-color: #e4e4e4;}
+
+        input#status_atual_nacele.status_atual_nacele_ok {
+            background-color: #4CAF50;
+            color: white;}
+
+        input#status_atual_pitch {
+            padding: 2.5px 2.5px;
+            font-size: 1.5rem;
+            text-align: center;
+            border: #666666 dotted 2px;
+            border-radius: 15px 50px;
+            box-shadow: #747474 -1px 1px 7px;
+            background-color: #e4e4e4;}
+
+
+        input#status_atual_pitch.status_atual_pitch_ok {
+            background-color: #4CAF50;
+            color: white; }
+
+        input.mostra_info {
+            padding: 2.5px 2.5px;
+            font-size: 1.5rem;
+            margin: 1rem 0.5rem;
+            width: 7rem;
+            height: 2.5rem;
+            text-align: center;
+            border: #666666 solid 2px;
+            border-radius: 10px 40px;
             background-color: #e4e4e4;}
 
         h2 {
@@ -278,33 +339,15 @@ const char index_html[] PROGMEM = R"rawliteral(
             font-weight: 500;}
 
         body::-webkit-scrollbar {
-            width: 12px;
-            /* width of the entire scrollbar */}
+            width: 12px;}
 
         body::-webkit-scrollbar-track {
-            background: #00AAB4;
-            /* color of the tracking area */}
+            background: #00AAB4;}
 
         body::-webkit-scrollbar-thumb {
             background-color: #b1ffb1;
-            /* color of the scroll thumb */
             border-radius: 20px;
-            /* roundness of the scroll thumb */
-            border: 3px solid #00AAB4;
-            /* creates padding around scroll thumb */}
-
-        /* Elementos */
-
-        /* .button {
-            background-color: #555555;
-            border: none;
-            color: white;
-            padding: 16px 40px;
-            text-decoration: none;
-            font-size: 30px;
-            margin: 2px;
-            cursor: pointer;
-        } */
+            border: 3px solid #00AAB4;}
 
         .button {
             color: white;
@@ -327,85 +370,14 @@ const char index_html[] PROGMEM = R"rawliteral(
             background-color: #348137;
             border: #dfdddd solid 3px;}
 
-        /* input{
-            padding: 2.5px 2.5px;
-            font-size: 1.5rem;
-            margin: 1rem 0.5rem;
-            width: 7rem;
-            height: 2.5rem;
-            text-align: center;
-            border:#666666 dotted 2px;
-            border-radius: 7%;
-            box-shadow: #747474 -1px 1px 7px;
-            background-color: #e4e4e4;
-        } */
-
-        input#status_sistema {
-            padding: 2.5px 2.5px;
-            font-size: 1.5rem;
-            margin: 3rem 0.5rem;
-            width: 7rem;
-            height: 2.5rem;
-            text-align: center;
-            border: #666666 dotted 2px;
-            border-radius: 7%;
-            box-shadow: #747474 -1px 1px 7px;
-            background-color: #e4e4e4;}
-
-        input#status_sistema.status_sistema_ativo {
-            background-color: #4CAF50;
-            color: white;}
-
-        input#status_atual_nacele {
-            padding: 2.5px 2.5px;
-            font-size: 1.5rem;
-            text-align: center;
-            border: #666666 dotted 2px;
-            border-radius: 7%;
-            box-shadow: #747474 -1px 1px 7px;
-            background-color: #e4e4e4;}
-
-        input#status_atual_nacele.status_atual_nacele_ok {
-            background-color: #4CAF50;
-            color: white;}
-
-        input#status_atual_pitch {
-            padding: 2.5px 2.5px;
-            font-size: 1.5rem;
-            text-align: center;
-            border: #666666 dotted 2px;
-            border-radius: 7%;
-            box-shadow: #747474 -1px 1px 7px;
-            background-color: #e4e4e4;}
-
-
-        input#status_atual_pitch.status_atual_pitch_ok {
-            background-color: #4CAF50;
-            color: white; }
-
-        input.mostra_info {
-            padding: 2.5px 2.5px;
-            font-size: 1.5rem;
-            margin: 1rem 0.5rem;
-            width: 7rem;
-            height: 2.5rem;
-            text-align: center;
-            border: #666666 solid 2px;
-            border-radius: 5%;
-            /* box-shadow: #747474 -1px 1px 7px; */
-            background-color: #e4e4e4;}
-
-        /* Formatacões blocos e coluna */
 
         .title-container {
-            /* background-color: #04d500; */
             background-color: #2377a2;
             text-align: center;
             margin-top: -0.01rem;
             margin-left: -0.1;
             margin-right: -0.1rem;
             margin-bottom: 0.6rem;
-            /* padding: 1rem; */
             position: sticky;
             top: 0;
             border: 2px solid #ffffff;
@@ -413,13 +385,10 @@ const char index_html[] PROGMEM = R"rawliteral(
             padding-right: 0.5rem;}
 
         .wrapper {
-            display: grid;
-            /* border: red solid 2px; */}
+            display: grid;}
 
         .column-gap {
             column-gap: 0.5rem;}
-
-        /* COLUNAS LINHA */
 
         .grid-titulo {
             grid-template-columns: 1fr 9fr;}
@@ -430,7 +399,6 @@ const char index_html[] PROGMEM = R"rawliteral(
         .grid-col-8-2 {
             grid-template-columns: 8fr 2fr;}
 
-        /* Blocos */
         .grid-col {
             grid-template-columns: 1fr;}
 
@@ -443,23 +411,11 @@ const char index_html[] PROGMEM = R"rawliteral(
         .grid-col-4-repeat {
             grid-template-columns: repeat(2, 2fr) 3fr 3fr;}
 
-        /* .wrapper>div {
-            border: red solid 2px;
-        } */
-
         .bloco-col {
             border-right: #7c7c7c7c groove 0.1rem;
             text-align: center;
             padding-top: 0.5rem;
             padding-bottom: 0.5rem;}
-
-        /* Formatacões gerais: alinhamentos, marges, paddings... */
-
-        /* .border-r {
-            border-right: #7c7c7c7c groove 0.1rem;
-            margin-right: 0rem;
-            padding-right: 1.2rem;
-        } */
 
         .border-row {
             border: #00AAB4 solid 0.2rem;
@@ -475,13 +431,14 @@ const char index_html[] PROGMEM = R"rawliteral(
             background-color: #fff;
             margin-left: -0.6rem;}
 
-        .hr {
-            width: 45%;
+         /*.hr {
+            width: 45%PERCENT%;
             border: #999999b2 solid 0.5px;
             background: #747474;
             margin-top: -0.1rem;
             margin-bottom: 0.7rem;}
-
+          */
+          
         .mt-05 {
             margin-top: 0.5rem;}
 
@@ -519,8 +476,6 @@ const char index_html[] PROGMEM = R"rawliteral(
         .background-rows {
             background-color: #f8f8ff;}
 
-        /* Textos */
-
         .p-col-title {
             color: #00AAB4;
             text-align: center;
@@ -536,7 +491,6 @@ const char index_html[] PROGMEM = R"rawliteral(
         #h1-title {
             font-size: 2.0rem;
             text-align: center;
-            /* color: #0099D8; */
             color: #fff;
             text-transform: uppercase;
             padding-right: 1.5rem;}  
@@ -557,35 +511,21 @@ const char index_html[] PROGMEM = R"rawliteral(
 
         <!-- Coluna 1 -->
         <div class="wrapper grid-col-4-repeat background-rows border-row">
+            <div class="bloco-col pt-1">
+                %BOTAOFREIONACELE%
+                %BOTAOFREIOROTOR%
+            </div>
             <div class="bloco-col pt-1">       
                <div>
                     <p class="p-col-title">RPM Rotor</p>
                     <p class="p-dado-sensor">
-                        <span id="rpm_rotor">%RPMROTOR%</span>
+                        <span id="rpmrotor">%RPMROTOR%</span>
                     </p>
-                    <!--<input type="text" name="rpm_rotor" id="rpm_rotor" class="mostra_info" placeholder="30 RPM"
-                        disabled>-->
                 </div>
                 <div class="mt-105 pt-1">
                     <p class="p-col-title">RPM Gerador</p>
                     <p class="p-dado-sensor">
                         <span id="rpm_gerador">%RPMGERADOR%</span>
-                    </p>
-                </div>
-            </div>
-            <div class="bloco-col pt-1">
-              <div>
-                    <p class="p-col-title">Temperatura Externa</p>
-                    <p class="p-dado-sensor">
-                        <span id="temp_externa">%TEMPEXTERNA%</span>
-                        <sup class="units">&deg;C</sup>
-                    </p>
-                </div>
-                <div class="mt-105 pt-1">
-                    <p class="p-col-title">Temperatura Gerador</p>
-                    <p class="p-dado-sensor">
-                        <span id="temp_gerador">%TEMPGERADOR%</span>
-                        <sup class="units">&deg;C</sup>
                     </p>
                 </div>
             </div>
@@ -688,12 +628,12 @@ const char index_html[] PROGMEM = R"rawliteral(
                         <div>
                             <p class="p-col-title">Posicao Atual</p>
                             <p class="p-dado-sensor">
-                                <span id="posica_atual_nacele">%POSICAOATUALNACELE%</span>
+                                <span id="posicao_atual_nacele">%POSICAOATUALNACELE%</span>
                             </p>
                         </div>
                         <div class="mt-105 pt-1">
                             <p class="p-col-title">......</p>
-                            <button id="...." class="button button-off" onclick='mudaEstado("....")'>OFF</button>
+                            <button id="...." class="button button-off" onclick='mudaEstado("....");toggleBtn("....")'>OFF</button>
                         </div>
                     </div>
 
@@ -724,7 +664,9 @@ const char index_html[] PROGMEM = R"rawliteral(
                     <!-- Primeira Parte -->
                     <div class="center">
                         <p class="p-col-title">Angulo Atual</p>
-                        <p class="p-dado-sensor">Velocidade</p>
+                        <p class="p-dado-sensor">
+                          <span id="angulo_atual_pitch">%ANGULOATUALPITCH%</span> 
+                        </p>
                     </div>
 
                     <!-- Segunda Parte -->
@@ -766,7 +708,8 @@ const char index_html[] PROGMEM = R"rawliteral(
          
          <!-- Coluna 2 -->
          <div class="wrapper grid-col-2 background-rows border-row">
-            <div class="bloco-col py-2">
+            <div class="bloco-col
+            ">
 
                 <!-- Titulo secao -->
                 <h2>Ajuste de posicao</h2>
@@ -792,7 +735,7 @@ const char index_html[] PROGMEM = R"rawliteral(
                 </div>
             </div>
 
-            <div class="bloco-col py-2">
+            <div class="bloco-col">
                 <!-- Titulo secao -->
                 <h2>Ajuste de Pitch</h2>
                 <hr class="hr">
@@ -818,7 +761,7 @@ const char index_html[] PROGMEM = R"rawliteral(
 
         <!-- Coluna 3 -->
         <div class="background-rows border-row wrapper ">
-            <div class="bloco-col py-2 border-none">
+            <div class="bloco-col border-none">
 
                 <!-- Titulo secao -->
                 <h2>Seguranca</h2>
@@ -867,14 +810,28 @@ const locker = "pluseamelhor";
 var elemento = ""
 
 //Faz as requisiçoes
+//MODELO
+//setInterval(function ( ) {
+//  var xhttp = new XMLHttpRequest();
+//  xhttp.onreadystatechange = function() {
+//    if (this.readyState == 4 && this.status == 200) {
+//      document.getElementById("temperature").innerHTML = this.responseText;
+//    }
+//  };
+//  xhttp.open("GET", "/temperature", true);
+//  xhttp.send();
+//}, 500 ) ;
+
+//RPMs
 setInterval(function ( ) {
   var xhttp = new XMLHttpRequest();
   xhttp.onreadystatechange = function() {
     if (this.readyState == 4 && this.status == 200) {
-      document.getElementById("temperature").innerHTML = this.responseText;
+      document.getElementById("rpmrotor").innerHTML = this.responseText;
+      console.log("Pediu RPM"); 
     }
   };
-  xhttp.open("GET", "/temperature", true);
+  xhttp.open("GET","/rpmrotor", true);
   xhttp.send();
 }, 500 ) ;
 
@@ -882,14 +839,131 @@ setInterval(function ( ) {
   var xhttp = new XMLHttpRequest();
   xhttp.onreadystatechange = function() {
     if (this.readyState == 4 && this.status == 200) {
-      document.getElementById("velocidade").value = this.responseText + " Km/h";
+      document.getElementById("rpm_gerador").innerHTML = this.responseText;
     }
   };
-  xhttp.open("GET", "/velocidade", true);
+  xhttp.open("GET", "/rpm_gerador", true);
   xhttp.send();
 }, 500 ) ;
 
-const = function pedeSenha() {
+//TEMPERATURAS
+setInterval(function ( ) {
+  var xhttp = new XMLHttpRequest();
+  xhttp.onreadystatechange = function() {
+    if (this.readyState == 4 && this.status == 200) {
+      document.getElementById("temp_externa").innerHTML = this.responseText;
+    }
+  };
+  xhttp.open("GET", "/temp_externa", true);
+  xhttp.send();
+}, 500 ) ;
+
+setInterval(function ( ) {
+  var xhttp = new XMLHttpRequest();
+  xhttp.onreadystatechange = function() {
+    if (this.readyState == 4 && this.status == 200) {
+      document.getElementById("temp_gerador").innerHTML = this.responseText;
+    }
+  };
+  xhttp.open("GET", "/temp_gerador", true);
+  xhttp.send();
+}, 500 ) ;
+
+
+//TENSOES
+setInterval(function ( ) {
+  var xhttp = new XMLHttpRequest();
+  xhttp.onreadystatechange = function() {
+    if (this.readyState == 4 && this.status == 200) {
+      document.getElementById("tensao_sistema_polo").innerHTML = this.responseText;
+    }
+  };
+  xhttp.open("GET", "/tensao_sistema_polo", true);
+  xhttp.send();
+}, 500 ) ;
+
+setInterval(function ( ) {
+  var xhttp = new XMLHttpRequest();
+  xhttp.onreadystatechange = function() {
+    if (this.readyState == 4 && this.status == 200) {
+      document.getElementById("tensao_sistema").innerHTML = this.responseText;
+    }
+  };
+  xhttp.open("GET", "/tensao_sistema", true);
+  xhttp.send();
+}, 500 ) ;
+
+
+//ESTACAO METEREOLOGICA
+setInterval(function ( ) {
+  var xhttp = new XMLHttpRequest();
+  xhttp.onreadystatechange = function() {
+    if (this.readyState == 4 && this.status == 200) {
+      document.getElementById("velocidade_met").innerHTML = this.responseText;
+    }
+  };
+  xhttp.open("GET", "/velocidade_met", true);
+  xhttp.send();
+}, 500 ) ;
+
+setInterval(function ( ) {
+  var xhttp = new XMLHttpRequest();
+  xhttp.onreadystatechange = function() {
+    if (this.readyState == 4 && this.status == 200) {
+      document.getElementById("velocidade_media_met").innerHTML = this.responseText;
+    }
+  };
+  xhttp.open("GET", "/velocidade_media_met", true);
+  xhttp.send();
+}, 500 ) ;
+
+setInterval(function ( ) {
+  var xhttp = new XMLHttpRequest();
+  xhttp.onreadystatechange = function() {
+    if (this.readyState == 4 && this.status == 200) {
+      document.getElementById("direcao_atual_met").innerHTML = this.responseText;
+    }
+  };
+  xhttp.open("GET", "/direcao_atual_met", true);
+  xhttp.send();
+}, 500 ) ;
+
+setInterval(function ( ) {
+  var xhttp = new XMLHttpRequest();
+  xhttp.onreadystatechange = function() {
+    if (this.readyState == 4 && this.status == 200) {
+      document.getElementById("direcao_final_met").innerHTML = this.responseText;
+    }
+  };
+  xhttp.open("GET", "/direcao_final_met", true);
+  xhttp.send();
+}, 500 ) ;
+
+
+//POSICIONAMENTO
+setInterval(function ( ) {
+  var xhttp = new XMLHttpRequest();
+  xhttp.onreadystatechange = function() {
+    if (this.readyState == 4 && this.status == 200) {
+      document.getElementById("posicao_atual_nacele").innerHTML = this.responseText;
+    }
+  };
+  xhttp.open("GET", "/posicao_atual_nacele", true);
+  xhttp.send();
+}, 500 ) ;
+
+setInterval(function ( ) {
+  var xhttp = new XMLHttpRequest();
+  xhttp.onreadystatechange = function() {
+    if (this.readyState == 4 && this.status == 200) {
+      document.getElementById("angulo_atual_pitch").innerHTML = this.responseText;
+    }
+  };
+  xhttp.open("GET", "/angulo_atual_pitch", true);
+  xhttp.send();
+}, 500 ) ;
+
+const pedeSenha = function() {
 
         var senha = prompt("Digite a senha para continuar")
 
@@ -904,7 +978,7 @@ const = function pedeSenha() {
 
     }
 
-const = function alerta() {
+const alerta = function() {
         var verifica = document.getElementById(elemento).classList.contains("button-on");
 
         if (verifica == false) {
@@ -914,10 +988,11 @@ const = function alerta() {
             }
         } else {
             mudaEstado(elemento);
+            toggleBtn(elemento);
         }
     }
 
-const = function capturaElemento(e) {
+const capturaElemento = function(e) {
         elemento = e;
 
     }
@@ -936,7 +1011,7 @@ const mudaEstado = function(elemento) {
         }
     }
 
-const = function mudaEstadoStatus() {
+const mudaEstadoStatus = function()  {
         var inputStatus = document.getElementById("status_sistema")
 
         if (inputStatus.value == "OFF") {
@@ -947,7 +1022,7 @@ const = function mudaEstadoStatus() {
 
     }
 
-const = function controlaGrau(id) {
+const controlaGrau = function(id) {
         var input = "#" + id + "ManualGraus"
         var inputGrau = document.querySelector(input)
         var valor = inputGrau.value
@@ -991,27 +1066,13 @@ const = function controlaGrau(id) {
 
   //Verifica se ta ativo ou nao
   if(classeAtiva == true)
-  { xhr.open("GET", "/atualizaBtn?output="+botao+"&state=1", true); }
-  else if (classeDesligada == true){ xhr.open("GET", "/atualizaBtn?output="+botao+"&state=0", true); }
+  { xhr.open("GET", "/atualizaBtn?output="+botao+"&state=1", true); console.log("Enviou:" + botao + "| Estado: 1");}
+  else if (classeDesligada == true){ xhr.open("GET", "/atualizaBtn?output="+botao+"&state=0", true);console.log("Enviou:" + botao + "| Estado: 0"); }
   xhr.send();
+
  }      
 
 </script>
-
- <!-- BODY ANTIGO
- =================
-  <h2>ESP32 DHT Server</h2>
-  <p>
-    <span class="dht-labels">Temperature</span>
-    <!--%TEMPEREATURE% -> é um placeholder que é subtituido ao processar o codigo-->
-    <span id="temperature">%TEMPERATURE%</span>
-    <!--Acompanha o <p> principal-->
-    <sup class="units">&deg;C</sup>
-  </p>
-  <div>
-    %BUTTONPLACEHOLDER%
-  </div>
-->
 
 </html>)rawliteral";
 
@@ -1022,16 +1083,24 @@ const = function controlaGrau(id) {
 
 //===============================================
 // PROCESSADOR DOS PLACEHOLDERS
+//Percorre o codigo HTML e troca os placeholders entre "%placeholder%" pelo o que for definido aqui 
 //===============================================
 String processor(const String &var)
 {
   // Serial.println(var);
 
+// MODELO QUE CONTROLA SE O BOTAO ESTA ATIVADO OU NAO E MANTÊM MESMO SE A PÁGINA ATUALIZAR
+// ====================================================
+
+// PERCORRE OS PLACEHOLDERS
   if (var == "BUTTONPLACEHOLDER")
   {
+    // Declara a variavel botao e soma os textoa ela
     String buttons = "";
     buttons += "<div><p class=\"dht-labels\">Velocidade</p><input type=\"text\" name=\"velocidade\" id=\"velocidade\" placeholder=\"30 Km/h\" value="
                " disabled></div>";
+
+    //Veriica se o botao esta ativado ou nao
     if (btnParam2Int == 0)
     {
       buttons += "<div><p class=\"dht-labels\">Led Placa</p><button id=\"freioNacele\" class=\"button button-off\" onclick='mudaEstado(\"freioNacele\");toggleBtn(\"freioNacele\")'>OFF</button></div>";
@@ -1040,16 +1109,68 @@ String processor(const String &var)
     {
       buttons += "<div><p class=\"dht-labels\">Led Placa</p><button id=\"freioNacele\" class=\"button button-on\" onclick='mudaEstado(\"freioNacele\");toggleBtn(\"freioNacele\")'>ON</button></div>";
     }
+    //retorna o botao
     return buttons;
-  }
-  else if (var == "TEMPERATURE")
-  {
-    return readDHTTemperature();
-  }
-  else
-  {
-    return String();
-  }
+
+ // Passa para o proximo placeholder
+
+ // IF DADOS
+ // -------------------
+  }else if(var == "PERCENT"){
+    return "%";
+    
+ }else if (var == "RPMROTOR"){
+    return readContaTudo();
+ }else if(var == "RPMGERADOR"){
+    return "Rpm gerador";
+    
+ }else if(var == "TEMPEXTERNA"){
+    return "Temp externa";
+ }else if(var == "TEMPGERADOR"){
+    return "Temp gerador";
+    
+ }else if(var == "TENSAOSISTEMA"){
+    return "Tensao sistema";
+ }else if(var == "TENSAOSISTEMAPOLO"){
+    return "Temp sistema polo";
+    
+ }else if(var == "VELOCIDADE"){
+    return "Temp velocidade";
+ }else if(var == "DIRECAOATUALMET"){
+    return "Direcao atual met";
+ }else if(var == "VELOCIDADEMEDIAMET"){
+    return "Velocidade media met";
+ }else if(var == "DIRECAOFINALMET"){
+    return "Direcao final met";
+    
+ }else if(var == "POSICAOATUALNACELE"){
+    return "Posicao atual nacele";
+ }else if(var == "ANGULOATUALPITCH"){
+    return "POiscao atual pitch";
+
+ // IF BOTOES
+ // ---------------------
+ }else if(var == "BOTAOFREIONACELE"){
+    String btns = "";
+    
+   if(btnFreioNacele == 0){
+      btns =+ "<div><p class=\"p-col-title\">Freio Nacele</p><button id=\"freioNacele\" class=\"button button-off\" onclick='mudaEstado(\"freioNacele\");toggleBtn(\"freioNacele\")'>OFF</button></div>";
+   }else if(btnFreioNacele == 1){
+      btns =+ "<div><p class=\"p-col-title\">Freio Nacele</p><button id=\"freioNacele\" class=\"button button-on\" onclick='mudaEstado(\"freioNacele\");toggleBtn(\"freioNacele\")'>ON</button></div>";
+   }
+    return btns;
+    
+ }else if(var == "BOTAOFREIOROTOR"){
+   String btns = "";
+   
+   if(btnFreioRotor == 0){
+      btns =+ "<div class=\"mt-105\"><p class=\"p-col-title\">Freio Rotor </p><button id=\"freioRotor\" onclick='mudaEstado(\"freioRotor\");toggleBtn(\"freioRotor\");' class=\"button button-off\">OFF</button></div>";
+   }else if(btnFreioRotor == 1){
+      btns =+ "<div class=\"mt-105\"><p class=\"p-col-title\">Freio Rotor </p><button id=\"freioRotor\" onclick='mudaEstado(\"freioRotor\");toggleBtn(\"freioRotor\");' class=\"button button-on\">ON</button></div>";
+   }
+    return btns;
+ }else{
+  return String();}
 }
 
 //===============================================
@@ -1058,17 +1179,17 @@ String processor(const String &var)
 
 void setup()
 {
-  Wire.begin(); // INICIALIZA O I2C BUS
+  /*Wire.begin(); // INICIALIZA O I2C BUS
   bmp.begin(0x76);
   // Called this function to update de cod, it run for 3 minuts, automatically after this the ESP reset,
   // reiniting it return on de updateWifiCode(), wait again 3 minuts and then, if does`t have cod for
   // for update the ESP return to setup and init the webserver and others functions.
   // For update the code is ever necessary restart the ESP ou call de function updateWifiCode(),
   // for get successe in this processe, is recommended restart de ESP, instead of call de function
-
+*/
   // Intanciando o LED onboard [PODE SER TIRADO DEPOIS]
   pinMode(LED_BUILTIN, OUTPUT); // Habilita o LED onboard como saída.
-
+/*
   // INSTANCIANDO AS VARIÁVEIS
   //-----------------------
   // OUTPUTs
@@ -1151,7 +1272,7 @@ void setup()
   lcd.setCursor(0, 2);
   lcd.print("Init_WebServer");
   delay(1000);
-
+*/
   // CRIANDO O WEBSERVER
   //-----------------------
   // Serial port for debugging purposes
@@ -1183,17 +1304,46 @@ void setup()
 
   // PUXA OS DADOS EM TEMPO REAL
   //---------------------------
-  server.on("/temperature", HTTP_GET, [](AsyncWebServerRequest *request)
-            { request->send_P(200, "text/plain", readDHTTemperature().c_str()); });
+  //modelo
+  //server.on("/rpmrotor", HTTP_GET, [](AsyncWebServerRequest *request)
+  //          { request->send_P(200, "text/plain", readDHTTemperature().c_str()); });
+  
+  server.on("/rpmrotor", HTTP_GET, [](AsyncWebServerRequest *request)
+            { request->send_P(200, "text/plain", readContaTudo().c_str()); });
+  server.on("/rpm_gerador", HTTP_GET, [](AsyncWebServerRequest *request)
+            { request->send_P(200, "text/plain", "RPM gerador 2"); });
+            
+  server.on("/velocidade_met", HTTP_GET, [](AsyncWebServerRequest *request)
+            { request->send_P(200, "text/plain", "RPM gerador 3"); });
+  server.on("/velocidade_media_met", HTTP_GET, [](AsyncWebServerRequest *request)
+            { request->send_P(200, "text/plain", "RPM gerador 4"); });     
+  server.on("/direcao_atual_met", HTTP_GET, [](AsyncWebServerRequest *request)
+            { request->send_P(200, "text/plain", "RPM gerador 5"); });  
+  server.on("/direcao_final_met", HTTP_GET, [](AsyncWebServerRequest *request)
+            { request->send_P(200, "text/plain", "RPM gerador 6"); });   
+              
+  server.on("/posicao_atual_nacele", HTTP_GET, [](AsyncWebServerRequest *request)
+            { request->send_P(200, "text/plain", "RPM gerador 7"); });  
+  server.on("/angulo_atual_pitch", HTTP_GET, [](AsyncWebServerRequest *request)
+            { request->send_P(200, "text/plain", "RPM gerador 8"); });  
 
-  server.on("/velocidade", HTTP_GET, [](AsyncWebServerRequest *request)
-            { request->send_P(200, "text/plain", readDHTVelocidade().c_str()); });
+  server.on("/temp_externa", HTTP_GET, [](AsyncWebServerRequest *request)
+            { request->send_P(200, "text/plain", "RPM gerador 9"); });  
+  server.on("/temp_gerador", HTTP_GET, [](AsyncWebServerRequest *request)
+            { request->send_P(200, "text/plain", "RPM gerador 10"); });   
+
+  server.on("/tensao_sistema", HTTP_GET, [](AsyncWebServerRequest *request)
+            { request->send_P(200, "text/plain", "RPM gerador 11"); });  
+  server.on("/tensao_sistema_polo", HTTP_GET, [](AsyncWebServerRequest *request)
+            { request->send_P(200, "text/plain", "RPM gerador 12"); });               
+                                              
   //---------------------------
 
   // VERIFICA E ATUALIZA O BOTAO QUE FOR ATIVADO
   //---------------------------
   //  Send a GET request to <ESP_IP>/update?output=<btnNaceleMsg1>&state=<btnNaceleMsg2>
-  server.on("/atualizaBtn", HTTP_GET, [](AsyncWebServerRequest *request)
+  //MODELO
+  /*server.on("/atualizaBtn", HTTP_GET, [](AsyncWebServerRequest *request)
             {
 
           // GET input1 value on <ESP_IP>/atualizaBtn?output=<btnNaceleMsg1>&state=<btnNaceleMsg2>
@@ -1222,15 +1372,46 @@ void setup()
               Serial.print(" - Set to: ");
               Serial.println(btnParam2);
           }
+              request->send(200, "text/plain", "OK"); });*/
+
+        server.on("/atualizaBtn", HTTP_GET, [](AsyncWebServerRequest *request){
+          // GET input1 value on <ESP_IP>/atualizaBtn?output=<btnNaceleMsg1>&state=<btnNaceleMsg2>
+          if(request->hasParam(PARAM_INPUT_1) && request->hasParam(PARAM_INPUT_2)){
+
+              //Captura os valores do request
+              btnParam1 = request->getParam(PARAM_INPUT_1)->value();
+              btnParam2 = request->getParam(PARAM_INPUT_2)->value();
+
+              btnParam2Int = btnParam2.toInt();
+
+              if(btnParam1 == "freioNacele"){
+                if(btnParam2Int == 0){
+                  btnFreioNacele = 0;
+                }else if(btnParam2Int == 1){
+                  btnFreioNacele = 1;
+                }  
+                Serial.println("FreioNacele definido");            
+              }else if(btnParam1 == "freioRotor"){
+                if(btnParam2Int == 0){
+                  btnFreioRotor = 0;
+                  digitalWrite(LED_BUILTIN, LOW);
+                }else if(btnParam2Int == 1){
+                  btnFreioRotor = 1;
+                  digitalWrite(LED_BUILTIN, HIGH);
+                }
+                Serial.println("FreioRotor definido");
+              }
+          }
               request->send(200, "text/plain", "OK"); });
   //---------------------------
+  
 
   // INICIA O SERVIDOR
   //---------------------------
   server.begin();
   //---------------------------
 
-  // PARTE FINAL LED
+ /* // PARTE FINAL LED
   //--------------------------
   lcd.clear();
   lcd.setCursor(0, 0);
@@ -1248,7 +1429,7 @@ void setup()
   lcd.clear();
   delay(3000);
 
-  digitalWrite(sinlight, LOW);
+  digitalWrite(sinlight, LOW);*/
 }
 
 //===============================================
@@ -1258,7 +1439,7 @@ void setup()
 void loop()
 {
 
-  // INICIA AS FUNÇÕES
+  /*// INICIA AS FUNÇÕES
   //------------------------
   readsensors();
 
@@ -1316,7 +1497,7 @@ void loop()
     lcd.print("     ");
     lcd.setCursor(14, 3);
     lcd.print(winddir, 1);
-  }
+  }*/
 }
 
 //===============================================
