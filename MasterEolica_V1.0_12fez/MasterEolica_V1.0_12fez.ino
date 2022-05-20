@@ -26,23 +26,32 @@ Adafruit_BMP280 bmp; //OBJETO DO TIPO Adafruit_BMP280 (I2C)
 byte outData = 1;
 float inByte = 0;
 String inString = "";        //string para armazenar bytes enviados pelo slave
+
+float winddir = 0;
+double windspeed = 0;
+float winddirMF = 0;
+
+float info1 = 0;
+int msgconvert = 0;
+int freee=0;
+
                                                            
 
 // Assign output variables to GPIO pins
-const int output26 = 26;
-const int output27 = 27;
-#define arref 2 //arrefecimento do sistem
-#define ncBrake 4 //bloqueio do movimento da nacele
-#define ncFree 15 //liberação do movimento da nacele
+//const int output26 = 26;
+//const int output27 = 27;
+#define arref 2 //arrefecimento do sistema
+#define ncBrake 23 //bloqueio do movimento da nacele
+#define ncFree 4 //liberação do movimento da nacele
 #define GPIOreftemp1 34 //leitura do sensor de temperetura interna do gerador
 #define GPIOreftemp2 13 //leitura do sensor de temperatura do sistema (ESP32)
 #define GPIOtSis 33 //leitura da tensão do sistema de controle
 #define GPIOtPot 32 //leitura da tensão do sistema de pontência
-#define GPIOpotpitch 36 //leitura da tensão do sistema de controle
-#define GPIOpotnacele 39 //leitura da tensão do sistema de pontência
+#define GPIOpotpitch 36 //leitura da referência do sisetma de posicionamento da nacele
+#define GPIOpotnacele 39 //leitura da referência do sisetma de controle de pitch
 #define sinlight 15 //luz de sinalização 
-#define rtFree 8
-#define rtBrake 12
+#define rtFree 26
+#define rtBrake 27
 
 
 //Variáveis da mediçnao de RPM
@@ -86,57 +95,55 @@ int d = 0;
 int e = 0;
 int f = 0;
 int g = 0;
-int pwmbrake = 0;
-int pitchAt = 0; //quarda o valor atual do pitch
-int posiAt = 0; //guarda o valor atual da posição da nacele 
 
+
+//freio rotor
+int braking = 0; //variável freiando
+int seg1 = 0; //parâmetro de segurança 1
+long int tempo16 = 0; //tempo para retorno a operação normal.
 
 
 //variáveis par as rotinas de posicionamento na nacele
-//para o motor de rotação na nacele
-#define pwmH 5 //pino que manda o sinal da pwm para o sentido Horário
-#define pwmA 6 //pino que manda o sinal da pwm no sentido Anti-horário
+#define pwmH 14 //pino que manda o sinal da pwm para o sentido Horário
+#define pwmA 27 //pino que manda o sinal da pwm no sentido Anti-horário
 int valpwm = 0; //variável que armazena o valor da pwm.
 int inter = 0; //intervalo entre deg e posi
 unsigned long tempo1 = 0; //tempo para o ajuste de potência do motor
 unsigned long tempo3 = 0; //tempo para printar a posição na hora do ajuste
-
-//para o referência da nacele
-#define pot 7 //pino que o potenciômetro de referência está conectado
 int valpot = 0; //armazena o valor lido do pot
-int potmap = 0; //armazena o valor do potênciômetro mapeado em graus
 int i = 0;
-
-
-//variáveis gerais. vide referência
 int posi = 0; //posição lida antes de iniciar o movimento
 int cont = 0; //valor de deg - posi = quanto andar e para que sentido
-int ref = 0; //valor (alto ou baixo) do switch refposi
 int deg = 0; //posição atual do vento - variável winddir do master e met.
 int olddeg = 0; //guarda o último valor de deg
 int tent = 0; //tentativas de correção de posição
 int tent1 = 0; //tentativas de correção de posição com precisão
 int i1 = 0;
-int medpot = 0; //media do potenciomentro 200 medições
+int medpot = 0; //media do potenciomentro nacele
 int tempo14 = 0;//tempo máximo para anular o loop de giro da nacele
+
+
+//para referência do pitch
+#define pwmHpitch 13 //pino que manda o sinal da pwm para o sentido Horário
+#define pwmApitch 12 //pino que manda o sinal da pwm no sentido Anti-horário
+int freq = 5000;
+int channel = 0;
+int channel1 = 1;
+int resolution = 8;
+int dutyCycle = 150;
+int dutyCyclePitch1 = 0;
+
+int medpotpitch = 0; //armazena o valor lido do pot
+int pitchReq = 45; //quarda o valor Requerido do pitch
+int pwmpitch = 0; //valor de aceleração do pitch
+int tent2 = 0; // número de tentativas de ajuste do pitch
+long int tempo9 = 0;
+long int tempo10 = 0;
+long int tempo11 = 0;
+
+//Sistema de freios
+int pwmbrake = 0; 
 int brake = 0;
-
-
-//SET da mini met
-//biblioteca ro recepção via RF
-//#include <PinChangeInterruptHandler.h>
-//#include <RFReceiver.h>
-
-// Leitura na porta 2
-//RFReceiver receiver(5);
-
-float winddir = 0;
-double windspeed = 0;
-float winddirMF = 0;
-
-float info1 = 0;
-int msgconvert = 0;
-
 
 
 // Current time
@@ -167,8 +174,7 @@ bmp.begin(0x76);
   // Initialize the output variables as outputs
 
   //OUTPUTs
-  pinMode(output26, OUTPUT);
-  pinMode(output27, OUTPUT);
+
   pinMode(arref, OUTPUT);
   pinMode(ncBrake, OUTPUT);
   pinMode(ncFree, OUTPUT);
@@ -192,8 +198,7 @@ bmp.begin(0x76);
 
 
   // Set outputs to off
-  digitalWrite(output26, LOW);
-  digitalWrite(output27, LOW);
+
   digitalWrite(arref, HIGH);
   digitalWrite(ncBrake, HIGH);
   digitalWrite(ncFree, HIGH);
@@ -202,6 +207,27 @@ bmp.begin(0x76);
   digitalWrite(sinlight, HIGH);
     digitalWrite(pwmH, LOW);
   digitalWrite(pwmA, LOW);
+
+
+//Definições gerais para a PWM
+
+  //pinMode(pwmHpitch, OUTPUT);
+  //pinMode(pwmApitch, OUTPUT);
+
+  ledcSetup(0, 5000, 8);
+  ledcAttachPin(13, 0);
+
+  ledcSetup(1, 5000, 8);
+  ledcAttachPin(12, 1);
+
+  ledcSetup(2, 5000, 8);
+  ledcAttachPin(26, 2);
+
+  ledcSetup(3, 5000, 8);
+  ledcAttachPin(27, 3);
+  
+ // ledcWrite(0, 200);
+ // ledcWrite(1, 0);
 
 
     //Abilitação do AttachInterrupt
@@ -235,6 +261,9 @@ lcd.print("updateWIFIcode()");
 lcd.setCursor(0, 3);
 lcd.print("Wait..........");
 
+//freenacele();
+//brakenacele();
+freerotor();
 
   updateWifiCode();
 
@@ -283,6 +312,22 @@ lcd.clear();
 delay(3000);
 
 
+
+
+
+while(1==2){
+  lcd.clear();
+  lcd.setCursor(0, 0);
+  lcd.print(analogRead(GPIOpotpitch));
+  delay(500);
+}
+
+
+
+
+
+
+
  
 digitalWrite(sinlight, LOW);
 
@@ -300,54 +345,8 @@ webServer();
 
 sinalization();
 
-//print no display
-while((millis()-time2) >= 500){
-  time2 = millis();
-lcd.setCursor(0, 0);
-lcd.print("LAZZARUS_Eolica V2.0");
-  
-lcd.setCursor(0, 1);
-lcd.print("TGer:");
-lcd.print(tempgerador,1);
-lcd.print("C");
+Display();
 
-lcd.setCursor(11, 1);
-lcd.print("Ts:");
-lcd.print(tempsistema,2);
-lcd.print("C");
-
-lcd.setCursor(11, 2);
-lcd.print("ts:");
-lcd.print(tSis,1);
-lcd.print("V");
-
-lcd.setCursor(0, 2);
-lcd.print("tPot:");
-lcd.print(tPot,1);
-lcd.print("V");
-
-lcd.setCursor(0, 3);
-lcd.print("RPM:");
-lcd.setCursor(4, 3);
-lcd.print("     ");
-lcd.setCursor(4, 3);
-lcd.print(rpm);
-
-lcd.setCursor(8, 3);
-lcd.print("U");
-lcd.setCursor(9, 3);
-lcd.print("     ");
-lcd.setCursor(9, 3);
-lcd.print(windspeed,1);
-lcd.setCursor(13, 3);
-lcd.print("D");
-lcd.setCursor(14, 3);
-lcd.print("     ");
-lcd.setCursor(14, 3);
-lcd.print(winddir,1);
-
-  
-}
 
 }
 
@@ -394,16 +393,12 @@ b=0;
 
 
 
+//leitura da posição da nacele
+mediapot();
 
-//para a leitura da posição de angulo de pitch
-pitchAt=0;
-while(b <= 30){
-pitchAt = analogRead(GPIOpotpitch)+pitchAt;
-b++;
-} 
-pitchAt = pitchAt/30;
-pitchAt = map(pitchAt, 0, 3000, 0, 90);
-b=0;
+
+//leitura do angulo pitch
+mediapotpitch();
 
 
 //Leitura da RPM 
@@ -418,17 +413,31 @@ attachInterrupt(digitalPinToInterrupt(35), addcount, FALLING);
   }
 
 
-mediapot();
   
  
 }
 
+
+//medição da valor do potenciometro de referência do sistema de posicionamento
 void mediapot(){
+  i1=0;
   while(i1<20)  {
-  medpot = medpot + (map(analogRead(pot), 68, 945, 0, 359));
+  medpot = medpot + (map(analogRead(GPIOpotnacele), 68, 945, 0, 359));
   i1++;
   }
-  medpot=medpot/20;
+  medpot = (medpot/20);
+  i1=0;
+}
+
+
+//medição da valor do potenciometro de referência do sistema de pitch
+void mediapotpitch(){
+  i1=0;
+  while(i1<20)  {
+  medpotpitch = medpotpitch + (map(analogRead(GPIOpotpitch), 110, 3950, 45, 0));
+  i1++;
+  }
+  medpotpitch = (medpotpitch/20);
   i1=0;
 }
 
@@ -507,6 +516,35 @@ time7=millis();
 //aqui toman-se as decisøes com base nos sensores e operação
 void operation(){
 
+//Elevação da RPM por angulo de pitch
+if(rpm < 200){
+  if(pitchReq < 45 & (millis()-tempo11) > 500){
+pitchReq = pitchReq + 1;
+tempo11 = millis();
+}
+tent2=0;
+ajustepitch();
+
+}
+
+
+
+//Redução do angulo de pitch em altas rotações
+if(rpm > 400 & millis()-tempo10 > 5000){
+
+if(pitchReq >= 5){
+pitchReq = pitchReq - 5;
+
+}
+ tempo10 = millis();
+ tent2=0;
+  ajustepitch();
+  
+}
+
+
+
+
 
 //ativação automática do arrefecimento
 if(tempgerador >= 23.0 & a == 0){
@@ -519,27 +557,80 @@ a=0;
 }
 
 
-//bloaqueio automático do rotor com base em alta rpm - para entrar nesta função o pitch deve ter falhado.
-if(rpm >= 3500 & brake == 0){
-  brake = 1;
+
+//retomada de operação após normalização de parâmetros
+if(rpm < 50 & (millis()-tempo16) >= 60000){
+  seg1=0;
+}
 
 
-  
+
+//bloqueio automático do rotor com base em alta rpm - para entrar nesta função o pitch deve ter falhado.
+if(rpm >= 600 & brake == 0){
+  braking = 1;
+  seg1=1; //parâmetro de segurança 1 acionado 
+  tempo16 = millis();
 }
-if(rpm < 500 & brake == 1){ //liberação do rotor
-  freerotor();
-  brake = 0;
-}
+
 
 //para entrar na freagem automática do rotor
-if(brake == 1){
+if(braking == 1){
   brakerotor();
 }
 
 
-ajustenacele();
+//liberação do rotor
+if(seg1 == 0 & brake ==1){ 
+  freerotor();
+}
+
 
 }//fim do operation()
+
+void ajustepitch(){
+
+  mediapotpitch();
+
+  //ajuste no sentido horário
+  if(medpotpitch > pitchReq & tent2 <= 3){
+   
+   //aumenta a pwm
+   if((millis()-tempo9) >= 10 & pwmpitch < 255){
+    pwmpitch++;
+    tempo9 = millis();
+   }
+
+   
+    ledcWrite(0, pwmpitch);
+  }
+
+
+    //ajuste no sentido Anti-horário
+  if(medpotpitch < pitchReq & tent2 <= 3){
+   
+   //aumenta a pwm
+   if((millis()-tempo9) >= 10 & pwmpitch < 255){
+    pwmpitch++;
+    tempo9 = millis();
+   }
+
+   
+    ledcWrite(1, pwmpitch);
+  }
+
+  if(medpotpitch == pitchReq){
+
+    pwmpitch = 0;
+    ledcWrite(1, pwmpitch);
+    ledcWrite(0, pwmpitch);
+
+    tent2++;
+  }
+
+
+
+  
+}
 
 
 void ajustenacele(){
@@ -555,7 +646,6 @@ if(deg < medpot){
 
 //quando não é um ajuste de precisão -> inter > 10
 if(deg != medpot & tent <= 8 & inter > 10){
-  Serial.print("            Entrou no iff");
 lcd.clear();
 
 mediapot();
@@ -634,14 +724,7 @@ lcd.print("ValPWM:");
 lcd.setCursor(17, 3);
 lcd.print(valpwm);
 tempo3=millis();
-Serial.print("valor do potênciometro: ");
-Serial.println(analogRead(pot));
-Serial.print("valor da posição:  ");
-Serial.println(medpot);
-Serial.print("valor do deg ");
-Serial.println(deg);
-Serial.print("valpwm");
-Serial.println(valpwm);
+
  }
 
 /*/anula o loop se passar de 4 min
@@ -726,14 +809,7 @@ lcd.print("ValPWM:");
 lcd.setCursor(17, 3);
 lcd.print(valpwm);
 tempo3=millis();
-Serial.print("valor do potênciometro: ");
-Serial.println(analogRead(pot));
-Serial.print("valor da posição:  ");
-Serial.println(medpot);
-Serial.print("valor do deg ");
-Serial.println(deg);
-Serial.print("valpwm");
-Serial.println(valpwm);
+
  }
 
 /*/anula o loop se passar de 2.5 min
@@ -829,14 +905,7 @@ lcd.print("ValPWM:");
 lcd.setCursor(17, 3);
 lcd.print(valpwm);
 tempo3=millis();
-Serial.print("valor do potênciometro: ");
-Serial.println(analogRead(pot));
-Serial.print("valor da posição:  ");
-Serial.println(medpot);
-Serial.print("valor do deg ");
-Serial.println(deg);
-Serial.print("valpwm");
-Serial.println(valpwm);
+
  }
  /*/anula o loop se passar de 30 seg
  if((millis()-tempo14) > (120000)){
@@ -909,14 +978,7 @@ lcd.print("ValPWM:");
 lcd.setCursor(17, 3);
 lcd.print(valpwm);
 tempo3=millis();
-Serial.print("valor do potênciometro: ");
-Serial.println(analogRead(pot));
-Serial.print("valor da posição:  ");
-Serial.println(medpot);
-Serial.print("valor do deg ");
-Serial.println(deg);
-Serial.print("valpwm");
-Serial.println(valpwm);
+
  }
  /*/anula o loop se passar de 30 seg
  if((millis()-tempo14) > (120000)){
@@ -970,11 +1032,11 @@ digitalWrite(arref, HIGH);
 //function to brake the nacele rotation
 void brakenacele(){
 digitalWrite(ncBrake, LOW); 
-delay(100); 
+delay(200); 
 digitalWrite(ncBrake, HIGH);
 delay(200);
 digitalWrite(ncBrake, LOW); 
-delay(600); 
+delay(700); 
 digitalWrite(ncBrake, HIGH);
 ncState = "locked"; 
 }
@@ -982,7 +1044,7 @@ ncState = "locked";
 //function to free the nacele rotation
 void freenacele(){
 digitalWrite(ncFree, LOW); 
-delay(100); 
+delay(200); 
 digitalWrite(ncFree, HIGH);
 delay(200);
 digitalWrite(ncFree, LOW); 
@@ -994,21 +1056,20 @@ ncState = "liberate";
 //function to brake the rotor rotation
 void brakerotor(){
 
-if((millis() - tempo3) >= 80 & pwmbrake < 255 & brake == 1){
+if((millis() - tempo3) >= 80 & pwmbrake < 255){
   pwmbrake++; 
-  ledcWrite(rtBrake, pwmbrake);
   tempo3 = millis();
   rtState = "locking";
 }
 
-if(pwmbrake == 255 & (millis()-tempo3) >= 200 & brake == 1){
+if(pwmbrake == 255 & (millis()-tempo3) >= 200){
   digitalWrite(rtBrake, LOW);
-  brake=0;
-  tempo3=0;
+  braking=0;
+  brake=1;
   rtState = "locked";
   pwmbrake=0;
 }
-  
+   ledcWrite(2, pwmbrake);
 
  
 }
@@ -1016,13 +1077,13 @@ if(pwmbrake == 255 & (millis()-tempo3) >= 200 & brake == 1){
 //function to free the rotor rotation
 void freerotor(){
 
-digitalWrite(rtFree, HIGH);
+ledcWrite(3, 255);
 delay(500);
-digitalWrite(rtFree, LOW);
+ledcWrite(3, 0);
 delay(100);
-digitalWrite(rtFree, HIGH);
+ledcWrite(3, 255);
 delay(200);
-digitalWrite(rtFree, LOW);
+ledcWrite(3, 0);
   
 rtState = "liberate"; 
 
@@ -1035,7 +1096,7 @@ rtState = "liberate";
 void sinalization(){
 
   
-  if((millis() - time6) >= 1500 & d==0){
+  if((millis() - time6) >= 3000 & d==0){
     time6=millis();
     digitalWrite(sinlight, HIGH);
    d=1;
@@ -1106,12 +1167,12 @@ void sinalization(){
             else if (header.indexOf("GET /27/on") >= 0) {
               Serial.println("GPIO 27 on");
               output27State = "on";
-              digitalWrite(output27, HIGH);
+              //digitalWrite(output27, HIGH);
            
             } else if (header.indexOf("GET /27/off") >= 0) {
               Serial.println("GPIO 27 off");
               output27State = "off";
-              digitalWrite(output27, LOW);
+              //digitalWrite(output27, LOW);
           
             }else if (header.indexOf("GET /pitch/on") >= 0) {
               Serial.println("pitch on");
@@ -1311,4 +1372,57 @@ void sinalization(){
   }
   Serial.println("Tempo de espera exedido");
   Serial.println("Inicializando servidor");
+  }
+
+
+  void Display(){
+    //print no display
+while((millis()-time2) >= 500){
+  time2 = millis();
+lcd.setCursor(0, 0);
+lcd.print("LAZZARUS_Eolica V2.0");
+  
+lcd.setCursor(0, 1);
+lcd.print("TGer:");
+lcd.print(tempgerador,1);
+lcd.print("C");
+
+lcd.setCursor(11, 1);
+lcd.print("Ts:");
+lcd.print(tempsistema,2);
+lcd.print("C");
+
+lcd.setCursor(11, 2);
+lcd.print("ts:");
+lcd.print(tSis,1);
+lcd.print("V");
+
+lcd.setCursor(0, 2);
+lcd.print("tPot:");
+lcd.print(tPot,1);
+lcd.print("V");
+
+lcd.setCursor(0, 3);
+lcd.print("RPM:");
+lcd.setCursor(4, 3);
+lcd.print("     ");
+lcd.setCursor(4, 3);
+lcd.print(rpm);
+
+lcd.setCursor(8, 3);
+lcd.print("U");
+lcd.setCursor(9, 3);
+lcd.print("     ");
+lcd.setCursor(9, 3);
+lcd.print(windspeed,1);
+lcd.setCursor(13, 3);
+lcd.print("D");
+lcd.setCursor(14, 3);
+lcd.print("     ");
+lcd.setCursor(14, 3);
+lcd.print(winddir,1);
+
+  
+}
+    
   }
