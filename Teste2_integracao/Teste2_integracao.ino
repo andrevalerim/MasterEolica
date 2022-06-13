@@ -183,15 +183,25 @@ int cont1 = 1;
 // Captura dos parametros
 String btnParam1; // Nome do botao
 String btnParam2; // Estado do botao
+String valueParam3; // Valor do input
+String inputParam4; // Nome do input
 
 // Receber o estado dos botoes
+int valueParam3Int = 0;
 int btnParam2Int = 0;
 int btnFreioRotor = 0;
 int btnFreioNacele = 0;
+int btnModoManualPitch = 0;
+int btnModoManualPosicionamento = 0;
 
 // Controle webpage
 const char *PARAM_INPUT_1 = "output";
 const char *PARAM_INPUT_2 = "state";
+
+const char *PARAM_INPUT_3 = "value";
+const char *PARAM_INPUT_4 = "input";
+
+
 
 //===============================================
 // LENDO OS SENSORES E OS TRANSFORMANDO EM STRING
@@ -222,14 +232,14 @@ const char *PARAM_INPUT_2 = "state";
 // Contadores de teste
 String readContaTudo(){
   contaTudo++;
-  Serial.println(contaTudo);
+//  Serial.println(contaTudo);
   return String(contaTudo);
 }
 
 String readDHTTemperature()
 {
   contaTudo++;
-  Serial.println(contaTudo);
+//  Serial.println(contaTudo);
   return String(contaTudo);
 }
 
@@ -237,7 +247,7 @@ String readDHTTemperature()
 String readDHTVelocidade()
 {
   cont1++;
-  Serial.println(cont1);
+//  Serial.println(cont1);
   return String(cont1);
 }
 
@@ -332,6 +342,14 @@ const char index_html[] PROGMEM = R"rawliteral(
             border: #666666 solid 2px;
             border-radius: 10px 40px;
             background-color: #e4e4e4;}
+
+        .hide {
+            display: none;
+        }
+
+        .show {
+            display: block;
+        }
 
         h2 {
             color: #00777e;
@@ -720,16 +738,13 @@ const char index_html[] PROGMEM = R"rawliteral(
                 <div>
                     <div class="mt-105">
                         <p class="p-col-title">Ativar Modo Manual</p>
-                        <button id="modoManualPosicao" class="button button-off"
-                            onclick='capturaElemento("modoManualPosicao");alerta();'>OFF</button>
+                        %BOTAOMANUALPOSICIONAMENTO%
                     </div>
-                    <div class="mt-105">
+                    <div id="formNacele" class="mt-105 hide">
                         <p class="p-col-title">Posicionamento Manual em Graus</p>
-                        <form action="">
-                            <input type="number" min="0" max="359" id="posicaoManualGraus" name="posicaoManualGraus"
+                            <input type="number" min="0" max="360" id="posicaoManualGraus" name="posicaoManualGraus"
                                 onkeyup='controlaGrau("posicao")' placeholder="0º">
-                            <button id="modoManualPosicaoEnviar" class="button button-off">Enviar</button>
-                        </form>
+                            <button id="modoManualPosicaoEnviar" class="button button-off" onclick='enviaGrausManual("posicaoManualGraus")'>Enviar</button>
                         <!-- <button id="modoManual" class="button button-off" onclick='capturaElemento("modoManual");alerta();'>OFF</button> -->
                     </div>
                 </div>
@@ -744,16 +759,13 @@ const char index_html[] PROGMEM = R"rawliteral(
                 <div>
                     <div class="mt-105">
                         <p class="p-col-title">Ativar Modo Manual</p>
-                        <button class="button button-off" onclick='capturaElemento("modoManualPitch");alerta();'>OFF</button>
+                        %BOTAOMANUALPITCH%
                     </div>
-                    <div class="mt-105">
+                    <div id="formPitch" class="mt-105 hide">
                         <p class="p-col-title">Posicionamento Manual em Graus</p>
-                        <form action="">
-                            <input type="number" min="0" max="359" id="pitchManualGraus" name="pitchManualGraus"
+                            <input type="number" min="0" max="360" id="pitchManualGraus" name="pitchManualGraus"
                                 onkeyup='controlaGrau("pitch")' placeholder="0º">
-                            <button id="modoManualPitchEnviar" class="button button-off">Enviar</button>
-                        </form>
-
+                            <button id="modoManualPitchEnviar" class="button button-off" onclick='enviaGrausManual("pitchManualGraus")'>Enviar</button>
                     </div>
                 </div>
             </div>
@@ -827,8 +839,7 @@ setInterval(function ( ) {
   var xhttp = new XMLHttpRequest();
   xhttp.onreadystatechange = function() {
     if (this.readyState == 4 && this.status == 200) {
-      document.getElementById("rpmrotor").innerHTML = this.responseText;
-      console.log("Pediu RPM"); 
+      document.getElementById("rpmrotor").innerHTML = this.responseText; 
     }
   };
   xhttp.open("GET","/rpmrotor", true);
@@ -963,6 +974,29 @@ setInterval(function ( ) {
   xhttp.send();
 }, 500 ) ;
 
+const habilitaEnvio = function (id) {
+        var form = "", indexForm = ""
+
+        if (id == "modoManualPitch") {
+            form = "formPitch"
+        } else if (id == "modoManualPosicao") {
+            form = "formNacele"
+        }else{
+            
+        }
+
+        indexForm = document.getElementById(form).classList.contains("hide");
+
+        if (indexForm == true) {
+            document.getElementById(form).classList.toggle("hide");
+            document.getElementById(form).classList.toggle("show");
+        }else if (indexForm == false){
+            document.getElementById(form).classList.toggle("show");
+            document.getElementById(form).classList.toggle("hide");
+        }
+
+    }
+
 const pedeSenha = function() {
 
         var senha = prompt("Digite a senha para continuar")
@@ -971,6 +1005,7 @@ const pedeSenha = function() {
             if (senha == "pluseamelhor") {
                 alert("Deu bom!")
                 mudaEstado(elemento);
+                habilitaEnvio(elemento);
             } else {
                 alert("Senha Incorreta!")
             }
@@ -988,6 +1023,7 @@ const alerta = function() {
             }
         } else {
             mudaEstado(elemento);
+            habilitaEnvio(elemento);
             toggleBtn(elemento);
         }
     }
@@ -1037,12 +1073,12 @@ const controlaGrau = function(id) {
 
         //Se for maior que o max altera para o min
         if (valor > attrMax) {
-            inputGrau.value = 359 + "º"
+            inputGrau.value = 360 
         }
 
         //Se for menor que o min ele muda para o max
         if (valor < attrMin) {
-            inputGrau.value = 359
+            inputGrau.value = 360
         }
 
         //Se for vazio atribui vazio
@@ -1056,8 +1092,8 @@ const controlaGrau = function(id) {
         }
     }
 
- //funcao nova
- const toggleBtn = function(botao){
+//funcao nova
+const toggleBtn = function(botao){
   //variaveis da funcao
   var botao = botao
   var classeAtiva = document.getElementById(botao).classList.contains("button-on")
@@ -1070,7 +1106,29 @@ const controlaGrau = function(id) {
   else if (classeDesligada == true){ xhr.open("GET", "/atualizaBtn?output="+botao+"&state=0", true);console.log("Enviou:" + botao + "| Estado: 0"); }
   xhr.send();
 
- }      
+} 
+
+const enviaGrausManual = function (id) {
+  var valor = document.getElementById(id).value;
+  var input = id;
+  var xhr = new XMLHttpRequest();
+
+  var escolha = confirm("Deseja enviar esse grau?");
+
+  if (escolha == true) {
+      xhr.open("GET", "/atualizaGrau?value=" + valor + "&input=" + input, true); console.log("Enviou grau:" + valor);
+  }
+  else if (escolha == false) {
+      if (id = "pitchManualGraus") {
+          mudaEstado("modoManualPitch");
+          toggleBtn("modoManualPitch");
+      } else if (id = "posicaoManualGraus") {
+          mudaEstado("modoManualPosicao");
+          toggleBtn("modoManualPosicao");
+      }
+  }
+  xhr.send();
+}
 
 </script>
 
@@ -1146,10 +1204,30 @@ String processor(const String &var)
  }else if(var == "POSICAOATUALNACELE"){
     return "Posicao atual nacele";
  }else if(var == "ANGULOATUALPITCH"){
-    return "POiscao atual pitch";
+    return "Posicao atual pitch";
 
  // IF BOTOES
  // ---------------------
+ }else if(var == "BOTAOMANUALPITCH"){
+    String btns = "";
+    
+   if(btnModoManualPitch == 0){
+      btns =+ "<button id=\"modoManualPitch\" class=\"button button-off\" onclick='capturaElemento(\"modoManualPitch\");alerta();'>OFF</button>";
+   }else if(btnModoManualPitch == 1){
+      btns =+ "<button id=\"modoManualPitch\" class=\"button button-on\" onclick='capturaElemento(\"modoManualPitch\");alerta();'>ON</button>";
+   }
+    return btns;
+    
+ }else if(var == "BOTAOMANUALPOSICIONAMENTO"){
+    String btns = "";
+    
+   if(btnModoManualPosicionamento == 0){
+      btns =+ "<button id=\"modoManualPosicao\" class=\"button button-off\"onclick='capturaElemento(\"modoManualPosicao\");alerta();'>OFF</button>";
+   }else if(btnModoManualPosicionamento == 1){
+      btns =+ "<button id=\"modoManualPosicao\" class=\"button button-on\"onclick='capturaElemento(\"modoManualPosicao\");alerta();'>ON</button>";
+   }
+    return btns;
+    
  }else if(var == "BOTAOFREIONACELE"){
     String btns = "";
     
@@ -1190,7 +1268,7 @@ void setup()
   // Intanciando o LED onboard [PODE SER TIRADO DEPOIS]
   pinMode(LED_BUILTIN, OUTPUT); // Habilita o LED onboard como saída.
 
-  // INSTANCIANDO AS VARIÁVEIS
+ /* // INSTANCIANDO AS VARIÁVEIS
   //-----------------------
   // OUTPUTs
   pinMode(output26, OUTPUT);
@@ -1226,12 +1304,12 @@ void setup()
   digitalWrite(sinlight, HIGH);
   digitalWrite(pwmH, LOW);
   digitalWrite(pwmA, LOW);
-
+*/
   // Abilitação do AttachInterrupt
   attachInterrupt(digitalPinToInterrupt(35), addcount, FALLING);
 
   // ATUALIZA O CÓDIGO VIA WIFI
-  updateWifiCode();
+  //updateWifiCode();
 
   // CRIANDO O WEBSERVER
   //-----------------------
@@ -1302,38 +1380,7 @@ void setup()
   // VERIFICA E ATUALIZA O BOTAO QUE FOR ATIVADO
   //---------------------------
   //  Send a GET request to <ESP_IP>/update?output=<btnNaceleMsg1>&state=<btnNaceleMsg2>
-  //MODELO
-  /*server.on("/atualizaBtn", HTTP_GET, [](AsyncWebServerRequest *request)
-            {
-
-          // GET input1 value on <ESP_IP>/atualizaBtn?output=<btnNaceleMsg1>&state=<btnNaceleMsg2>
-          if(request->hasParam(PARAM_INPUT_1) && request->hasParam(PARAM_INPUT_2)){
-
-              //Captura os valores do request
-              btnParam1 = request->getParam(PARAM_INPUT_1)->value();
-              btnParam2 = request->getParam(PARAM_INPUT_2)->value();
-
-              btnParam2Int = btnParam2.toInt();
-
-              //(TEORICAMENTE MUDARIA O ESTADO DO OBJETO LIGADO AO GPIO)
-              //digitalWrite(btnNaceleMsg, btnNaceleMsg2.toInt());
-
-              //MAS VAMOS FAZER DE OUTRA FORMA
-              if(btnParam2Int == 0){
-                digitalWrite(LED_BUILTIN,LOW);
-              }else if(btnParam2Int == 1){
-                digitalWrite(LED_BUILTIN, HIGH);
-              }else{
-              btnParam1 = "--";
-              btnParam2 = "--";
-              }
-              Serial.print("GPIO: ");
-              Serial.print(btnParam1);
-              Serial.print(" - Set to: ");
-              Serial.println(btnParam2);
-          }
-              request->send(200, "text/plain", "OK"); });*/
-
+ 
         server.on("/atualizaBtn", HTTP_GET, [](AsyncWebServerRequest *request){
           // GET input1 value on <ESP_IP>/atualizaBtn?output=<btnNaceleMsg1>&state=<btnNaceleMsg2>
           if(request->hasParam(PARAM_INPUT_1) && request->hasParam(PARAM_INPUT_2)){
@@ -1360,6 +1407,43 @@ void setup()
                   digitalWrite(LED_BUILTIN, HIGH);
                 }
                 Serial.println("FreioRotor definido");
+              }else if(btnParam1 == "modoManualPosicao"){
+                if(btnParam2Int == 0){
+                  btnModoManualPosicionamento = 0;
+                  
+                }else if(btnParam2Int == 1){
+                  btnModoManualPosicionamento = 1;
+                 
+                }
+                Serial.println("Modo Manual Posicao Definido");
+              }else if(btnParam1 == "modoManualPitch"){
+                if(btnParam2Int == 0){
+                  btnModoManualPitch = 0;
+                  
+                }else if(btnParam2Int == 1){
+                  btnModoManualPitch = 1;
+                 
+                }
+                Serial.println("Modo Manual Pitch Definido");
+              }
+          };
+           request->send(200, "text/plain", "OK"); });
+          
+          //AVALIA INPUTS GRAUS
+
+          //PITCH
+          server.on("/atualizaGrau", HTTP_GET, [](AsyncWebServerRequest *request){
+          // GET input1 value on <ESP_IP>/atualizaBtn?output=<btnNaceleMsg1>&state=<btnNaceleMsg2>
+          if(request->hasParam(PARAM_INPUT_3) && request->hasParam(PARAM_INPUT_4)){
+
+              //Captura os valores do request
+              valueParam3 = request->getParam(PARAM_INPUT_3)->value();
+              inputParam4 = request->getParam(PARAM_INPUT_4)->value();
+
+              valueParam3Int = valueParam3.toInt();
+
+              if(inputParam4 == "pitchManualGraus"){
+                Serial.println(valueParam3Int);
               }
           }
               request->send(200, "text/plain", "OK"); });
@@ -1378,7 +1462,7 @@ void setup()
 
 void loop()
 {
-
+/*
   // INICIA AS FUNÇÕES
   //------------------------
   readsensors();
@@ -1388,6 +1472,8 @@ void loop()
   operation();
 
   sinalization();
+
+  */
 }
 
 //===============================================
