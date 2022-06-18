@@ -927,7 +927,7 @@ const char index_html[] PROGMEM = R"rawliteral(
 //Declarando as funcoes criadas (Declarar as funcoes usando - const = *nome funcao* function(){} - pq ele nao reconhce o function)
 //Declarando as variaveis
     const locker = "pluseamelhor";
-    var elemento = "", armazenaUltimoModo = 1;
+    var elemento = "", armazenaUltimoModo = 3;
 
 //INTERVALOS DE 0.5 SEGUNDO
     //RPMS
@@ -1038,14 +1038,14 @@ const char index_html[] PROGMEM = R"rawliteral(
     //FREIOS
     setInterval(function () {
         var xhttp = new XMLHttpRequest();        
-        xhttp.onreadystatechange = function () {if (this.readyState == 4 && this.status == 200) {/*document.getElementById("freio_nacele").innerHTML = this.responseText;*/}};
+        xhttp.onreadystatechange = function () {if (this.readyState == 4 && this.status == 200) {var modo = this.responseText,modoInt = parseInt(modo); if(modoInt == 0){document.getElementById("status_atual_freio_nacele").value = "Desacoplado"; if(document.getElementById("status_atual_freio_nacele").classList.contains("status_atual_freio_nacele_freado") == true){document.getElementById("status_atual_freio_nacele").classList.remove("status_atual_freio_nacele_freado");}}else{if(document.getElementById("status_atual_freio_nacele").classList.contains("status_atual_freio_nacele_freado") == false){document.getElementById("status_atual_freio_nacele").classList.add("status_atual_freio_nacele_freado"); document.getElementById("status_atual_freio_nacele").value = "Acoplado"}else{}}}};
         xhttp.open("GET", "/freio_nacele", true);
         xhttp.send();
         
     }, 1000);
     setInterval(function () {
         var xhttp = new XMLHttpRequest();        
-        xhttp.onreadystatechange = function () {if (this.readyState == 4 && this.status == 200) {/* document.getElementById("freio_rotor").innerHTML = this.responseText;*/}};
+        xhttp.onreadystatechange = function () {if (this.readyState == 4 && this.status == 200) {var modo = this.responseText,modoInt = parseInt(modo); if(modoInt == 0){document.getElementById("status_atual_freio_rotor").value = "Desacoplado"; if(document.getElementById("status_atual_freio_rotor").classList.contains("status_atual_freio_rotor_freado") == true){document.getElementById("status_atual_freio_rotor").classList.remove("status_atual_freio_rotor_freado");}}else{if(document.getElementById("status_atual_freio_rotor").classList.contains("status_atual_freio_rotor_freado") == false){document.getElementById("status_atual_freio_rotor").classList.add("status_atual_freio_rotor_freado"); document.getElementById("status_atual_freio_rotor").value = "Acoplado"}else{}}}};
         xhttp.open("GET", "/freio_rotor", true);
         xhttp.send();
         
@@ -1211,9 +1211,9 @@ const char index_html[] PROGMEM = R"rawliteral(
             input = document.getElementById(btn);
 
         console.log("armazenaUltimoModo:" + armazenaUltimoModo)
-        if ((armazenaUltimoModo == 3) && (modo != 3)) {
-            habilitaManual()
-        }
+        //if ((armazenaUltimoModo == 5) && (modo != 5)) {
+        //    habilitaManual()
+        //}
 
         if (input.classList.contains("button-off")) {
             escolha = confirm("Deseja ativar esse modo?");
@@ -1224,7 +1224,7 @@ const char index_html[] PROGMEM = R"rawliteral(
         if (escolha == true) {
 
             if ((modo == armazenaUltimoModo)) {
-                if (modo == 1) {
+                if (modo == 3) {
 
                 } else {
                     mudaStatusSistema(modo)
@@ -1373,9 +1373,9 @@ String processor(const String &var)
    String btns = "";
    
    if(btnAcionaManual == 0){
-      btns =+ "<div class=\"mt-105\"><p class=\"p-col-title\">Modo Manual</p><button id=\"btnAcionaModoManual\" onclick='enviaModoAtual(\"btnAcionaModoManual\",3)' class=\"button button-off\">OFF</button></div>";
+      btns =+ "<div class=\"mt-105\"><p class=\"p-col-title\">Modo Manual</p><button id=\"btnAcionaModoManual\" onclick='enviaModoAtual(\"btnAcionaModoManual\",5)' class=\"button button-off\">OFF</button></div>";
    }else if(btnAcionaManual == 1){
-      btns =+ "<div class=\"mt-105\"><p class=\"p-col-title\">Modo Manual </p><button id=\"btnAcionaModoManual\" onclick='enviaModoAtual(\"btnAcionaModoManual\",3)' class=\"button button-on\">ON</button></div>";
+      btns =+ "<div class=\"mt-105\"><p class=\"p-col-title\">Modo Manual </p><button id=\"btnAcionaModoManual\" onclick='enviaModoAtual(\"btnAcionaModoManual\",5)' class=\"button button-on\">ON</button></div>";
    }
     return btns;
  }else if(var == "BOTAOACIONAONLINE"){
@@ -1388,18 +1388,18 @@ String processor(const String &var)
   }
    
    if(btnAcionaOnline == 0){
-      btns =+ "<div class=\"mt-105\"><p class=\"p-col-title\">Modo Online</p><button id=\"btnAcionaOnline\" onclick='enviaModoAtual(\"btnAcionaOnline\",1)' class=\"button button-off\">OFF</button></div>";
+      btns =+ "<div class=\"mt-105\"><p class=\"p-col-title\">Modo Online</p><button id=\"btnAcionaOnline\" onclick='enviaModoAtual(\"btnAcionaOnline\",3)' class=\"button button-off\">OFF</button></div>";
    }else if(btnAcionaOnline == 1){
-      btns =+ "<div class=\"mt-105\"><p class=\"p-col-title\">Modo Online </p><button id=\"btnAcionaOnline\" onclick='enviaModoAtual(\"btnAcionaOnline\",1)' class=\"button button-on\">ON</button></div>";
+      btns =+ "<div class=\"mt-105\"><p class=\"p-col-title\">Modo Online </p><button id=\"btnAcionaOnline\" onclick='enviaModoAtual(\"btnAcionaOnline\",3)' class=\"button button-on\">ON</button></div>";
    }
     return btns;
  }else if(var == "BOTAOACIONAOFFLINE"){
    String btns = "";
    
    if(btnAcionaOffline == 0){
-      btns =+ "<div class=\"mt-105\"><p class=\"p-col-title\">Modo Offline</p><button id=\"btnAcionaOffline\" onclick='enviaModoAtual(\"btnAcionaOffline\",0)' class=\"button button-off\">OFF</button></div>";
+      btns =+ "<div class=\"mt-105\"><p class=\"p-col-title\">Modo Offline</p><button id=\"btnAcionaOffline\" onclick='enviaModoAtual(\"btnAcionaOffline\",4)' class=\"button button-off\">OFF</button></div>";
    }else if(btnAcionaOffline == 1){
-      btns =+ "<div class=\"mt-105\"><p class=\"p-col-title\">Modo Offline </p><button id=\"btnAcionaOffline\" onclick='enviaModoAtual(\"btnAcionaOffline\",0)' class=\"button button-on\">ON</button></div>";
+      btns =+ "<div class=\"mt-105\"><p class=\"p-col-title\">Modo Offline </p><button id=\"btnAcionaOffline\" onclick='enviaModoAtual(\"btnAcionaOffline\",4)' class=\"button button-on\">ON</button></div>";
    }
     return btns;
  }else if(var == "BOTAOACIONAIDLE"){
@@ -1415,18 +1415,18 @@ String processor(const String &var)
    String btns = "";
    
    if(btnAcionaAutosafe == 0){
-      btns =+ "<div class=\"mt-105\"><p class=\"p-col-title\">Modo Autosafe</p><button id=\"btnAutosafe\" onclick='enviaModoAtual(\"btnAutosafe\",4)' class=\"button button-off\">OFF</button></div>";
+      btns =+ "<div class=\"mt-105\"><p class=\"p-col-title\">Modo Autosafe</p><button id=\"btnAutosafe\" onclick='enviaModoAtual(\"btnAutosafe\",1)' class=\"button button-off\">OFF</button></div>";
    }else if(btnAcionaAutosafe == 1){
-      btns =+ "<div class=\"mt-105\"><p class=\"p-col-title\">Modo Autosafe</p><button id=\"btnAutosafe\" onclick='enviaModoAtual(\"btnAutosafe\",4)' class=\"button button-on\">ON</button></div>";
+      btns =+ "<div class=\"mt-105\"><p class=\"p-col-title\">Modo Autosafe</p><button id=\"btnAutosafe\" onclick='enviaModoAtual(\"btnAutosafe\",1)' class=\"button button-on\">ON</button></div>";
    }
     return btns;
  }else if(var == "BOTAOACIONAPARADAEMERGENCIA"){
    String btns = "";
    
    if(btnAcionaParadaEmergencia == 0){
-      btns =+ "<div class=\"mt-105\"><p class=\"p-col-title\">Modo Parada Emergência</p><button id=\"btnParadaEmergencia\" onclick='enviaModoAtual(\"btnParadaEmergencia\",5)' class=\"button button-off\">OFF</button></div>";
+      btns =+ "<div class=\"mt-105\"><p class=\"p-col-title\">Modo Parada Emergência</p><button id=\"btnParadaEmergencia\" onclick='enviaModoAtual(\"btnParadaEmergencia\",6)' class=\"button button-off\">OFF</button></div>";
    }else if(btnAcionaParadaEmergencia == 1){
-      btns =+ "<div class=\"mt-105\"><p class=\"p-col-title\">Modo Parada Emergência</p><button id=\"btnParadaEmergencia\" onclick='enviaModoAtual(\"btnParadaEmergencia\",5)' class=\"button button-on\">ON</button></div>";
+      btns =+ "<div class=\"mt-105\"><p class=\"p-col-title\">Modo Parada Emergência</p><button id=\"btnParadaEmergencia\" onclick='enviaModoAtual(\"btnParadaEmergencia\",6)' class=\"button button-on\">ON</button></div>";
    }
     return btns;
  }else if(var == "BOTAOLIBERABOTOES"){
@@ -1707,8 +1707,20 @@ void setup()
                 }else if(btnParam2Int == 1){
                   btnFreioRotor = 1;
                   braking = 1;
-                  Serial.println("BRAKEROTOR");
-                }
+                  Serial.println("BRAKEROTOR");}
+                  
+              //ARREFECIMENTO
+              }else if(btnParam1 == "btnArrefecimento"){
+                  if(btnParam2Int == 0){
+                  btnArrefecimento = 0;
+                  offarref();
+                  Serial.println("OFF ARREF");
+                }else if(btnParam2Int == 1){
+                  btnArrefecimento = 1;
+                  onarref(); 
+                  Serial.println("ON ARREF");}
+                  
+                
               //LIBERA BOTOES
               }else if(btnParam1 == "btnLiberaBotoes"){
                 if(btnParam2Int == 0){
