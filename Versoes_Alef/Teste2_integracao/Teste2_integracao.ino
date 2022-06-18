@@ -145,7 +145,7 @@ int manual = 0; //parâmetro para chamada do modo manual
 int emergencia = 0; //parametro para parada de emergencia
 int automatico = 1; //parâmetro para operação automática
 int autoposi = 0;
-int operationMode = 0;
+int operationMode = 3;
 
 //variáveis sensores
 float tempgerador = 0;
@@ -587,12 +587,12 @@ const char index_html[] PROGMEM = R"rawliteral(
                 <div>
                     <p class="p-col-title">Freio Nacele</p>
                     <input type="text" name=" " id="status_atual_freio_nacele"
-                         value="Desfreado" disabled>
+                         value="Desacoplado" disabled>
                 </div>
                 <div class="mt-105 pt-1">
                     <p class="p-col-title">Freio Rotor</p>
                     <input type="text" name="status_atual_freio_rotor" id="status_atual_freio_rotor"
-                         value="Desfreado" disabled>
+                         value="Desacoplado" disabled>
                 </div>
             </div>
             <div class="bloco-col pt-1">       
@@ -930,91 +930,180 @@ const char index_html[] PROGMEM = R"rawliteral(
     var elemento = "", armazenaUltimoModo = 1;
 
 //INTERVALOS DE 0.5 SEGUNDO
+    //RPMS
     setInterval(function () {
         var xhttp = new XMLHttpRequest();
-        //RPMS
-        xhttp.onreadystatechange = function () {if (this.readyState == 4 && this.status == 200) {document.getElementById("rpm_gerador").innerHTML = this.responseText;}};
-        xhttp.open("GET", "/rpm_gerador", true);
-        xhttp.send();
+        
         xhttp.onreadystatechange = function () {if (this.readyState == 4 && this.status == 200) {document.getElementById("rpmrotor").innerHTML = this.responseText;}};
         xhttp.open("GET", "/rpmrotor", true);
         xhttp.send();
-        //TENSOES
+        
+    }, 500);
+    setInterval(function () {
+        var xhttp = new XMLHttpRequest();
+        
+        xhttp.onreadystatechange = function () {if (this.readyState == 4 && this.status == 200) {document.getElementById("rpm_gerador").innerHTML = this.responseText;}};
+        xhttp.open("GET", "/rpm_gerador", true);
+        xhttp.send();
+        
+    }, 500);
+
+    //TENSOES
+    setInterval(function () {
+        var xhttp = new XMLHttpRequest();
+        
         xhttp.onreadystatechange = function () {if (this.readyState == 4 && this.status == 200) {document.getElementById("tensao_sistema").innerHTML = this.responseText;}};
         xhttp.open("GET", "/tensao_sistema", true);
         xhttp.send();
+        
+    }, 500);
+    setInterval(function () {
+        var xhttp = new XMLHttpRequest();
+        
         xhttp.onreadystatechange = function () {if (this.readyState == 4 && this.status == 200) {document.getElementById("tensao_sistema_potencia").innerHTML = this.responseText;}};
         xhttp.open("GET", "/tensao_sistema_potencia", true);
         xhttp.send();
+        
+    }, 500);
 
-        //ANGULOS
+    //ANGULOS
+    setInterval(function () {
+        var xhttp = new XMLHttpRequest();
+        
         xhttp.onreadystatechange = function () {if (this.readyState == 4 && this.status == 200) {document.getElementById("angulo_atual_pitch").innerHTML = this.responseText;}};
         xhttp.open("GET", "/angulo_atual_pitch", true);
         xhttp.send();
+        
+    }, 500);
+    setInterval(function () {
+        var xhttp = new XMLHttpRequest();
+
         xhttp.onreadystatechange = function () {if (this.readyState == 4 && this.status == 200) {document.getElementById("posicao_atual_nacele").innerHTML = this.responseText;}};
         xhttp.open("GET", "/posicao_atual_nacele", true);
         xhttp.send();
-
         
+    }, 500);
+
+    //VELOCIDADE VENTO
+    setInterval(function () {
+        var xhttp = new XMLHttpRequest();        
+
         xhttp.onreadystatechange = function () {if (this.readyState == 4 && this.status == 200) {document.getElementById("velocidade_met").innerHTML = this.responseText;}};
         xhttp.open("GET", "/velocidade_met", true);
         xhttp.send();
         
     }, 500);
+
+
     //INTERVALOS DE 1 SEGUNDO
+    //TEMPERATURAS
     setInterval(function () {
-        var xhttp = new XMLHttpRequest();
-        //TEMPERATURAS
+        var xhttp = new XMLHttpRequest();        
         xhttp.onreadystatechange = function () {if (this.readyState == 4 && this.status == 200) {document.getElementById("temp_gerador").innerHTML = this.responseText;}};
         xhttp.open("GET", "/temp_gerador", true);
         xhttp.send();
+        
+    }, 1000);
+    setInterval(function () {
+        var xhttp = new XMLHttpRequest();        
         xhttp.onreadystatechange = function () {if (this.readyState == 4 && this.status == 200) {document.getElementById("temp_externa").innerHTML = this.responseText;}};
         xhttp.open("GET", "/temp_externa", true);
         xhttp.send();
-        //ESTACAO METEREOLOGICA
+        
+    }, 1000);
+
+    //ESTACAO METEREOLOGICA
+    setInterval(function () {
+        var xhttp = new XMLHttpRequest();        
         xhttp.onreadystatechange = function () {if (this.readyState == 4 && this.status == 200) {document.getElementById("direcao_atual_met").innerHTML = this.responseText;}};
         xhttp.open("GET", "/direcao_atual_met", true);
         xhttp.send();
+        
+    }, 1000);
+    setInterval(function () {
+        var xhttp = new XMLHttpRequest();        
         xhttp.onreadystatechange = function () {if (this.readyState == 4 && this.status == 200) {document.getElementById("direcao_final_met").innerHTML = this.responseText;}};
         xhttp.open("GET", "/direcao_final_met", true);
         xhttp.send();
+        
+    }, 1000);
+    setInterval(function () {
+        var xhttp = new XMLHttpRequest();        
         xhttp.onreadystatechange = function () {if (this.readyState == 4 && this.status == 200) {document.getElementById("velocidade_media_met").innerHTML = this.responseText;}};
         xhttp.open("GET", "/velocidade_media_met", true);
         xhttp.send();
-        //FREIOS
+        
+    }, 1000);
+
+    //FREIOS
+    setInterval(function () {
+        var xhttp = new XMLHttpRequest();        
         xhttp.onreadystatechange = function () {if (this.readyState == 4 && this.status == 200) {/*document.getElementById("freio_nacele").innerHTML = this.responseText;*/}};
         xhttp.open("GET", "/freio_nacele", true);
         xhttp.send();
+        
+    }, 1000);
+    setInterval(function () {
+        var xhttp = new XMLHttpRequest();        
         xhttp.onreadystatechange = function () {if (this.readyState == 4 && this.status == 200) {/* document.getElementById("freio_rotor").innerHTML = this.responseText;*/}};
         xhttp.open("GET", "/freio_rotor", true);
         xhttp.send();
+        
     }, 1000);
+
     //ADICOINAR ARREFECIMENTO 
     //INTERVALOS DE 3 SEGUNDOS
+    
+    //MODO DE OPERAÇÃO
     setInterval(function () {
-        var xhttp = new XMLHttpRequest(),modo, modoInt;
-        //MODO DE OPERAÇÃO
+        var xhttp = new XMLHttpRequest();        
+
         xhttp.onreadystatechange = function () {if (this.readyState == 4 && this.status == 200) {modo = this.responseText;modoInt = parseInt(modo);console.log("MUDOU OPERACAO:" + modoInt);}};
         xhttp.open("GET", "/status_modo_operacao", true);
         xhttp.send();
-        // DIRECAO BIRUTA
-    xhttp.onreadystatechange = function () {if (this.readyState == 4 && this.status == 200) {/*document.getElementById("direcao_nacele").innerHTML = this.responseText;*/}};
-        xhttp.open("GET", "/direcao_biruta", true);
-        xhttp.send();        
-        //DIRECAO NACELE
-    xhttp.onreadystatechange = function () {if (this.readyState == 4 && this.status == 200) {/* document.getElementById("direcao_nacele").innerHTML = this.responseText;*/}};
-        xhttp.open("GET", "/direcao_nacele", true);
-        xhttp.send();
+        
     }, 3000);
+
+    // DIRECAO BIRUTA
+    setInterval(function () {
+        var xhttp = new XMLHttpRequest();        
+
+        xhttp.onreadystatechange = function () {if (this.readyState == 4 && this.status == 200) {/*document.getElementById("direcao_nacele").innerHTML = this.responseText;*/}};
+        xhttp.open("GET", "/direcao_biruta", true);
+        xhttp.send(); 
+        
+    }, 3000);
+
+    //DIRECAO NACELE
+    setInterval(function () {
+        var xhttp = new XMLHttpRequest();        
+
+        xhttp.onreadystatechange = function () {if (this.readyState == 4 && this.status == 200) {/* document.getElementById("direcao_nacele").innerHTML = this.responseText;*/}};
+        xhttp.open("GET", "/direcao_nacele", true);
+        xhttp.send(); 
+        
+    }, 3000);    
+
+    //ARREFECIMENTO
+   /* setInterval(function () {
+        var xhttp = new XMLHttpRequest(),modo, modoInt;
+
+        xhttp.onreadystatechange = function () {if (this.readyState == 4 && this.status == 200) { document.getElementById("direcao_nacele").innerHTML = this.responseText;}};
+        xhttp.open("GET", "/arrefecimento", true);
+        xhttp.send();
+        
+    }, 3000);
+    */
+   
     //NOVO
     const mudaStatusSistema = function (status) {
         var input = document.getElementById("status_sistema"),inputContainsOffline = input.classList.contains("offline"),inputContainsOnline = input.classList.contains("online");
-        if (status == 0) {input.value = "OFFLINE";document.getElementById("status_sistema").classList.remove("status_sistema_offline", "status_sistema_online", "status_sistema_idle", "status_sistema_manual", "status_sistema_autosafe", "status_sistema_parada_emergencia");document.getElementById("status_sistema").classList.add("status_sistema_offline");mudaEstado("btnAcionaOffline");toggleBtn("btnAcionaOffline");armazenaUltimoModo = 0;
-        } else if (status == 1) {input.value = "ONLINE";document.getElementById("status_sistema").classList.remove("status_sistema_offline", "status_sistema_online", "status_sistema_idle", "status_sistema_manual", "status_sistema_autosafe", "status_sistema_parada_emergencia");document.getElementById("status_sistema").classList.add("status_sistema_online");mudaEstado("btnAcionaOnline");toggleBtn("btnAcionaOnline");armazenaUltimoModo = 1;
+        if (status == 4) {input.value = "OFFLINE";document.getElementById("status_sistema").classList.remove("status_sistema_offline", "status_sistema_online", "status_sistema_idle", "status_sistema_manual", "status_sistema_autosafe", "status_sistema_parada_emergencia");document.getElementById("status_sistema").classList.add("status_sistema_offline");mudaEstado("btnAcionaOffline");toggleBtn("btnAcionaOffline");armazenaUltimoModo = 4;
+        } else if (status == 3) {input.value = "ONLINE";document.getElementById("status_sistema").classList.remove("status_sistema_offline", "status_sistema_online", "status_sistema_idle", "status_sistema_manual", "status_sistema_autosafe", "status_sistema_parada_emergencia");document.getElementById("status_sistema").classList.add("status_sistema_online");mudaEstado("btnAcionaOnline");toggleBtn("btnAcionaOnline");armazenaUltimoModo = 3;
         } else if (status == 2) {input.value = "IDLE";document.getElementById("status_sistema").classList.remove("status_sistema_offline", "status_sistema_online", "status_sistema_idle", "status_sistema_manual", "status_sistema_autosafe", "status_sistema_parada_emergencia");document.getElementById("status_sistema").classList.add("status_sistema_idle");mudaEstado("btnAcionaIdle");toggleBtn("btnAcionaIdle");armazenaUltimoModo = 2;
-        } else if (status == 3) {input.value = "MANUAL";document.getElementById("status_sistema").classList.remove("status_sistema_offline", "status_sistema_online", "status_sistema_idle", "status_sistema_manual", "status_sistema_autosafe", "status_sistema_parada_emergencia");document.getElementById("status_sistema").classList.add("status_sistema_manual");mudaEstado("btnAcionaModoManual");toggleBtn("btnAcionaModoManual");habilitaManual();armazenaUltimoModo = 3;
-        } else if (status == 4) {input.value = "AUTOSAFE";document.getElementById("status_sistema").classList.remove("status_sistema_offline", "status_sistema_online", "status_sistema_idle", "status_sistema_manual", "status_sistema_autosafe", "status_sistema_parada_emergencia");document.getElementById("status_sistema").classList.add("status_sistema_autosafe");mudaEstado("btnAutosafe");toggleBtn("btnAutosafe");armazenaUltimoModo = 4;
-        } else if (status == 5) {input.value = "P.E.";document.getElementById("status_sistema").classList.remove("status_sistema_offline", "status_sistema_online", "status_sistema_idle", "status_sistema_manual", "status_sistema_autosafe", "status_sistema_parada_emergencia");document.getElementById("status_sistema").classList.add("status_sistema_parada_emergencia");mudaEstado("btnParadaEmergencia");toggleBtn("btnParadaEmergencia");armazenaUltimoModo = 5;
+        } else if (status == 5) {input.value = "MANUAL";document.getElementById("status_sistema").classList.remove("status_sistema_offline", "status_sistema_online", "status_sistema_idle", "status_sistema_manual", "status_sistema_autosafe", "status_sistema_parada_emergencia");document.getElementById("status_sistema").classList.add("status_sistema_manual");mudaEstado("btnAcionaModoManual");toggleBtn("btnAcionaModoManual");habilitaManual();armazenaUltimoModo = 5;
+        } else if (status == 1) {input.value = "AUTOSAFE";document.getElementById("status_sistema").classList.remove("status_sistema_offline", "status_sistema_online", "status_sistema_idle", "status_sistema_manual", "status_sistema_autosafe", "status_sistema_parada_emergencia");document.getElementById("status_sistema").classList.add("status_sistema_autosafe");mudaEstado("btnAutosafe");toggleBtn("btnAutosafe");armazenaUltimoModo = 1;
+        } else if (status == 6) {input.value = "P.E.";document.getElementById("status_sistema").classList.remove("status_sistema_offline", "status_sistema_online", "status_sistema_idle", "status_sistema_manual", "status_sistema_autosafe", "status_sistema_parada_emergencia");document.getElementById("status_sistema").classList.add("status_sistema_parada_emergencia");mudaEstado("btnParadaEmergencia");toggleBtn("btnParadaEmergencia");armazenaUltimoModo = 6;
         } else if (status == armazenaUltimoModo) { /*input.value = "ONLINE";document.getElementById("status_sistema").classList.remove("status_sistema_offline", "status_sistema_online", "status_sistema_idle", "status_sistema_manual", "status_sistema_autosafe", "status_sistema_parada_emergencia");// document.getElementById("status_sistema").classList.add("status_sistema_online")*/;}
     }
     const liberaBloqueaBotoes = function () {
@@ -1732,7 +1821,6 @@ void setup()
 
 void loop()
 {
-
 /*  // INICIA AS FUNÇÕES
   //------------------------
   readsensors(); 
@@ -1755,6 +1843,10 @@ void loop()
 //===============================================
 // FUNCOES
 //===============================================
+
+void reiniciaESP(){
+  ESP.restart();
+}
 
 //aquisição dos dasos dos sensores
 void readsensors(){
