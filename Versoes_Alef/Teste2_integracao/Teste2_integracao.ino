@@ -31,8 +31,8 @@
 //const char *ssid = "Consultorio";
 //const char *password = "terapiaCris";
 
-//  const char *ssid = "Valter 2.4GHz";
-//  const char *password = "casa092614";
+  const char *ssid = "Valter 2.4GHz";
+  const char *password = "casa092614";
 
 // const char *ssid = "Quantum Team";
 // const char *password = "amotolia_oleosa";
@@ -40,8 +40,8 @@
 // const char *ssid = "Andre Wifi";
 // const char *password = "gostoso1";
 
- const char *ssid = "PlusEnergy_Control - Host1";
- const char *password = "diaqueohomemfoiemdirecaoalua16";
+// const char *ssid = "PlusEnergy_Control - Host1";
+// const char *password = "diaqueohomemfoiemdirecaoalua16";
 
 //===============================================
 // PINOS
@@ -1056,6 +1056,7 @@ const char index_html[] PROGMEM = R"rawliteral(
     
     //MODO DE OPERAÇÃO 3segundos
       //DEFINE FUNCAO DO INTERVALO
+      // ATIVA BUSCA SE controladorBuscaOperacao == 0
       const buscaOperacao  = function () {
         var xhttp = new XMLHttpRequest();
          xhttp.onreadystatechange = function () { if (this.readyState == 4 && this.status == 200) { modo = this.responseText; modoInt = parseInt(modo); console.log("MUDOU OPERACAO:" + modoInt); trataDados(modoInt); } }
@@ -1068,7 +1069,7 @@ const char index_html[] PROGMEM = R"rawliteral(
           }
       }
       //ATIVA INTERVALO
-      var intervaloOperacao = setInterval(buscaOperacao, 3000)
+      //var intervaloOperacao = setInterval(buscaOperacao, 3000)
       // FUNCAO PARA ATIVAR O INTERVALO
       const ativaIntervalo = function(){
         controladorBuscaOperacao = 0
@@ -1121,21 +1122,24 @@ const char index_html[] PROGMEM = R"rawliteral(
         vetorId = ["btnAcionaModoManual", "btnAcionaOnline", "btnAcionaOffline", "btnAcionaIdle", "btnParadaEmergencia"];
         var contAtivo = 0, contDesativado = 0, divId = "";
         
-        
         for (i = 0; i < vetorId.length; i++) {divId = document.getElementById(vetorId[i]).hasAttribute("disabled")
             if (divId == false) {contAtivo++;
             }else{contDesativado++;}
         }
         if (vetorId.length == contAtivo) {
             for (i = 0; i < contAtivo; i++) {document.getElementById(vetorId[i]).setAttribute("disabled", "disabled");}
+            controladorBuscaOperacao = 0;
         } else if (vetorId.length == contDesativado) {
             for (i = 0; i < contDesativado; i++) {document.getElementById(vetorId[i]).removeAttribute("disabled");}
+            controladorBuscaOperacao = 1;
         }
+
+       
     }
     const pedeSenha = function () {
         var senha = prompt("Digite a senha para continuar")
         if (senha != null) {
-            if (senha == "pluseamelhor") {alert("Deu bom!");controladorBuscaOperacao = 1;console.log("Deifiniu controlador" + controladorBuscaOperacao);mudaEstado(elemento);toggleBtn(elemento);liberaBloqueaBotoes();
+            if (senha == "pluseamelhor") {alert("Deu bom!");mudaEstado(elemento);toggleBtn(elemento);liberaBloqueaBotoes();
             }else {alert("Senha Incorreta!");}
         }
     }
@@ -1290,14 +1294,14 @@ const char index_html[] PROGMEM = R"rawliteral(
         }else if(comeFromServer == 1){
             if ((modo == armazenaUltimoModo)) {
                     if (modo == 3) {
-
+                        
                     } else {
                         mudaStatusSistema(modo)
 
-                        modo = 3    
+                        //modo = 3    
                         // xhr.open("GET", "/atualizaModo?value=" + modo, true);
                         // xhr.send();
-                        mudaStatusSistema(modo)
+                        //mudaStatusSistema(modo)
                     }
                 } else {
                     // xhr.open("GET", "/atualizaModo?value=" + modo, true);
@@ -1871,11 +1875,11 @@ void setup()
                   btnAcionaManual = 0;
                   
                   if((btnAcionaOffline == 0) && (btnAcionaIdle == 0) && (btnAcionaManual == 0) && (btnAcionaParadaEmergencia == 0) && (btnAcionaAutosafe == 0) && (btnAcionaOnline == 0)){
-                  operationMode = 3; //AARRUMAR POR SOB CONDIÇAO DE QUE SOMENTE TODOS OS OUTROS BOTOES FOREM IGUAL A 0 ELE ASSUME O OPERATION MODE = 3
+                  operationMode = 3;
                   }
                   
                   Serial.println("MANUL OFF ONLINE ON");
-                }else if(btnParam2Int == 1){
+                }else if(btnParam2Int == 1 && btnLiberaBotoes == 1){
                   btnAcionaManual = 1;
                   operationMode = 5;
                   Serial.println("MANUAL ON");
@@ -1884,7 +1888,7 @@ void setup()
                 if(btnParam2Int == 0){
                   btnAcionaOnline = 0;
                   Serial.println("ONLINE OFF");
-                }else if(btnParam2Int == 1){
+                }else if(btnParam2Int == 1 && btnLiberaBotoes == 1){
                   btnAcionaOnline = 1;
                   operationMode = 3;
                   Serial.println("ONLINE ON");
@@ -1892,11 +1896,11 @@ void setup()
               }else if(btnParam1 == "btnAcionaOffline"){
                 if(btnParam2Int == 0){
                   btnAcionaOffline = 0;
-                  if((btnAcionaOffline == 0) && (btnAcionaIdle == 0) && (btnAcionaManual == 0) && (btnAcionaParadaEmergencia == 0) && (btnAcionaAutosafe == 0) && (btnAcionaOnline == 0)){
+                  if((btnAcionaOffline == 0) && (btnAcionaIdle == 0) && (btnAcionaManual == 0) && (btnAcionaParadaEmergencia == 0) && (btnAcionaAutosafe == 0) && (btnAcionaOnline == 0) && btnLiberaBotoes == 1){
                     operationMode = 3; //AARRUMAR POR SOB CONDIÇAO DE QUE SOMENTE TODOS OS OUTROS BOTOES FOREM IGUAL A 0 ELE ASSUME O OPERATION MODE = 3
                   }
                   Serial.println("OFFLINE OFF ONLINE ON");
-                }else if(btnParam2Int == 1){
+                }else if(btnParam2Int == 1 && btnLiberaBotoes == 1){
                   btnAcionaOffline = 1;
                   operationMode = 4;
                   Serial.println("OFFLINE ON");
@@ -1908,7 +1912,7 @@ void setup()
                     operationMode = 3; //AARRUMAR POR SOB CONDIÇAO DE QUE SOMENTE TODOS OS OUTROS BOTOES FOREM IGUAL A 0 ELE ASSUME O OPERATION MODE = 3
                   }
                   Serial.println("IDLE OFF ONLINE ON");
-                }else if(btnParam2Int == 1){
+                }else if(btnParam2Int == 1 && btnLiberaBotoes == 1){
                   btnAcionaIdle = 1;
                   operationMode = 2;
                   Serial.println("IDLE ON");
@@ -1921,7 +1925,7 @@ void setup()
                   }
                   Serial.println("AUTOSAFE OFF ONLINE ON");
                   
-                }else if(btnParam2Int == 1){
+                }else if(btnParam2Int == 1 && btnLiberaBotoes == 1){
                   btnAcionaAutosafe = 1;
                   operationMode = 1;
                   Serial.println("AUTOSAFE ON");
@@ -1934,7 +1938,7 @@ void setup()
                   }
                   Serial.println("EMERGENCIA OFF ONLINE ON");
                   
-                }else if(btnParam2Int == 1){
+                }else if(btnParam2Int == 1 && btnLiberaBotoes == 1){
                   btnAcionaParadaEmergencia = 1;
                   operationMode = 6;
                   Serial.println("EMERGENCIA ON");
