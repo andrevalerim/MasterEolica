@@ -7,6 +7,12 @@
 // BIBLIOTECAS
 //===============================================
 
+//EXCLUIR DEPOIS
+#include <stdio.h>
+#include <stdlib.h>
+
+int randomico = 0;
+
 // Conexão WIFI
 
 #include <WiFi.h>;
@@ -1118,6 +1124,17 @@ const char index_html[] PROGMEM = R"rawliteral(
         } else if (status == 6) {input.value = "P.E.";document.getElementById("status_sistema").classList.remove("status_sistema_offline", "status_sistema_online", "status_sistema_idle", "status_sistema_manual", "status_sistema_autosafe", "status_sistema_parada_emergencia");document.getElementById("status_sistema").classList.add("status_sistema_parada_emergencia");mudaEstado("btnParadaEmergencia");toggleBtn("btnParadaEmergencia");armazenaUltimoModo = 6;
         } else if (status == armazenaUltimoModo) { /*input.value = "ONLINE";document.getElementById("status_sistema").classList.remove("status_sistema_offline", "status_sistema_online", "status_sistema_idle", "status_sistema_manual", "status_sistema_autosafe", "status_sistema_parada_emergencia");// document.getElementById("status_sistema").classList.add("status_sistema_online")*/;}
     }
+    const mudaStatusSistemaCameServer = function (status) {
+        var input = document.getElementById("status_sistema"),inputContainsOffline = input.classList.contains("offline"),inputContainsOnline = input.classList.contains("online");
+        if (status == 4) {input.value = "OFFLINE";document.getElementById("status_sistema").classList.remove("status_sistema_offline", "status_sistema_online", "status_sistema_idle", "status_sistema_manual", "status_sistema_autosafe", "status_sistema_parada_emergencia");document.getElementById("status_sistema").classList.add("status_sistema_offline");armazenaUltimoModo = 4;
+        } else if (status == 3) {input.value = "ONLINE";document.getElementById("status_sistema").classList.remove("status_sistema_offline", "status_sistema_online", "status_sistema_idle", "status_sistema_manual", "status_sistema_autosafe", "status_sistema_parada_emergencia");document.getElementById("status_sistema").classList.add("status_sistema_online");armazenaUltimoModo = 3;
+        } else if (status == 2) {input.value = "IDLE";document.getElementById("status_sistema").classList.remove("status_sistema_offline", "status_sistema_online", "status_sistema_idle", "status_sistema_manual", "status_sistema_autosafe", "status_sistema_parada_emergencia");document.getElementById("status_sistema").classList.add("status_sistema_idle");armazenaUltimoModo = 2;
+        } else if (status == 5) {input.value = "MANUAL";document.getElementById("status_sistema").classList.remove("status_sistema_offline", "status_sistema_online", "status_sistema_idle", "status_sistema_manual", "status_sistema_autosafe", "status_sistema_parada_emergencia");document.getElementById("status_sistema").classList.add("status_sistema_manual");habilitaManual();armazenaUltimoModo = 5;
+        } else if (status == 1) {input.value = "AUTOSAFE";document.getElementById("status_sistema").classList.remove("status_sistema_offline", "status_sistema_online", "status_sistema_idle", "status_sistema_manual", "status_sistema_autosafe", "status_sistema_parada_emergencia");document.getElementById("status_sistema").classList.add("status_sistema_autosafe");armazenaUltimoModo = 1;
+        } else if (status == 6) {input.value = "P.E.";document.getElementById("status_sistema").classList.remove("status_sistema_offline", "status_sistema_online", "status_sistema_idle", "status_sistema_manual", "status_sistema_autosafe", "status_sistema_parada_emergencia");document.getElementById("status_sistema").classList.add("status_sistema_parada_emergencia");armazenaUltimoModo = 6;
+        } else if (status == armazenaUltimoModo) { /*input.value = "ONLINE";document.getElementById("status_sistema").classList.remove("status_sistema_offline", "status_sistema_online", "status_sistema_idle", "status_sistema_manual", "status_sistema_autosafe", "status_sistema_parada_emergencia");// document.getElementById("status_sistema").classList.add("status_sistema_online")*/;}
+    }
+    
     const liberaBloqueaBotoes = function () {
         vetorId = ["btnAcionaModoManual", "btnAcionaOnline", "btnAcionaOffline", "btnAcionaIdle", "btnParadaEmergencia"];
         var contAtivo = 0, contDesativado = 0, divId = "";
@@ -1296,7 +1313,7 @@ const char index_html[] PROGMEM = R"rawliteral(
                     if (modo == 3) {
                         
                     } else {
-                        mudaStatusSistema(modo)
+                        mudaStatusSistemaCameServer(modo)
 
                         //modo = 3    
                         // xhr.open("GET", "/atualizaModo?value=" + modo, true);
@@ -1308,7 +1325,7 @@ const char index_html[] PROGMEM = R"rawliteral(
                     // xhr.send();
                     //Verifica se deu certo e já altera o atual estado do sistema
 
-                    mudaStatusSistema(armazenaUltimoModo)
+                    mudaStatusSistemaCameServer(armazenaUltimoModo)
                     mudaStatusSistema(modo)
                     //xhr.addEventListener("load", mudaStatusSistema(modo), false)
                 }
@@ -1879,7 +1896,7 @@ void setup()
                   }
                   
                   Serial.println("MANUL OFF ONLINE ON");
-                }else if(btnParam2Int == 1 && btnLiberaBotoes == 1){
+                }else if(btnParam2Int == 1){
                   btnAcionaManual = 1;
                   operationMode = 5;
                   Serial.println("MANUAL ON");
@@ -1888,7 +1905,7 @@ void setup()
                 if(btnParam2Int == 0){
                   btnAcionaOnline = 0;
                   Serial.println("ONLINE OFF");
-                }else if(btnParam2Int == 1 && btnLiberaBotoes == 1){
+                }else if(btnParam2Int == 1){
                   btnAcionaOnline = 1;
                   operationMode = 3;
                   Serial.println("ONLINE ON");
@@ -1900,7 +1917,7 @@ void setup()
                     operationMode = 3; //AARRUMAR POR SOB CONDIÇAO DE QUE SOMENTE TODOS OS OUTROS BOTOES FOREM IGUAL A 0 ELE ASSUME O OPERATION MODE = 3
                   }
                   Serial.println("OFFLINE OFF ONLINE ON");
-                }else if(btnParam2Int == 1 && btnLiberaBotoes == 1){
+                }else if(btnParam2Int == 1){
                   btnAcionaOffline = 1;
                   operationMode = 4;
                   Serial.println("OFFLINE ON");
@@ -1912,7 +1929,7 @@ void setup()
                     operationMode = 3; //AARRUMAR POR SOB CONDIÇAO DE QUE SOMENTE TODOS OS OUTROS BOTOES FOREM IGUAL A 0 ELE ASSUME O OPERATION MODE = 3
                   }
                   Serial.println("IDLE OFF ONLINE ON");
-                }else if(btnParam2Int == 1 && btnLiberaBotoes == 1){
+                }else if(btnParam2Int == 1){
                   btnAcionaIdle = 1;
                   operationMode = 2;
                   Serial.println("IDLE ON");
@@ -1925,7 +1942,7 @@ void setup()
                   }
                   Serial.println("AUTOSAFE OFF ONLINE ON");
                   
-                }else if(btnParam2Int == 1 && btnLiberaBotoes == 1){
+                }else if(btnParam2Int == 1){
                   btnAcionaAutosafe = 1;
                   operationMode = 1;
                   Serial.println("AUTOSAFE ON");
@@ -1938,7 +1955,7 @@ void setup()
                   }
                   Serial.println("EMERGENCIA OFF ONLINE ON");
                   
-                }else if(btnParam2Int == 1 && btnLiberaBotoes == 1){
+                }else if(btnParam2Int == 1){
                   btnAcionaParadaEmergencia = 1;
                   operationMode = 6;
                   Serial.println("EMERGENCIA ON");
@@ -2002,11 +2019,30 @@ void loop()
 
   }
   */
+    randomizaOperacao();
+    delay(10000);
 }
 
 //===============================================
 // FUNCOES
 //===============================================
+
+//FUNÇÃO PARA TESTAR A AUTOMOÇÃO SERVER-PAGINA
+void randomizaOperacao(){
+ randomico = 1 + ( rand() % 2 );
+
+   if(randomico == 3){
+    operationMode = 3;
+   }else if (randomico == 4){
+    operationMode = 4;
+   }else if (randomico == 2){
+    operationMode = 2;
+   }else if (randomico == 1){
+    operationMode = 1;
+   }else if (randomico == 5){
+    operationMode = 5;
+   }
+}
 
 void reiniciaESP(){
   ESP.restart();
