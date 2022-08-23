@@ -1089,7 +1089,7 @@ const char index_html[] PROGMEM = R"rawliteral(
       const ativaIntervalo = function(){
         controladorBuscaOperacao = 0
         intervaloOperacao = setInterval(buscaOperacao,3000);
-        console.log("Ativou essa merda")
+        //console.log("Ativou essa merda")
       }
     // DIRECAO BIRUTA
     setInterval(function () {
@@ -1248,6 +1248,13 @@ const char index_html[] PROGMEM = R"rawliteral(
     const trataDados = function(modo){
         var btn ="";
         verificaUltimoModo(modo);
+
+        ultimoModo = modo%10
+        modo = Math.floor(modo/10)
+
+//        console.log(modo);
+//        console.log(ultimoModo);
+        
         if(modo == 1){
             btn = "btnAutosafe";
             enviaModoAtual(btn,modo,1);
@@ -1402,9 +1409,9 @@ const verificaPrimeiraRequisicao = function(modo){
         ultimoModo = modo%10
         modo = Math.floor(modo/10)
 
-        console.log(modo);
-        console.log(ultimoModo);
-        
+//        console.log(modo);
+//        console.log(ultimoModo);
+
         if(modo == 1){
 //            armazenaUltimoModo = modo
             trataDados(modo);
@@ -1556,9 +1563,9 @@ String processor(const String &var)
   } else if (var == "BOTAOACIONAMANUAL") {
     String btns = "";
 
-    if (btnAcionaManual == 0) {
+    if (btnAcionaManual == 0 || btnAcionaManual == 1) {
       btns = + "<div class=\"mt-105\"><p class=\"p-col-title\">Modo Manual</p><button id=\"btnAcionaModoManual\" onclick='enviaModoAtual(\"btnAcionaModoManual\",5,0)' class=\"button button-off\">OFF</button></div>";
-    } else if (btnAcionaManual == 1) {
+    } else /*if (btnAcionaManual == 1)*/ {
 //      btns = + "<div class=\"mt-105\"><p class=\"p-col-title\">Modo Manual </p><button id=\"btnAcionaModoManual\" onclick='enviaModoAtual(\"btnAcionaModoManual\",5,0)' class=\"button button-on\">ON</button></div>";
     }
     return btns;
@@ -1571,72 +1578,72 @@ String processor(const String &var)
 //      btnAcionaOnline = 0;
 //    }
 
-    if (btnAcionaOnline == 0) {
+    if (btnAcionaOnline == 0 || btnAcionaOnline == 1) {
       btns = + "<div class=\"mt-105\"><p class=\"p-col-title\">Modo Online</p><button id=\"btnAcionaOnline\" onclick='enviaModoAtual(\"btnAcionaOnline\",3,0)' class=\"button button-off\">OFF</button></div>";
-    } else if (btnAcionaOnline == 1) {
+    } else /*if (btnAcionaOnline == 1)*/ {
 //      btns = + "<div class=\"mt-105\"><p class=\"p-col-title\">Modo Online </p><button id=\"btnAcionaOnline\" onclick='enviaModoAtual(\"btnAcionaOnline\",3,0)' class=\"button button-on\">ON</button></div>";
     }
     return btns;
   } else if (var == "BOTAOACIONAOFFLINE") {
     String btns = "";
 
-    if (btnAcionaOffline == 0) {
+    if (btnAcionaOffline == 0 || btnAcionaOffline == 1) {
       btns = + "<div class=\"mt-105\"><p class=\"p-col-title\">Modo Offline</p><button id=\"btnAcionaOffline\" onclick='enviaModoAtual(\"btnAcionaOffline\",4,0)' class=\"button button-off\">OFF</button></div>";
-    } else if (btnAcionaOffline == 1) {
+    } else /*if (btnAcionaOffline == 1)*/ {
 //      btns = + "<div class=\"mt-105\"><p class=\"p-col-title\">Modo Offline </p><button id=\"btnAcionaOffline\" onclick='enviaModoAtual(\"btnAcionaOffline\",4,0)' class=\"button button-on\">ON</button></div>";
     }
     return btns;
   } else if (var == "BOTAOACIONAIDLE") {
     String btns = "";
 
-    if (btnAcionaIdle == 0) {
+    if (btnAcionaIdle == 0 || btnAcionaIdle == 1) {
       btns = + "<div class=\"mt-105\"><p class=\"p-col-title\">Modo Idle</p><button id=\"btnAcionaIdle\" onclick='enviaModoAtual(\"btnAcionaIdle\",2,0)' class=\"button button-off\">OFF</button></div>";
-    } else if (btnAcionaIdle == 1) {
+    } else /*if (btnAcionaIdle == 1)*/ {
 //      btns = + "<div class=\"mt-105\"><p class=\"p-col-title\">Modo Idle</p><button id=\"btnAcionaIdle\" onclick='enviaModoAtual(\"btnAcionaIdle\",2,0)' class=\"button button-on\">ON</button></div>";
     }
     return btns;
   } else if (var == "BOTAOACIONAAUTOSAFE") {
     String btns = "";
 
-    if (btnAcionaAutosafe == 0) {
+    if (btnAcionaAutosafe == 0 || btnAcionaAutosafe == 1) {
       btns = + "<div class=\"mt-105\"><p class=\"p-col-title\">Modo Autosafe</p><button id=\"btnAutosafe\" onclick='enviaModoAtual(\"btnAutosafe\",1,0)' class=\"button button-off\">OFF</button></div>";
-    } else if (btnAcionaAutosafe == 1) {
+    } else /*if (btnAcionaAutosafe == 1)*/ {
 //      btns = + "<div class=\"mt-105\"><p class=\"p-col-title\">Modo Autosafe</p><button id=\"btnAutosafe\" onclick='enviaModoAtual(\"btnAutosafe\",1,0)' class=\"button button-on\">ON</button></div>";
     }
     return btns;
   } else if (var == "BOTAOACIONAPARADAEMERGENCIA") {
     String btns = "";
 
-    if (btnAcionaParadaEmergencia == 0) {
+    if (btnAcionaParadaEmergencia == 0 || btnAcionaParadaEmergencia == 1) {
       btns = + "<div class=\"mt-105\"><p class=\"p-col-title\">Modo Parada Emergência</p><button id=\"btnParadaEmergencia\" onclick='enviaModoAtual(\"btnParadaEmergencia\",6,0)' class=\"button button-off\">OFF</button></div>";
-    } else if (btnAcionaParadaEmergencia == 1) {
+    } else /*if (btnAcionaParadaEmergencia == 1)*/ {
 //      btns = + "<div class=\"mt-105\"><p class=\"p-col-title\">Modo Parada Emergência</p><button id=\"btnParadaEmergencia\" onclick='enviaModoAtual(\"btnParadaEmergencia\",6,0)' class=\"button button-on\">ON</button></div>";
     }
     return btns;
   } else if (var == "BOTAOLIBERABOTOES") {
     String btns = "";
 
-    if (btnLiberaBotoes == 0) {
+    if (btnLiberaBotoes == 0 || btnLiberaBotoes == 1) {
       btns = + "<div class=\"mt-105\"><p class=\"p-col-title\">Liberar Botoes</p><button id=\"btnLiberaBotoes\" onclick='capturaElemento(\"btnLiberaBotoes\");alerta()' class=\"button button-off\">OFF</button></div>";
-    } else if (btnLiberaBotoes == 1) {
+    } else /*if (btnLiberaBotoes == 1)*/ {
 //      btns = + "<div class=\"mt-105\"><p class=\"p-col-title\">Liberar Botoes</p><button id=\"btnLiberaBotoes\" onclick='capturaElemento(\"btnLiberaBotoes\");alerta()' class=\"button button-on\">ON</button></div>";
     }
     return btns;
   } else if (var == "BOTAOATUALIZASOFTWARE") {
     String btns = "";
 
-    if (btnAtualizasoftware == 0) {
+    if (btnAtualizasoftware == 0 || btnAtualizasoftware == 1) {
       btns = + "<div class=\"mt-105\"><p class=\"p-col-title\">Atualiza Soft.</p><button id=\"btnAtualizasoftware\" onclick='mudaEstado(\"btnAtualizasoftware\");toggleBtn(\"btnAtualizasoftware\");' class=\"button button-off\">OFF</button></div>";
-    } else if (btnAtualizasoftware == 1) {
+    } else /*if (btnAtualizasoftware == 1)*/ {
 //      btns = + "<div class=\"mt-105\"><p class=\"p-col-title\">Atualiza Soft.</p><button id=\"btnAtualizasoftware\" onclick='mudaEstado(\"btnAtualizasoftware\");toggleBtn(\"btnAtualizasoftware\");' class=\"button button-on\">ON</button></div>";
     }
     return btns;
   } else if (var == "BOTAOACIONAARREFECIMENTO") {
     String btns = "";
 
-    if (btnArrefecimento == 0) {
+    if (btnArrefecimento == 0 || (btnArrefecimento == 1)) {
       btns = + "<div class=\"mt-105\"><p class=\"p-col-title\">Arrefecimento</p><button id=\"btnArrefecimento\" onclick='mudaEstado(\"btnArrefecimento\");toggleBtn(\"btnArrefecimento\");' class=\"button button-off\">OFF</button></div>";
-    } else if (btnArrefecimento == 1) {
+    } else /*if ( btnArrefecimento == 1)*/ {
 //      btns = + "<div class=\"mt-105\"><p class=\"p-col-title\">Arrefecimento</p><button id=\"btnArrefecimento\" onclick='mudaEstado(\"btnArrefecimento\");toggleBtn(\"btnArrefecimento\");' class=\"button button-on\">ON</button></div>";
     }
     return btns;
