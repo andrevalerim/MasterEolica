@@ -1,6 +1,6 @@
 /*********
   Alef Júnior &
-  André V. de Freitas 
+  André V. de Freitas
 *********/
 
 //===============================================
@@ -37,8 +37,8 @@ int randomico = 0;
 //const char *ssid = "Consultorio";
 //const char *password = "terapiaCris";
 
-  const char *ssid = "Valter 2.4GHz";
-  const char *password = "casa092614";
+const char *ssid = "Valter 2.4Ghz";
+const char *password = "casa092614";
 
 // const char *ssid = "Quantum Team";
 // const char *password = "amotolia_oleosa";
@@ -63,8 +63,8 @@ int randomico = 0;
 // DHT dht(DHTPIN, DHTTYPE);
 
 // Create AsyncWebServer object on port 80
-  AsyncWebServer server(80);
-    
+AsyncWebServer server(80);
+
 
 //===============================================
 // VARIAVEIS
@@ -85,10 +85,10 @@ float winddirMF = 0;
 
 float info1 = 0;
 int msgconvert = 0;
-int freee=0;
+int freee = 0;
 
 
-//variáveis parametrais 
+//variáveis parametrais
 int rpmmax1 = 400; //1500 RPM para redução automática do andulo de pitch
 int rpmmax2 = 600;  // 1700 rpm para entrar no auto safe
 int rpmmax3 = 650; //2200 . //rpm para última tentativa de segurança bloaquear o rotor intependente da velocidade
@@ -101,7 +101,7 @@ float cutIn = 0.0;  //vento mínimo para iniciar a operação
 float temparref = 45.0; //temperatura para ativação atomática do arref do gerador
 int tent3 = 0;
 
-                                                           
+
 
 // Assign output variables to GPIO pins
 //const int output26 = 26;
@@ -151,7 +151,9 @@ int manual = 0; //parâmetro para chamada do modo manual
 int emergencia = 0; //parametro para parada de emergencia
 int automatico = 1; //parâmetro para operação automática
 int autoposi = 0;
-int operationMode = 3;
+int armazenaModo;
+int operationMode = armazenaModo;
+
 
 //variáveis sensores
 float tempgerador = 0;
@@ -178,7 +180,7 @@ int a8 = 0;
 int a9 = 0;
 int a10 = 0;
 int a11 = 0;
-int b1=0;
+int b1 = 0;
 
 
 //váriáveis rotinas de segurança
@@ -208,7 +210,7 @@ long int tempo20 = 0;
 int ultimointer = 0;
 float Vangular = 0;
 long int tempo40 = 0;
-int posicao = 0; 
+int posicao = 0;
 String pontoNacele = "";
 
 
@@ -237,7 +239,7 @@ int braking = 0; //variável freiando se == 1
 // Current time
 unsigned long currentTime = millis();
 long int time1 = 0;
-unsigned long previousTime = 0; 
+unsigned long previousTime = 0;
 const long timeoutTime = 2000;
 long int time2 = 0; //time count of wait in update code
 long int teme3 = 0; //tempo para brake rotor
@@ -251,10 +253,10 @@ long int time7 = 0;//leitura minimet
 
 //descrição: A operação se baseria no registro da velocidade e direção
 //do vento a cada 5s, uma vez que se passaram 25s é feita uma análise
-//com os dados que já foram armazenados nos vetores, primeiro é verificado 
+//com os dados que já foram armazenados nos vetores, primeiro é verificado
 //o número de ocorrências de cara uma das classes possíveis descritas
 //no ventor chamado classes[], após isto é verificado qual a velocidade
-//de cada uma das ocorrências, com essas informações se traça uma média 
+//de cada uma das ocorrências, com essas informações se traça uma média
 //de velocidade para cada vez que uma direção ocorreu, desta forma
 //se o valor for maior que o cut-in e for o mais recorrente, o posição
 //é indicada ao master.PS se o mais recorrente está abaixo do cut-in,
@@ -267,7 +269,7 @@ long int time7 = 0;//leitura minimet
 float winddirs[50];
 float windspeeds[50];
 
-//vetores com os dados refinados  
+//vetores com os dados refinados
 float classes[32] = {0.00, 11.25, 22.5, 33.75, 45, 56.25, 67.5, 78.75, 90, 101.25, 112.5, 123.75, 135.0, 146.25, 157.5, 168.75, 180.1, 191.25, 202.5, 213.75, 225.0, 236.25, 247.5, 258.75, 270.0, 281.25, 292.5, 303.75, 315.0, 326.25, 337.5, 348.75};
 float ocorr[32];
 float classespeeds[32];
@@ -280,7 +282,7 @@ long int tempo32 = 0; //tempo para zerar os vetores novamente
 long int pass = 0; //variável que marca a posição do vet que está sendo analizada
 long int pass1 = 0; //marcação de posição na análise dos vetores
 long int numposi = 0; //variável que grava qual a posição do vetor que está sendo lida na gravação
-float posimf = 0; //variável que armazena a posição mais frequente 
+float posimf = 0; //variável que armazena a posição mais frequente
 float maiorocorr = 0;//armazena quantas vezes ocorreu
 float velocidade = 0;
 float cutin = 0; //indica se o cut-in é possível
@@ -319,7 +321,7 @@ int btnParam2Int = 0;
 int btnFreioRotor = 0;
 int btnFreioNacele = 0;
 int btnAcionaManual = 0;
-int btnAcionaOnline = 1;
+int btnAcionaOnline = 0;
 int btnAcionaOffline = 0;
 int btnAcionaIdle = 0;
 int btnAcionaParadaEmergencia = 0;
@@ -366,10 +368,10 @@ const char *PARAM_INPUT_5 = "modo";
 //}
 
 // Contadores de teste
-String readContaTudo(){
-//  contaTudo++;
-//  Serial.println(contaTudo);
-//  return String(contaTudo);
+String readContaTudo() {
+  //  contaTudo++;
+  //  Serial.println(contaTudo);
+  //  return String(contaTudo);
 }
 
 // Temperatura Gerador
@@ -405,7 +407,7 @@ String readRPMGerador()
 // RPM Rotor
 String readRPMRotor()
 {
-  return String((rpm/32));
+  return String((rpm / 32));
 }
 
 // Angulo de Pitch
@@ -445,7 +447,7 @@ String readWinddirMF()
 }
 
 //COLOCAR DIRECAO BIRUTA
-String readDirecaoBiruta(){
+String readDirecaoBiruta() {
   return String(ponto);
 }
 
@@ -455,41 +457,48 @@ String readDirecaoNacele()
 }
 
 //Status do freio nacele
-String readFreioNacele(){
-  
-  if(a10 == 1){
+String readFreioNacele() {
+
+  if (a10 == 1) {
     controle1 = 1;
-  }else if(a10 == 0){
+  } else if (a10 == 0) {
     controle1 = 0;
   }
   return String(controle1);
 }
 
 //Status do freio rotor
-String readFreioRotor(){
-  
-  if(brake == 1){
+String readFreioRotor() {
+
+  if (brake == 1) {
     controle2 = 1;
-  }else if(brake == 0){
+  } else if (brake == 0) {
     controle2 = 0;
   }
   return String(controle2);
 }
 
 //Status do arrefecimento
-String readArrefecimento(){
-  
-  if(arrefState == "On"){
+String readArrefecimento() {
+
+  if (arrefState == "On") {
     controle3 = 1;
-  }else if(arrefState == "Off"){
+  } else if (arrefState == "Off") {
     controle3 = 0 ;
   }
   return String(controle3);
 }
 
 //Status do modo de operação
-String readModoOperacao(){
-  return String(operationMode);
+String readModoOperacao() {
+
+  if ((armazenaModo != 0) && (armazenaModo != 1) && (armazenaModo != 2) && (armazenaModo != 3) && (armazenaModo != 4) && (armazenaModo != 5) && (armazenaModo != 6)){
+    armazenaModo = 0;
+  }
+
+  int resultado = ((operationMode*10)+armazenaModo);
+  
+  return String(resultado);
 }
 
 // OLHAR ESSE SITE A ADAPTAR O CODIGO
@@ -933,7 +942,7 @@ const char index_html[] PROGMEM = R"rawliteral(
 //Declarando as funcoes criadas (Declarar as funcoes usando - const = *nome funcao* function(){} - pq ele nao reconhce o function)
 //Declarando as variaveis
     const locker = "pluseamelhor";
-    var elemento = "", armazenaUltimoModo = 0, controladorBuscaOperacao = 1;
+    var elemento = "", armazenaUltimoModo, controladorBuscaOperacao = 1;
 
 //INTERVALOS DE 0.5 SEGUNDO
     //RPMS
@@ -1126,17 +1135,17 @@ const char index_html[] PROGMEM = R"rawliteral(
     }
     const mudaStatusSistemaCameServer = function (status) {
         var input = document.getElementById("status_sistema"),inputContainsOffline = input.classList.contains("offline"),inputContainsOnline = input.classList.contains("online");
-        if (status == 4) {input.value = "OFFLINE";document.getElementById("status_sistema").classList.remove("status_sistema_offline", "status_sistema_online", "status_sistema_idle", "status_sistema_manual", "status_sistema_autosafe", "status_sistema_parada_emergencia");document.getElementById("status_sistema").classList.add("status_sistema_offline");armazenaUltimoModo = 4;
-        } else if (status == 3) {input.value = "ONLINE";document.getElementById("status_sistema").classList.remove("status_sistema_offline", "status_sistema_online", "status_sistema_idle", "status_sistema_manual", "status_sistema_autosafe", "status_sistema_parada_emergencia");document.getElementById("status_sistema").classList.add("status_sistema_online");armazenaUltimoModo = 3;
-        } else if (status == 2) {input.value = "IDLE";document.getElementById("status_sistema").classList.remove("status_sistema_offline", "status_sistema_online", "status_sistema_idle", "status_sistema_manual", "status_sistema_autosafe", "status_sistema_parada_emergencia");document.getElementById("status_sistema").classList.add("status_sistema_idle");armazenaUltimoModo = 2;
-        } else if (status == 5) {input.value = "MANUAL";document.getElementById("status_sistema").classList.remove("status_sistema_offline", "status_sistema_online", "status_sistema_idle", "status_sistema_manual", "status_sistema_autosafe", "status_sistema_parada_emergencia");document.getElementById("status_sistema").classList.add("status_sistema_manual");habilitaManual();armazenaUltimoModo = 5;
-        } else if (status == 1) {input.value = "AUTOSAFE";document.getElementById("status_sistema").classList.remove("status_sistema_offline", "status_sistema_online", "status_sistema_idle", "status_sistema_manual", "status_sistema_autosafe", "status_sistema_parada_emergencia");document.getElementById("status_sistema").classList.add("status_sistema_autosafe");armazenaUltimoModo = 1;
-        } else if (status == 6) {input.value = "P.E.";document.getElementById("status_sistema").classList.remove("status_sistema_offline", "status_sistema_online", "status_sistema_idle", "status_sistema_manual", "status_sistema_autosafe", "status_sistema_parada_emergencia");document.getElementById("status_sistema").classList.add("status_sistema_parada_emergencia");armazenaUltimoModo = 6;
+        if (status == 4) {input.value = "OFFLINE";document.getElementById("status_sistema").classList.remove("status_sistema_offline", "status_sistema_online", "status_sistema_idle", "status_sistema_manual", "status_sistema_autosafe", "status_sistema_parada_emergencia");mudaEstado("btnAcionaOffline");toggleBtn("btnAcionaOffline");armazenaUltimoModo = 4;
+        } else if (status == 3) {input.value = "ONLINE";document.getElementById("status_sistema").classList.remove("status_sistema_offline", "status_sistema_online", "status_sistema_idle", "status_sistema_manual", "status_sistema_autosafe", "status_sistema_parada_emergencia");mudaEstado("btnAcionaOnline");toggleBtn("btnAcionaOnline");armazenaUltimoModo = 3;
+        } else if (status == 2) {input.value = "IDLE";document.getElementById("status_sistema").classList.remove("status_sistema_offline", "status_sistema_online", "status_sistema_idle", "status_sistema_manual", "status_sistema_autosafe", "status_sistema_parada_emergencia");mudaEstado("btnAcionaIdle");toggleBtn("btnAcionaIdle");armazenaUltimoModo = 2;
+        } else if (status == 5) {input.value = "MANUAL";document.getElementById("status_sistema").classList.remove("status_sistema_offline", "status_sistema_online", "status_sistema_idle", "status_sistema_manual", "status_sistema_autosafe", "status_sistema_parada_emergencia");mudaEstado("btnAcionaModoManual");toggleBtn("btnAcionaModoManual");habilitaManual();armazenaUltimoModo = 5;
+        } else if (status == 1) {input.value = "AUTOSAFE";document.getElementById("status_sistema").classList.remove("status_sistema_offline", "status_sistema_online", "status_sistema_idle", "status_sistema_manual", "status_sistema_autosafe", "status_sistema_parada_emergencia");mudaEstado("btnAutosafe");toggleBtn("btnAutosafe");armazenaUltimoModo = 1;
+        } else if (status == 6) {input.value = "P.E.";document.getElementById("status_sistema").classList.remove("status_sistema_offline", "status_sistema_online", "status_sistema_idle", "status_sistema_manual", "status_sistema_autosafe", "status_sistema_parada_emergencia");mudaEstado("btnParadaEmergencia");toggleBtn("btnParadaEmergencia");armazenaUltimoModo = 6;
         } else if (status == armazenaUltimoModo) { /*input.value = "ONLINE";document.getElementById("status_sistema").classList.remove("status_sistema_offline", "status_sistema_online", "status_sistema_idle", "status_sistema_manual", "status_sistema_autosafe", "status_sistema_parada_emergencia");// document.getElementById("status_sistema").classList.add("status_sistema_online")*/;}
     }
     
     const liberaBloqueaBotoes = function () {
-        vetorId = ["btnAcionaModoManual", "btnAcionaOnline", "btnAcionaOffline", "btnAcionaIdle", "btnParadaEmergencia"];
+        vetorId = ["btnAcionaModoManual", "btnAcionaOnline", "btnAcionaOffline", "btnAcionaIdle", "btnParadaEmergencia", "btnAutosafe"];
         var contAtivo = 0, contDesativado = 0, divId = "";
         
         for (i = 0; i < vetorId.length; i++) {divId = document.getElementById(vetorId[i]).hasAttribute("disabled")
@@ -1261,9 +1270,9 @@ const char index_html[] PROGMEM = R"rawliteral(
     }
 
     const verificaUltimoModo = function(modo){
-        if(armazenaUltimoModo == 0){
-            armazenaUltimoModo = 3;
-        }
+//        if(armazenaUltimoModo == 0){
+//            armazenaUltimoModo = 3;
+//        }
     }
 
     const enviaModoAtual = function (btn, modo, comeFromServer) {
@@ -1309,18 +1318,24 @@ const char index_html[] PROGMEM = R"rawliteral(
                 }
             }else if (escolha == false) {}
         }else if(comeFromServer == 1){
-            if ((modo == armazenaUltimoModo)) {
+          //primeira request
+          if(modo == 31){
+            modo = 3;
+            mudaStatusSistema(modo); 
+          }else if ((0 == armazenaUltimoModo)) {
                     if (modo == 3) {
                         
                     } else {
-                        mudaStatusSistemaCameServer(modo)
+                        mudaStatusSistema(modo)
 
                         //modo = 3    
                         // xhr.open("GET", "/atualizaModo?value=" + modo, true);
                         // xhr.send();
                         //mudaStatusSistema(modo)
                     }
-                } else {
+            }else if(modo == armazenaUltimoModo){
+                      
+            }else {
                     // xhr.open("GET", "/atualizaModo?value=" + modo, true);
                     // xhr.send();
                     //Verifica se deu certo e já altera o atual estado do sistema
@@ -1382,33 +1397,45 @@ const char index_html[] PROGMEM = R"rawliteral(
         }
     }
 
-    const verificaPrimeiraRequisicao = function(modo){
+const verificaPrimeiraRequisicao = function(modo){
+        
+        ultimoModo = modo%10
+        modo = Math.floor(modo/10)
+
+        console.log(modo);
+        console.log(ultimoModo);
+        
         if(modo == 1){
-            armazenaUltimoModo = modo
+//            armazenaUltimoModo = modo
             trataDados(modo);
         }else if(modo == 2){
-            armazenaUltimoModo = modo
+//            armazenaUltimoModo = modo
             trataDados(modo);
         }else if(modo == 4){
-            armazenaUltimoModo = modo
+//            armazenaUltimoModo = modo
             trataDados(modo);
         }else if(modo == 3){
-            armazenaUltimoModo = modo
+//            armazenaUltimoModo = modo
             trataDados(modo);
         }else if(modo == 5){
-            armazenaUltimoModo = modo
+//            armazenaUltimoModo = modo
             trataDados(modo);
         }else if(modo == 6){
-            armazenaUltimoModo = modo
+//            armazenaUltimoModo = modo
+            trataDados(modo);
+        }else if(modo == 0){
+//            armazenaUltimoModo = 3;
+            modo = 31
             trataDados(modo);
         }
+        console.log("OPERACAO APÓS TRATAR: " + modo)
     }
     
     document.addEventListener("DOMContentLoaded", function () {
         if (document.getElementById("btnLiberaBotoes").classList.contains("button-off") == true) {
             
             var xhttp = new XMLHttpRequest();
-            xhttp.onreadystatechange = function () { if (this.readyState == 4 && this.status == 200) { modo = this.responseText; modoInt = parseInt(modo); console.log("MUDOU OPERACAO:" + modoInt); verificaPrimeiraRequisicao(modoInt); } }
+            xhttp.onreadystatechange = function () { if (this.readyState == 4 && this.status == 200) { modo = this.responseText; modoInt = parseInt(modo); console.log("ENTROU OPERACAO:" + modoInt); verificaPrimeiraRequisicao(modoInt); } }
             xhttp.open("GET", "/status_modo_operacao", true);
             xhttp.send();
 
@@ -1435,16 +1462,16 @@ const char index_html[] PROGMEM = R"rawliteral(
 
 //===============================================
 // PROCESSADOR DOS PLACEHOLDERS
-//Percorre o codigo HTML e troca os placeholders entre "%placeholder%" pelo o que for definido aqui 
+//Percorre o codigo HTML e troca os placeholders entre "%placeholder%" pelo o que for definido aqui
 //===============================================
 String processor(const String &var)
 {
   // Serial.println(var);
 
-// MODELO QUE CONTROLA SE O BOTAO ESTA ATIVADO OU NAO E MANTÊM MESMO SE A PÁGINA ATUALIZAR
-// ====================================================
+  // MODELO QUE CONTROLA SE O BOTAO ESTA ATIVADO OU NAO E MANTÊM MESMO SE A PÁGINA ATUALIZAR
+  // ====================================================
 
-// PERCORRE OS PLACEHOLDERS
+  // PERCORRE OS PLACEHOLDERS
   if (var == "BUTTONPLACEHOLDER")
   {
     // Declara a variavel botao e soma os textoa ela
@@ -1464,157 +1491,158 @@ String processor(const String &var)
     //retorna o botao
     return buttons;
 
- // Passa para o proximo placeholder
+    // Passa para o proximo placeholder
 
- // IF DADOS
- // -------------------
-  }else if(var == "PERCENT"){
+    // IF DADOS
+    // -------------------
+  } else if (var == "PERCENT") {
     return "%";
-    
- }else if (var == "RPMROTOR"){
+
+  } else if (var == "RPMROTOR") {
     return readContaTudo();
- }else if(var == "RPMGERADOR"){
+  } else if (var == "RPMGERADOR") {
     return "Rpm gerador";
-    
- }else if(var == "TEMPEXTERNA"){
+
+  } else if (var == "TEMPEXTERNA") {
     return "Temp externa";
- }else if(var == "TEMPGERADOR"){
+  } else if (var == "TEMPGERADOR") {
     return readTempGerador();
-    
- }else if(var == "TENSAOSISTEMA"){
+
+  } else if (var == "TENSAOSISTEMA") {
     return "Tensao sistema";
- }else if(var == "TENSAOSISTEMAPOTENCIA"){
+  } else if (var == "TENSAOSISTEMAPOTENCIA") {
     return "Temp sistema potencia";
-    
- }else if(var == "VELOCIDADE"){
+
+  } else if (var == "VELOCIDADE") {
     return "Temp velocidade";
- }else if(var == "DIRECAOATUALMET"){
+  } else if (var == "DIRECAOATUALMET") {
     return "Direcao atual met";
- }else if(var == "VELOCIDADEMEDIAMET"){
+  } else if (var == "VELOCIDADEMEDIAMET") {
     return "Velocidade media met";
- }else if(var == "DIRECAOFINALMET"){
+  } else if (var == "DIRECAOFINALMET") {
     return "Direcao final met";
-    
- }else if(var == "POSICAOATUALNACELE"){
+
+  } else if (var == "POSICAOATUALNACELE") {
     return "Posicao atual nacele";
- }else if(var == "ANGULOATUALPITCH"){
+  } else if (var == "ANGULOATUALPITCH") {
     return "Posicao atual pitch";
 
 
- }else if(var == "DIRECAOCARDIALNACELE"){
-  return readDirecaoNacele();
- }else if(var == "DIRECAOCARDIALBIRUTA"){
-  return readDirecaoBiruta();
- // IF BOTOES
- // ---------------------    
- }else if(var == "BOTAOFREIONACELE"){
+  } else if (var == "DIRECAOCARDIALNACELE") {
+    return readDirecaoNacele();
+  } else if (var == "DIRECAOCARDIALBIRUTA") {
+    return readDirecaoBiruta();
+    // IF BOTOES
+    // ---------------------
+  } else if (var == "BOTAOFREIONACELE") {
     String btns = "";
-    
-   if(btnFreioNacele == 0){
-      btns =+ "<div><p class=\"p-col-title\">Freio Nacele</p><button id=\"freioNacele\" class=\"button button-off\" onclick='mudaEstado(\"freioNacele\");toggleBtn(\"freioNacele\");' >OFF</button></div>";
-   }else if(btnFreioNacele == 1){
-      btns =+ "<div><p class=\"p-col-title\">Freio Nacele</p><button id=\"freioNacele\" class=\"button button-on\" onclick='mudaEstado(\"freioNacele\");toggleBtn(\"freioNacele\");'>ON</button></div>";
-   }
-    return btns;
-    
- }else if(var == "BOTAOFREIOROTOR"){
-   String btns = "";
-   
-   if(btnFreioRotor == 0){
-      btns =+ "<div class=\"mt-105\"><p class=\"p-col-title\">Freio Rotor </p><button id=\"freioRotor\" onclick='mudaEstado(\"freioRotor\");toggleBtn(\"freioRotor\");' class=\"button button-off\">OFF</button></div>";
-   }else if(btnFreioRotor == 1){
-      btns =+ "<div class=\"mt-105\"><p class=\"p-col-title\">Freio Rotor </p><button id=\"freioRotor\" onclick='mudaEstado(\"freioRotor\");toggleBtn(\"freioRotor\");' class=\"button button-on\">ON</button></div>";
-   }
-    return btns;
- }else if(var == "BOTAOACIONAMANUAL"){
-   String btns = "";
-   
-   if(btnAcionaManual == 0){
-      btns =+ "<div class=\"mt-105\"><p class=\"p-col-title\">Modo Manual</p><button id=\"btnAcionaModoManual\" onclick='enviaModoAtual(\"btnAcionaModoManual\",5,0)' class=\"button button-off\">OFF</button></div>";
-   }else if(btnAcionaManual == 1){
-      btns =+ "<div class=\"mt-105\"><p class=\"p-col-title\">Modo Manual </p><button id=\"btnAcionaModoManual\" onclick='enviaModoAtual(\"btnAcionaModoManual\",5,0)' class=\"button button-on\">ON</button></div>";
-   }
-    return btns;
- }else if(var == "BOTAOACIONAONLINE"){
-   String btns = "";
 
-  if((btnAcionaOffline == 0) && (btnAcionaIdle == 0) && (btnAcionaManual == 0) && (btnAcionaParadaEmergencia == 0) && (btnAcionaAutosafe == 0)){
-    btnAcionaOnline = 1;
-  }else{
-    btnAcionaOnline = 0;
-  }
-   
-   if(btnAcionaOnline == 0){
-      btns =+ "<div class=\"mt-105\"><p class=\"p-col-title\">Modo Online</p><button id=\"btnAcionaOnline\" onclick='enviaModoAtual(\"btnAcionaOnline\",3,0)' class=\"button button-off\">OFF</button></div>";
-   }else if(btnAcionaOnline == 1){
-      btns =+ "<div class=\"mt-105\"><p class=\"p-col-title\">Modo Online </p><button id=\"btnAcionaOnline\" onclick='enviaModoAtual(\"btnAcionaOnline\",3,0)' class=\"button button-on\">ON</button></div>";
-   }
+    if (btnFreioNacele == 0) {
+      btns = + "<div><p class=\"p-col-title\">Freio Nacele</p><button id=\"freioNacele\" class=\"button button-off\" onclick='mudaEstado(\"freioNacele\");toggleBtn(\"freioNacele\");' >OFF</button></div>";
+    } else if (btnFreioNacele == 1) {
+      btns = + "<div><p class=\"p-col-title\">Freio Nacele</p><button id=\"freioNacele\" class=\"button button-on\" onclick='mudaEstado(\"freioNacele\");toggleBtn(\"freioNacele\");'>ON</button></div>";
+    }
     return btns;
- }else if(var == "BOTAOACIONAOFFLINE"){
-   String btns = "";
-   
-   if(btnAcionaOffline == 0){
-      btns =+ "<div class=\"mt-105\"><p class=\"p-col-title\">Modo Offline</p><button id=\"btnAcionaOffline\" onclick='enviaModoAtual(\"btnAcionaOffline\",4,0)' class=\"button button-off\">OFF</button></div>";
-   }else if(btnAcionaOffline == 1){
-      btns =+ "<div class=\"mt-105\"><p class=\"p-col-title\">Modo Offline </p><button id=\"btnAcionaOffline\" onclick='enviaModoAtual(\"btnAcionaOffline\",4,0)' class=\"button button-on\">ON</button></div>";
-   }
-    return btns;
- }else if(var == "BOTAOACIONAIDLE"){
-   String btns = "";
-   
-   if(btnAcionaIdle == 0){
-      btns =+ "<div class=\"mt-105\"><p class=\"p-col-title\">Modo Idle</p><button id=\"btnAcionaIdle\" onclick='enviaModoAtual(\"btnAcionaIdle\",2,0)' class=\"button button-off\">OFF</button></div>";
-   }else if(btnAcionaIdle == 1){
-      btns =+ "<div class=\"mt-105\"><p class=\"p-col-title\">Modo Idle</p><button id=\"btnAcionaIdle\" onclick='enviaModoAtual(\"btnAcionaIdle\",2,0)' class=\"button button-on\">ON</button></div>";
-   }
-    return btns;
-  }else if(var == "BOTAOACIONAAUTOSAFE"){
-   String btns = "";
-   
-   if(btnAcionaAutosafe == 0){
-      btns =+ "<div class=\"mt-105\"><p class=\"p-col-title\">Modo Autosafe</p><button id=\"btnAutosafe\" onclick='enviaModoAtual(\"btnAutosafe\",1,0)' class=\"button button-off\">OFF</button></div>";
-   }else if(btnAcionaAutosafe == 1){
-      btns =+ "<div class=\"mt-105\"><p class=\"p-col-title\">Modo Autosafe</p><button id=\"btnAutosafe\" onclick='enviaModoAtual(\"btnAutosafe\",1,0)' class=\"button button-on\">ON</button></div>";
-   }
-    return btns;
- }else if(var == "BOTAOACIONAPARADAEMERGENCIA"){
-   String btns = "";
-   
-   if(btnAcionaParadaEmergencia == 0){
-      btns =+ "<div class=\"mt-105\"><p class=\"p-col-title\">Modo Parada Emergência</p><button id=\"btnParadaEmergencia\" onclick='enviaModoAtual(\"btnParadaEmergencia\",6,0)' class=\"button button-off\">OFF</button></div>";
-   }else if(btnAcionaParadaEmergencia == 1){
-      btns =+ "<div class=\"mt-105\"><p class=\"p-col-title\">Modo Parada Emergência</p><button id=\"btnParadaEmergencia\" onclick='enviaModoAtual(\"btnParadaEmergencia\",6,0)' class=\"button button-on\">ON</button></div>";
-   }
-    return btns;
- }else if(var == "BOTAOLIBERABOTOES"){
-   String btns = "";
-   
-   if(btnLiberaBotoes == 0){
-      btns =+ "<div class=\"mt-105\"><p class=\"p-col-title\">Liberar Botoes</p><button id=\"btnLiberaBotoes\" onclick='capturaElemento(\"btnLiberaBotoes\");alerta()' class=\"button button-off\">OFF</button></div>";
-   }else if(btnLiberaBotoes == 1){
-      btns =+ "<div class=\"mt-105\"><p class=\"p-col-title\">Liberar Botoes</p><button id=\"btnLiberaBotoes\" onclick='capturaElemento(\"btnLiberaBotoes\");alerta()' class=\"button button-on\">ON</button></div>";
-   }
-    return btns;
- }else if(var == "BOTAOATUALIZASOFTWARE"){
+
+  } else if (var == "BOTAOFREIOROTOR") {
     String btns = "";
-   
-   if(btnAtualizasoftware == 0){
-      btns =+ "<div class=\"mt-105\"><p class=\"p-col-title\">Atualiza Soft.</p><button id=\"btnAtualizasoftware\" onclick='mudaEstado(\"btnAtualizasoftware\");toggleBtn(\"btnAtualizasoftware\");' class=\"button button-off\">OFF</button></div>";
-   }else if(btnAtualizasoftware== 1){
-      btns =+ "<div class=\"mt-105\"><p class=\"p-col-title\">Atualiza Soft.</p><button id=\"btnAtualizasoftware\" onclick='mudaEstado(\"btnAtualizasoftware\");toggleBtn(\"btnAtualizasoftware\");' class=\"button button-on\">ON</button></div>";
-   }
+
+    if (btnFreioRotor == 0) {
+      btns = + "<div class=\"mt-105\"><p class=\"p-col-title\">Freio Rotor </p><button id=\"freioRotor\" onclick='mudaEstado(\"freioRotor\");toggleBtn(\"freioRotor\");' class=\"button button-off\">OFF</button></div>";
+    } else if (btnFreioRotor == 1) {
+      btns = + "<div class=\"mt-105\"><p class=\"p-col-title\">Freio Rotor </p><button id=\"freioRotor\" onclick='mudaEstado(\"freioRotor\");toggleBtn(\"freioRotor\");' class=\"button button-on\">ON</button></div>";
+    }
     return btns;
- }else if(var == "BOTAOACIONAARREFECIMENTO"){
-   String btns = "";
-   
-   if(btnArrefecimento == 0){
-      btns =+ "<div class=\"mt-105\"><p class=\"p-col-title\">Arrefecimento</p><button id=\"btnArrefecimento\" onclick='mudaEstado(\"btnArrefecimento\");toggleBtn(\"btnArrefecimento\");' class=\"button button-off\">OFF</button></div>";
-   }else if(btnArrefecimento== 1){
-      btns =+ "<div class=\"mt-105\"><p class=\"p-col-title\">Arrefecimento</p><button id=\"btnArrefecimento\" onclick='mudaEstado(\"btnArrefecimento\");toggleBtn(\"btnArrefecimento\");' class=\"button button-on\">ON</button></div>";
-   }
+  } else if (var == "BOTAOACIONAMANUAL") {
+    String btns = "";
+
+    if (btnAcionaManual == 0) {
+      btns = + "<div class=\"mt-105\"><p class=\"p-col-title\">Modo Manual</p><button id=\"btnAcionaModoManual\" onclick='enviaModoAtual(\"btnAcionaModoManual\",5,0)' class=\"button button-off\">OFF</button></div>";
+    } else if (btnAcionaManual == 1) {
+//      btns = + "<div class=\"mt-105\"><p class=\"p-col-title\">Modo Manual </p><button id=\"btnAcionaModoManual\" onclick='enviaModoAtual(\"btnAcionaModoManual\",5,0)' class=\"button button-on\">ON</button></div>";
+    }
     return btns;
- }else{
-  return String();}
+  } else if (var == "BOTAOACIONAONLINE") {
+    String btns = "";
+
+//    if ((btnAcionaOffline == 0) && (btnAcionaIdle == 0) && (btnAcionaManual == 0) && (btnAcionaParadaEmergencia == 0) && (btnAcionaAutosafe == 0)) {
+//      btnAcionaOnline = 1;
+//    } else {
+//      btnAcionaOnline = 0;
+//    }
+
+    if (btnAcionaOnline == 0) {
+      btns = + "<div class=\"mt-105\"><p class=\"p-col-title\">Modo Online</p><button id=\"btnAcionaOnline\" onclick='enviaModoAtual(\"btnAcionaOnline\",3,0)' class=\"button button-off\">OFF</button></div>";
+    } else if (btnAcionaOnline == 1) {
+//      btns = + "<div class=\"mt-105\"><p class=\"p-col-title\">Modo Online </p><button id=\"btnAcionaOnline\" onclick='enviaModoAtual(\"btnAcionaOnline\",3,0)' class=\"button button-on\">ON</button></div>";
+    }
+    return btns;
+  } else if (var == "BOTAOACIONAOFFLINE") {
+    String btns = "";
+
+    if (btnAcionaOffline == 0) {
+      btns = + "<div class=\"mt-105\"><p class=\"p-col-title\">Modo Offline</p><button id=\"btnAcionaOffline\" onclick='enviaModoAtual(\"btnAcionaOffline\",4,0)' class=\"button button-off\">OFF</button></div>";
+    } else if (btnAcionaOffline == 1) {
+//      btns = + "<div class=\"mt-105\"><p class=\"p-col-title\">Modo Offline </p><button id=\"btnAcionaOffline\" onclick='enviaModoAtual(\"btnAcionaOffline\",4,0)' class=\"button button-on\">ON</button></div>";
+    }
+    return btns;
+  } else if (var == "BOTAOACIONAIDLE") {
+    String btns = "";
+
+    if (btnAcionaIdle == 0) {
+      btns = + "<div class=\"mt-105\"><p class=\"p-col-title\">Modo Idle</p><button id=\"btnAcionaIdle\" onclick='enviaModoAtual(\"btnAcionaIdle\",2,0)' class=\"button button-off\">OFF</button></div>";
+    } else if (btnAcionaIdle == 1) {
+//      btns = + "<div class=\"mt-105\"><p class=\"p-col-title\">Modo Idle</p><button id=\"btnAcionaIdle\" onclick='enviaModoAtual(\"btnAcionaIdle\",2,0)' class=\"button button-on\">ON</button></div>";
+    }
+    return btns;
+  } else if (var == "BOTAOACIONAAUTOSAFE") {
+    String btns = "";
+
+    if (btnAcionaAutosafe == 0) {
+      btns = + "<div class=\"mt-105\"><p class=\"p-col-title\">Modo Autosafe</p><button id=\"btnAutosafe\" onclick='enviaModoAtual(\"btnAutosafe\",1,0)' class=\"button button-off\">OFF</button></div>";
+    } else if (btnAcionaAutosafe == 1) {
+//      btns = + "<div class=\"mt-105\"><p class=\"p-col-title\">Modo Autosafe</p><button id=\"btnAutosafe\" onclick='enviaModoAtual(\"btnAutosafe\",1,0)' class=\"button button-on\">ON</button></div>";
+    }
+    return btns;
+  } else if (var == "BOTAOACIONAPARADAEMERGENCIA") {
+    String btns = "";
+
+    if (btnAcionaParadaEmergencia == 0) {
+      btns = + "<div class=\"mt-105\"><p class=\"p-col-title\">Modo Parada Emergência</p><button id=\"btnParadaEmergencia\" onclick='enviaModoAtual(\"btnParadaEmergencia\",6,0)' class=\"button button-off\">OFF</button></div>";
+    } else if (btnAcionaParadaEmergencia == 1) {
+//      btns = + "<div class=\"mt-105\"><p class=\"p-col-title\">Modo Parada Emergência</p><button id=\"btnParadaEmergencia\" onclick='enviaModoAtual(\"btnParadaEmergencia\",6,0)' class=\"button button-on\">ON</button></div>";
+    }
+    return btns;
+  } else if (var == "BOTAOLIBERABOTOES") {
+    String btns = "";
+
+    if (btnLiberaBotoes == 0) {
+      btns = + "<div class=\"mt-105\"><p class=\"p-col-title\">Liberar Botoes</p><button id=\"btnLiberaBotoes\" onclick='capturaElemento(\"btnLiberaBotoes\");alerta()' class=\"button button-off\">OFF</button></div>";
+    } else if (btnLiberaBotoes == 1) {
+//      btns = + "<div class=\"mt-105\"><p class=\"p-col-title\">Liberar Botoes</p><button id=\"btnLiberaBotoes\" onclick='capturaElemento(\"btnLiberaBotoes\");alerta()' class=\"button button-on\">ON</button></div>";
+    }
+    return btns;
+  } else if (var == "BOTAOATUALIZASOFTWARE") {
+    String btns = "";
+
+    if (btnAtualizasoftware == 0) {
+      btns = + "<div class=\"mt-105\"><p class=\"p-col-title\">Atualiza Soft.</p><button id=\"btnAtualizasoftware\" onclick='mudaEstado(\"btnAtualizasoftware\");toggleBtn(\"btnAtualizasoftware\");' class=\"button button-off\">OFF</button></div>";
+    } else if (btnAtualizasoftware == 1) {
+//      btns = + "<div class=\"mt-105\"><p class=\"p-col-title\">Atualiza Soft.</p><button id=\"btnAtualizasoftware\" onclick='mudaEstado(\"btnAtualizasoftware\");toggleBtn(\"btnAtualizasoftware\");' class=\"button button-on\">ON</button></div>";
+    }
+    return btns;
+  } else if (var == "BOTAOACIONAARREFECIMENTO") {
+    String btns = "";
+
+    if (btnArrefecimento == 0) {
+      btns = + "<div class=\"mt-105\"><p class=\"p-col-title\">Arrefecimento</p><button id=\"btnArrefecimento\" onclick='mudaEstado(\"btnArrefecimento\");toggleBtn(\"btnArrefecimento\");' class=\"button button-off\">OFF</button></div>";
+    } else if (btnArrefecimento == 1) {
+//      btns = + "<div class=\"mt-105\"><p class=\"p-col-title\">Arrefecimento</p><button id=\"btnArrefecimento\" onclick='mudaEstado(\"btnArrefecimento\");toggleBtn(\"btnArrefecimento\");' class=\"button button-on\">ON</button></div>";
+    }
+    return btns;
+  } else {
+    return String();
+  }
 }
 
 //===============================================
@@ -1634,118 +1662,118 @@ void setup()
 
   // INSTANCIANDO AS VARIÁVEIS
   //-----------------------
-    // Initialize the output variables as outputs
+  // Initialize the output variables as outputs
 
-/*  //OUTPUTs
+  /*  //OUTPUTs
 
-  pinMode(arref, OUTPUT);
-  pinMode(ncBrake, OUTPUT);
-  pinMode(ncFree, OUTPUT);
-  pinMode(rtBrake, OUTPUT);
-  pinMode(rtFree, OUTPUT);
-    //set dos pinos do motor de rotaão da nacele
-
-
-  //IMPUTs
-  pinMode(GPIOreftemp1, INPUT);
-  pinMode(GPIOreftemp2, INPUT);
-  pinMode(GPIOtSis, INPUT);
-  pinMode(GPIOtPot, INPUT);
-  pinMode(35, INPUT);
-  pinMode(5, INPUT);
-  pinMode(GPIOpotpitch, INPUT);
-  pinMode(GPIOpotnacele, INPUT);
+    pinMode(arref, OUTPUT);
+    pinMode(ncBrake, OUTPUT);
+    pinMode(ncFree, OUTPUT);
+    pinMode(rtBrake, OUTPUT);
+    pinMode(rtFree, OUTPUT);
+      //set dos pinos do motor de rotaão da nacele
 
 
-  // Set outputs to off
-
-  digitalWrite(arref, HIGH);
-  digitalWrite(ncBrake, HIGH);
-  digitalWrite(ncFree, HIGH);
-  digitalWrite(rtBrake, LOW);
-  digitalWrite(rtFree, LOW);
-
-  //Definições gerais para a PWM
-
-  ledcSetup(0, 5000, 8);
-  ledcAttachPin(13, 0);
-
-  ledcSetup(1, 5000, 8);
-  ledcAttachPin(12, 1);
-
-  ledcSetup(2, 5000, 8);
-  ledcAttachPin(26, 2);
-
-  ledcSetup(3, 5000, 8);
-  ledcAttachPin(27, 3);
-  
-  ledcSetup(4, 5000, 8);
-  ledcAttachPin(14, 4);
-
-  ledcSetup(5, 5000, 8);
-  ledcAttachPin(15, 5);
-
-  
-  // Abilitação do AttachInterrupt
-  attachInterrupt(digitalPinToInterrupt(35), addcount, FALLING);
-
-  lcd.init();
-  lcd.backlight();
-  
-  lcd.clear();
-  lcd.setCursor(0, 0);
-  lcd.print("LAZZARUS_Eolica v2.1");
-  delay(1000);
-  lcd.setCursor(2, 1);
-  lcd.print("Developed By_");
-  delay(500);
-  lcd.setCursor(0, 2);
-  lcd.print("Alef Julio S. C.");
-  lcd.setCursor(0, 3);
-  lcd.print("Andre V. de Freitas");
-  delay(3000);
-  lcd.clear();
-  lcd.setCursor(0, 0);
-  lcd.print("LAZZARUS_Eolica v2.1");
-  delay(1000);
-  lcd.setCursor(2, 1);
-  lcd.print("--Init_Sistem--");
-  delay(500);
-  lcd.setCursor(0, 2);
-  lcd.print("updateWIFIcode()");
-  lcd.setCursor(0, 3);
-  lcd.print("Wait..........");
-
-  //freenacele();
-  //brakenacele();
-  //braking = 1;
-  //freerotor();
-
-  // ATUALIZA O CÓDIGO VIA WIFI
-  updateWifiCode();
-
-  //Atualização de software encerrada, inicializando servidor
-  lcd.clear();  
-  lcd.setCursor(0, 0);
-  lcd.print("Atualizacao de");
-  lcd.setCursor(0, 1);
-  lcd.print("Software encerrada!");
-  
-  lcd.setCursor(0, 2);
-  lcd.print("Init_WebServer");
-  delay(1000);
+    //IMPUTs
+    pinMode(GPIOreftemp1, INPUT);
+    pinMode(GPIOreftemp2, INPUT);
+    pinMode(GPIOtSis, INPUT);
+    pinMode(GPIOtPot, INPUT);
+    pinMode(35, INPUT);
+    pinMode(5, INPUT);
+    pinMode(GPIOpotpitch, INPUT);
+    pinMode(GPIOpotnacele, INPUT);
 
 
-  //fins de teste para leitura do potenciøemtro de ref da nacele e pitch
-  //while(1){
-   // lcd.clear();
-   // lcd.setCursor(0, 0);
-   // lcd.print(analogRead(GPIOpotnacele));
-   // delay(500);
-  //}
-  
-  settozero();
-*/
+    // Set outputs to off
+
+    digitalWrite(arref, HIGH);
+    digitalWrite(ncBrake, HIGH);
+    digitalWrite(ncFree, HIGH);
+    digitalWrite(rtBrake, LOW);
+    digitalWrite(rtFree, LOW);
+
+    //Definições gerais para a PWM
+
+    ledcSetup(0, 5000, 8);
+    ledcAttachPin(13, 0);
+
+    ledcSetup(1, 5000, 8);
+    ledcAttachPin(12, 1);
+
+    ledcSetup(2, 5000, 8);
+    ledcAttachPin(26, 2);
+
+    ledcSetup(3, 5000, 8);
+    ledcAttachPin(27, 3);
+
+    ledcSetup(4, 5000, 8);
+    ledcAttachPin(14, 4);
+
+    ledcSetup(5, 5000, 8);
+    ledcAttachPin(15, 5);
+
+
+    // Abilitação do AttachInterrupt
+    attachInterrupt(digitalPinToInterrupt(35), addcount, FALLING);
+
+    lcd.init();
+    lcd.backlight();
+
+    lcd.clear();
+    lcd.setCursor(0, 0);
+    lcd.print("LAZZARUS_Eolica v2.1");
+    delay(1000);
+    lcd.setCursor(2, 1);
+    lcd.print("Developed By_");
+    delay(500);
+    lcd.setCursor(0, 2);
+    lcd.print("Alef Julio S. C.");
+    lcd.setCursor(0, 3);
+    lcd.print("Andre V. de Freitas");
+    delay(3000);
+    lcd.clear();
+    lcd.setCursor(0, 0);
+    lcd.print("LAZZARUS_Eolica v2.1");
+    delay(1000);
+    lcd.setCursor(2, 1);
+    lcd.print("--Init_Sistem--");
+    delay(500);
+    lcd.setCursor(0, 2);
+    lcd.print("updateWIFIcode()");
+    lcd.setCursor(0, 3);
+    lcd.print("Wait..........");
+
+    //freenacele();
+    //brakenacele();
+    //braking = 1;
+    //freerotor();
+
+    // ATUALIZA O CÓDIGO VIA WIFI
+    updateWifiCode();
+
+    //Atualização de software encerrada, inicializando servidor
+    lcd.clear();
+    lcd.setCursor(0, 0);
+    lcd.print("Atualizacao de");
+    lcd.setCursor(0, 1);
+    lcd.print("Software encerrada!");
+
+    lcd.setCursor(0, 2);
+    lcd.print("Init_WebServer");
+    delay(1000);
+
+
+    //fins de teste para leitura do potenciøemtro de ref da nacele e pitch
+    //while(1){
+     // lcd.clear();
+     // lcd.setCursor(0, 0);
+     // lcd.print(analogRead(GPIOpotnacele));
+     // delay(500);
+    //}
+
+    settozero();
+  */
 
   // CRIANDO O WEBSERVER
   //-----------------------
@@ -1772,8 +1800,10 @@ void setup()
 
   // PUXA A PAGINA
   //---------------------------
-  server.on("/", HTTP_GET, [](AsyncWebServerRequest *request)
-            { request->send_P(200, "text/html", index_html, processor); });
+  server.on("/", HTTP_GET, [](AsyncWebServerRequest * request)
+  {
+    request->send_P(200, "text/html", index_html, processor);
+  });
   //---------------------------
 
   // PUXA OS DADOS EM TEMPO REAL
@@ -1781,218 +1811,267 @@ void setup()
   //modelo
   //server.on("/rpmrotor", HTTP_GET, [](AsyncWebServerRequest *request)
   //          { request->send_P(200, "text/plain", readDHTTemperature().c_str()); });
-  
-  server.on("/rpmrotor", HTTP_GET, [](AsyncWebServerRequest *request)
-            { request->send_P(200, "text/plain", readRPMRotor().c_str()); });
-  server.on("/rpm_gerador", HTTP_GET, [](AsyncWebServerRequest *request)
-            { request->send_P(200, "text/plain", readRPMGerador().c_str()); });
-            
-  server.on("/velocidade_met", HTTP_GET, [](AsyncWebServerRequest *request)
-            { request->send_P(200, "text/plain", readWindspeedAt().c_str()); });
-  server.on("/velocidade_media_met", HTTP_GET, [](AsyncWebServerRequest *request)
-            { request->send_P(200, "text/plain", readWindspeedMF().c_str()); });     
-  server.on("/direcao_atual_met", HTTP_GET, [](AsyncWebServerRequest *request)
-            { request->send_P(200, "text/plain", readWinddirAt().c_str()); });  
-  server.on("/direcao_final_met", HTTP_GET, [](AsyncWebServerRequest *request)
-            { request->send_P(200, "text/plain", readWinddirMF().c_str()); });   
-              
-  server.on("/posicao_atual_nacele", HTTP_GET, [](AsyncWebServerRequest *request)
-            { request->send_P(200, "text/plain", readPosiNacele().c_str()); });  
-  server.on("/angulo_atual_pitch", HTTP_GET, [](AsyncWebServerRequest *request)
-            { request->send_P(200, "text/plain", readPosiPitch().c_str()); });  
 
-  server.on("/temp_externa", HTTP_GET, [](AsyncWebServerRequest *request)
-            { request->send_P(200, "text/plain", readTempSistema().c_str()); });  
-  server.on("/temp_gerador", HTTP_GET, [](AsyncWebServerRequest *request)
-            { request->send_P(200, "text/plain", readTempGerador().c_str()); });   
+  server.on("/rpmrotor", HTTP_GET, [](AsyncWebServerRequest * request)
+  {
+    request->send_P(200, "text/plain", readRPMRotor().c_str());
+  });
+  server.on("/rpm_gerador", HTTP_GET, [](AsyncWebServerRequest * request)
+  {
+    request->send_P(200, "text/plain", readRPMGerador().c_str());
+  });
 
-  server.on("/tensao_sistema", HTTP_GET, [](AsyncWebServerRequest *request)
-            { request->send_P(200, "text/plain", readTensaoSistema().c_str()); });  
-  server.on("/tensao_sistema_potencia", HTTP_GET, [](AsyncWebServerRequest *request)
-            { request->send_P(200, "text/plain", readTensaoPotencia().c_str()); });               
+  server.on("/velocidade_met", HTTP_GET, [](AsyncWebServerRequest * request)
+  {
+    request->send_P(200, "text/plain", readWindspeedAt().c_str());
+  });
+  server.on("/velocidade_media_met", HTTP_GET, [](AsyncWebServerRequest * request)
+  {
+    request->send_P(200, "text/plain", readWindspeedMF().c_str());
+  });
+  server.on("/direcao_atual_met", HTTP_GET, [](AsyncWebServerRequest * request)
+  {
+    request->send_P(200, "text/plain", readWinddirAt().c_str());
+  });
+  server.on("/direcao_final_met", HTTP_GET, [](AsyncWebServerRequest * request)
+  {
+    request->send_P(200, "text/plain", readWinddirMF().c_str());
+  });
 
-  server.on("/direcao_biruta", HTTP_GET, [](AsyncWebServerRequest *request)
-            { request->send_P(200, "text/plain", readDirecaoBiruta().c_str()); });  
-  server.on("/direcao_nacele", HTTP_GET, [](AsyncWebServerRequest *request)
-            { request->send_P(200, "text/plain", readDirecaoNacele().c_str()); });               
+  server.on("/posicao_atual_nacele", HTTP_GET, [](AsyncWebServerRequest * request)
+  {
+    request->send_P(200, "text/plain", readPosiNacele().c_str());
+  });
+  server.on("/angulo_atual_pitch", HTTP_GET, [](AsyncWebServerRequest * request)
+  {
+    request->send_P(200, "text/plain", readPosiPitch().c_str());
+  });
+
+  server.on("/temp_externa", HTTP_GET, [](AsyncWebServerRequest * request)
+  {
+    request->send_P(200, "text/plain", readTempSistema().c_str());
+  });
+  server.on("/temp_gerador", HTTP_GET, [](AsyncWebServerRequest * request)
+  {
+    request->send_P(200, "text/plain", readTempGerador().c_str());
+  });
+
+  server.on("/tensao_sistema", HTTP_GET, [](AsyncWebServerRequest * request)
+  {
+    request->send_P(200, "text/plain", readTensaoSistema().c_str());
+  });
+  server.on("/tensao_sistema_potencia", HTTP_GET, [](AsyncWebServerRequest * request)
+  {
+    request->send_P(200, "text/plain", readTensaoPotencia().c_str());
+  });
+
+  server.on("/direcao_biruta", HTTP_GET, [](AsyncWebServerRequest * request)
+  {
+    request->send_P(200, "text/plain", readDirecaoBiruta().c_str());
+  });
+  server.on("/direcao_nacele", HTTP_GET, [](AsyncWebServerRequest * request)
+  {
+    request->send_P(200, "text/plain", readDirecaoNacele().c_str());
+  });
 
 
 
   //MODO DE OPERAÇÃO, FREIO E ARREFECIMENTO
-  server.on("/freio_nacele", HTTP_GET, [](AsyncWebServerRequest *request)
-            { request->send_P(200, "text/plain", readFreioNacele().c_str()); });
-  server.on("/freio_rotor", HTTP_GET, [](AsyncWebServerRequest *request)
-            { request->send_P(200, "text/plain", readFreioRotor().c_str()); });
-            
-  /*server.on("/status_arrefecimento", HTTP_GET, [](AsyncWebServerRequest *request)
-            { request->send_P(200, "text/plain", readArrefecimento().c_str()); });*/              
+  server.on("/freio_nacele", HTTP_GET, [](AsyncWebServerRequest * request)
+  {
+    request->send_P(200, "text/plain", readFreioNacele().c_str());
+  });
+  server.on("/freio_rotor", HTTP_GET, [](AsyncWebServerRequest * request)
+  {
+    request->send_P(200, "text/plain", readFreioRotor().c_str());
+  });
 
-  server.on("/status_modo_operacao", HTTP_GET, [](AsyncWebServerRequest *request)
-            { request->send_P(200, "text/plain", readModoOperacao().c_str()); });                                
+  /*server.on("/status_arrefecimento", HTTP_GET, [](AsyncWebServerRequest *request)
+            { request->send_P(200, "text/plain", readArrefecimento().c_str()); });*/
+
+  server.on("/status_modo_operacao", HTTP_GET, [](AsyncWebServerRequest * request)
+  {
+    request->send_P(200, "text/plain", readModoOperacao().c_str());
+  });
   //---------------------------
 
   // VERIFICA E ATUALIZA O BOTAO QUE FOR ATIVADO
   //---------------------------
   //  Send a GET request to <ESP_IP>/update?output=<btnNaceleMsg1>&state=<btnNaceleMsg2>
- 
-        server.on("/atualizaBtn", HTTP_GET, [](AsyncWebServerRequest *request){
-          // GET input1 value on <ESP_IP>/atualizaBtn?output=<btnNaceleMsg1>&state=<btnNaceleMsg2>
-          if(request->hasParam(PARAM_INPUT_1) && request->hasParam(PARAM_INPUT_2)){
 
-              //Captura os valores do request
-              btnParam1 = request->getParam(PARAM_INPUT_1)->value();
-              btnParam2 = request->getParam(PARAM_INPUT_2)->value();
+  server.on("/atualizaBtn", HTTP_GET, [](AsyncWebServerRequest * request) {
+    // GET input1 value on <ESP_IP>/atualizaBtn?output=<btnNaceleMsg1>&state=<btnNaceleMsg2>
+    if (request->hasParam(PARAM_INPUT_1) && request->hasParam(PARAM_INPUT_2)) {
 
-              btnParam2Int = btnParam2.toInt();
+      //Captura os valores do request
+      btnParam1 = request->getParam(PARAM_INPUT_1)->value();
+      btnParam2 = request->getParam(PARAM_INPUT_2)->value();
 
-              //FREIOS
-              if(btnParam1 == "freioNacele"){
-                if(btnParam2Int == 0){
-                  btnFreioNacele = 0;
-                  freenacele();
-                  Serial.println("FREENACELE");
-                }else if(btnParam2Int == 1){
-                  btnFreioNacele = 1;
-                  brakenacele();
-                  Serial.println("BRAKENACELE");
-                }             
-              }else if(btnParam1 == "freioRotor"){
-                if(btnParam2Int == 0){
-                  btnFreioRotor = 0;
-                  freerotor();
-                  Serial.println("FREEROTOR");
-                }else if(btnParam2Int == 1){
-                  btnFreioRotor = 1;
-                  braking = 1;
-                  Serial.println("BRAKEROTOR");}
-                  
-              //ARREFECIMENTO
-              }else if(btnParam1 == "btnArrefecimento"){
-                  if(btnParam2Int == 0){
-                  btnArrefecimento = 0;
-                  offarref();
-                  Serial.println("OFF ARREF");
-                }else if(btnParam2Int == 1){
-                  btnArrefecimento = 1;
-                  onarref(); 
-                  Serial.println("ON ARREF");}
-                  
-                
-              //LIBERA BOTOES
-              }else if(btnParam1 == "btnLiberaBotoes"){
-                if(btnParam2Int == 0){
-                  btnLiberaBotoes = 0;
-                }else if(btnParam2Int == 1){
-                  btnLiberaBotoes = 1;
-                }
-                
-              //MODOS
-              }else if(btnParam1 == "btnAcionaModoManual"){
-                if(btnParam2Int == 0){
-                  btnAcionaManual = 0;
-                  
-                  if((btnAcionaOffline == 0) && (btnAcionaIdle == 0) && (btnAcionaManual == 0) && (btnAcionaParadaEmergencia == 0) && (btnAcionaAutosafe == 0) && (btnAcionaOnline == 0)){
-                  operationMode = 3;
-                  }
-                  
-                  Serial.println("MANUL OFF ONLINE ON");
-                }else if(btnParam2Int == 1){
-                  btnAcionaManual = 1;
-                  operationMode = 5;
-                  Serial.println("MANUAL ON");
-                }
-              }else if(btnParam1 == "btnAcionaOnline"){
-                if(btnParam2Int == 0){
-                  btnAcionaOnline = 0;
-                  Serial.println("ONLINE OFF");
-                }else if(btnParam2Int == 1){
-                  btnAcionaOnline = 1;
-                  operationMode = 3;
-                  Serial.println("ONLINE ON");
-                }
-              }else if(btnParam1 == "btnAcionaOffline"){
-                if(btnParam2Int == 0){
-                  btnAcionaOffline = 0;
-                  if((btnAcionaOffline == 0) && (btnAcionaIdle == 0) && (btnAcionaManual == 0) && (btnAcionaParadaEmergencia == 0) && (btnAcionaAutosafe == 0) && (btnAcionaOnline == 0) && btnLiberaBotoes == 1){
-                    operationMode = 3; //AARRUMAR POR SOB CONDIÇAO DE QUE SOMENTE TODOS OS OUTROS BOTOES FOREM IGUAL A 0 ELE ASSUME O OPERATION MODE = 3
-                  }
-                  Serial.println("OFFLINE OFF ONLINE ON");
-                }else if(btnParam2Int == 1){
-                  btnAcionaOffline = 1;
-                  operationMode = 4;
-                  Serial.println("OFFLINE ON");
-                }
-              }else if(btnParam1 == "btnAcionaIdle"){
-                if(btnParam2Int == 0){
-                  btnAcionaIdle = 0;
-                  if((btnAcionaOffline == 0) && (btnAcionaIdle == 0) && (btnAcionaManual == 0) && (btnAcionaParadaEmergencia == 0) && (btnAcionaAutosafe == 0) && (btnAcionaOnline == 0)){
-                    operationMode = 3; //AARRUMAR POR SOB CONDIÇAO DE QUE SOMENTE TODOS OS OUTROS BOTOES FOREM IGUAL A 0 ELE ASSUME O OPERATION MODE = 3
-                  }
-                  Serial.println("IDLE OFF ONLINE ON");
-                }else if(btnParam2Int == 1){
-                  btnAcionaIdle = 1;
-                  operationMode = 2;
-                  Serial.println("IDLE ON");
-                }
-              }else if(btnParam1 == "btnAcionaAutosafe"){
-                if(btnParam2Int == 0){
-                  btnAcionaAutosafe = 0;
-                  if((btnAcionaOffline == 0) && (btnAcionaIdle == 0) && (btnAcionaManual == 0) && (btnAcionaParadaEmergencia == 0) && (btnAcionaAutosafe == 0) && (btnAcionaOnline == 0)){
-                    operationMode = 3; //AARRUMAR POR SOB CONDIÇAO DE QUE SOMENTE TODOS OS OUTROS BOTOES FOREM IGUAL A 0 ELE ASSUME O OPERATION MODE = 3
-                  }
-                  Serial.println("AUTOSAFE OFF ONLINE ON");
-                  
-                }else if(btnParam2Int == 1){
-                  btnAcionaAutosafe = 1;
-                  operationMode = 1;
-                  Serial.println("AUTOSAFE ON");
-                }
-              }else if(btnParam1 == "btnParadaEmergencia"){
-                if(btnParam2Int == 0){
-                  btnAcionaParadaEmergencia = 0;
-                  if((btnAcionaOffline == 0) && (btnAcionaIdle == 0) && (btnAcionaManual == 0) && (btnAcionaParadaEmergencia == 0) && (btnAcionaAutosafe == 0) && (btnAcionaOnline == 0)){
-                    operationMode = 3; //AARRUMAR POR SOB CONDIÇAO DE QUE SOMENTE TODOS OS OUTROS BOTOES FOREM IGUAL A 0 ELE ASSUME O OPERATION MODE = 3
-                  }
-                  Serial.println("EMERGENCIA OFF ONLINE ON");
-                  
-                }else if(btnParam2Int == 1){
-                  btnAcionaParadaEmergencia = 1;
-                  operationMode = 6;
-                  Serial.println("EMERGENCIA ON");
-                }
-              }
-          
-              
-          };
-           request->send(200, "text/plain", "OK"); });
-          
-          //AVALIA INPUTS GRAUS
+      btnParam2Int = btnParam2.toInt();
 
-          server.on("/atualizaGrau", HTTP_GET, [](AsyncWebServerRequest *request){
-          // GET input1 value on <ESP_IP>/atualizaBtn?output=<btnNaceleMsg1>&state=<btnNaceleMsg2>
-            if(request->hasParam(PARAM_INPUT_3) && request->hasParam(PARAM_INPUT_4)){
+      //FREIOS
+      if (btnParam1 == "freioNacele") {
+        if (btnParam2Int == 0) {
+          btnFreioNacele = 0;
+          freenacele();
+          Serial.println("FREENACELE");
+        } else if (btnParam2Int == 1) {
+          btnFreioNacele = 1;
+          brakenacele();
+          Serial.println("BRAKENACELE");
+        }
+      } else if (btnParam1 == "freioRotor") {
+        if (btnParam2Int == 0) {
+          btnFreioRotor = 0;
+          freerotor();
+          Serial.println("FREEROTOR");
+        } else if (btnParam2Int == 1) {
+          btnFreioRotor = 1;
+          braking = 1;
+          Serial.println("BRAKEROTOR");
+        }
 
-              //Captura os valores do request
-              valueParam3 = request->getParam(PARAM_INPUT_3)->value();
-              inputParam4 = request->getParam(PARAM_INPUT_4)->value();
+        //ARREFECIMENTO
+      } else if (btnParam1 == "btnArrefecimento") {
+        if (btnParam2Int == 0) {
+          btnArrefecimento = 0;
+          offarref();
+          Serial.println("OFF ARREF");
+        } else if (btnParam2Int == 1) {
+          btnArrefecimento = 1;
+          onarref();
+          Serial.println("ON ARREF");
+        }
 
-              valueParam3Int = valueParam3.toInt();
 
-              if(inputParam4 == "pitchManualGraus"){
-                pitchReq = valueParam3Int;
-              }else if(inputParam4 == "posicaoManualGraus"){
-                deg = valueParam3Int;
-              }
+        //LIBERA BOTOES
+      } else if (btnParam1 == "btnLiberaBotoes") {
+        if (btnParam2Int == 0) {
+          btnLiberaBotoes = 0;
+        } else if (btnParam2Int == 1) {
+          btnLiberaBotoes = 1;
+        }
+
+        //MODOS
+      } else if (btnParam1 == "btnAcionaModoManual") {
+        if (btnParam2Int == 0) {
+          btnAcionaManual = 0;
+
+          if ((btnAcionaOffline == 0) && (btnAcionaIdle == 0) && (btnAcionaManual == 0) && (btnAcionaParadaEmergencia == 0) && (btnAcionaAutosafe == 0) && (btnAcionaOnline == 0)) {
+            operationMode = 3;
+            armazenaModo = 3;
           }
-              request->send(200, "text/plain", "OK"); });
-              
+
+          Serial.println("MANUL OFF ONLINE ON");
+        } else if (btnParam2Int == 1) {
+          btnAcionaManual = 1;
+          operationMode = 5;
+          armazenaModo = 5;
+          Serial.println("MANUAL ON");
+        }
+      } else if (btnParam1 == "btnAcionaOnline") {
+        if (btnParam2Int == 0) {
+          btnAcionaOnline = 0;
+          Serial.println("ONLINE OFF");
+        } else if (btnParam2Int == 1) {
+          btnAcionaOnline = 1;
+          operationMode = 3;
+          armazenaModo = 3;
+          Serial.println("ONLINE ON");
+        }
+      } else if (btnParam1 == "btnAcionaOffline") {
+        if (btnParam2Int == 0) {
+          btnAcionaOffline = 0;
+          if ((btnAcionaOffline == 0) && (btnAcionaIdle == 0) && (btnAcionaManual == 0) && (btnAcionaParadaEmergencia == 0) && (btnAcionaAutosafe == 0) && (btnAcionaOnline == 0) && btnLiberaBotoes == 1) {
+            operationMode = 3; //AARRUMAR POR SOB CONDIÇAO DE QUE SOMENTE TODOS OS OUTROS BOTOES FOREM IGUAL A 0 ELE ASSUME O OPERATION MODE = 3
+            armazenaModo = 3;
+          }
+          Serial.println("OFFLINE OFF ONLINE ON");
+        } else if (btnParam2Int == 1) {
+          btnAcionaOffline = 1;
+          operationMode = 4;
+          armazenaModo = 4;
+          Serial.println("OFFLINE ON");
+        }
+      } else if (btnParam1 == "btnAcionaIdle") {
+        if (btnParam2Int == 0) {
+          btnAcionaIdle = 0;
+          if ((btnAcionaOffline == 0) && (btnAcionaIdle == 0) && (btnAcionaManual == 0) && (btnAcionaParadaEmergencia == 0) && (btnAcionaAutosafe == 0) && (btnAcionaOnline == 0)) {
+            operationMode = 3;
+            armazenaModo = 3;
+          }
+          Serial.println("IDLE OFF ONLINE ON");
+        } else if (btnParam2Int == 1) {
+          btnAcionaIdle = 1;
+          operationMode = 2;
+          armazenaModo = 2;
+          Serial.println("IDLE ON");
+        }
+      } else if (btnParam1 == "btnAcionaAutosafe") {
+        if (btnParam2Int == 0) {
+          btnAcionaAutosafe = 0;
+          if ((btnAcionaOffline == 0) && (btnAcionaIdle == 0) && (btnAcionaManual == 0) && (btnAcionaParadaEmergencia == 0) && (btnAcionaAutosafe == 0) && (btnAcionaOnline == 0)) {
+            operationMode = 3; 
+            armazenaModo = 3;
+          }
+          Serial.println("AUTOSAFE OFF ONLINE ON");
+
+        } else if (btnParam2Int == 1) {
+          btnAcionaAutosafe = 1;
+          operationMode = 1;
+          armazenaModo = 1;
+          Serial.println("AUTOSAFE ON");
+        }
+      } else if (btnParam1 == "btnParadaEmergencia") {
+        if (btnParam2Int == 0) {
+          btnAcionaParadaEmergencia = 0;
+          if ((btnAcionaOffline == 0) && (btnAcionaIdle == 0) && (btnAcionaManual == 0) && (btnAcionaParadaEmergencia == 0) && (btnAcionaAutosafe == 0) && (btnAcionaOnline == 0)) {
+            operationMode = 3; 
+            armazenaModo = 3;
+          }
+          Serial.println("EMERGENCIA OFF ONLINE ON");
+
+        } else if (btnParam2Int == 1) {
+          btnAcionaParadaEmergencia = 1;
+          operationMode = 6;
+          armazenaModo = 6;
+          Serial.println("EMERGENCIA ON");
+        }
+      }
+
+
+    };
+    request->send(200, "text/plain", "OK");
+  });
+
+  //AVALIA INPUTS GRAUS
+
+  server.on("/atualizaGrau", HTTP_GET, [](AsyncWebServerRequest * request) {
+    // GET input1 value on <ESP_IP>/atualizaBtn?output=<btnNaceleMsg1>&state=<btnNaceleMsg2>
+    if (request->hasParam(PARAM_INPUT_3) && request->hasParam(PARAM_INPUT_4)) {
+
+      //Captura os valores do request
+      valueParam3 = request->getParam(PARAM_INPUT_3)->value();
+      inputParam4 = request->getParam(PARAM_INPUT_4)->value();
+
+      valueParam3Int = valueParam3.toInt();
+
+      if (inputParam4 == "pitchManualGraus") {
+        pitchReq = valueParam3Int;
+      } else if (inputParam4 == "posicaoManualGraus") {
+        deg = valueParam3Int;
+      }
+    }
+    request->send(200, "text/plain", "OK");
+  });
+
   //---------------------------
-  
+
 
   // INICIA O SERVIDOR
   //---------------------------
   server.begin();
-  
+
   //---------------------------
 }
 
@@ -2002,25 +2081,26 @@ void setup()
 
 void loop()
 {
-/*  // INICIA AS FUNÇÕES
-  //------------------------
-  readsensors(); 
-  
-  readminimet(); 
-  
-  operation();
-  
-  Display();
-  
-  if(automatico == 1 & deg >= 0 & deg < 360){
-  
-  //ajuste na posição da nacele
-  ajustenacele();
+  /*  // INICIA AS FUNÇÕES
+    //------------------------
+    readsensors();
 
-  }
+    readminimet();
+
+    operation();
+
+    Display();
+
+    if(automatico == 1 & deg >= 0 & deg < 360){
+
+    //ajuste na posição da nacele
+    ajustenacele();
+
+    }
   */
+    delay(11000);
     randomizaOperacao();
-    delay(10000);
+    delay(9000);
 }
 
 //===============================================
@@ -2028,449 +2108,449 @@ void loop()
 //===============================================
 
 //FUNÇÃO PARA TESTAR A AUTOMOÇÃO SERVER-PAGINA
-void randomizaOperacao(){
- randomico = 1 + ( rand() % 2 );
+void randomizaOperacao() {
+  randomico = 1 + ( rand() % 5 );
 
-   if(randomico == 3){
+  if (randomico == 3) {
     operationMode = 3;
-   }else if (randomico == 4){
+  } else if (randomico == 4) {
     operationMode = 4;
-   }else if (randomico == 2){
+  } else if (randomico == 2) {
     operationMode = 2;
-   }else if (randomico == 1){
+  } else if (randomico == 1) {
     operationMode = 1;
-   }else if (randomico == 5){
+  } else if (randomico == 5) {
     operationMode = 5;
-   }
+  }
 }
 
-void reiniciaESP(){
+void reiniciaESP() {
   ESP.restart();
 }
 
 //aquisição dos dasos dos sensores
-void readsensors(){
+void readsensors() {
 
 
- //para a medição de temperatura do sistema
-tempsistema = bmp.readTemperature();
-b=0;
-
-  
- //para a medição de temperatura do gerador
-tempgerador=0;
-while(b <= 500){
-tempgerador = (analogRead(GPIOreftemp1)*0.000805664*100)+tempgerador+6;
-b++;
-} 
-tempgerador = tempgerador/500;
-Tgerador = tempgerador;
-b=0;
+  //para a medição de temperatura do sistema
+  tempsistema = bmp.readTemperature();
+  b = 0;
 
 
-//Para a medição da tensão so sistema de controle
-b=0;
-tensaoSis=0;
-while(b <= 20){
-tensaoSis = (((analogRead(GPIOtSis)* 3.3) / 4096.0)/ 0.2)+tensaoSis-0.3;
-b++;
-} 
-tSis = tensaoSis/20;
+  //para a medição de temperatura do gerador
+  tempgerador = 0;
+  while (b <= 500) {
+    tempgerador = (analogRead(GPIOreftemp1) * 0.000805664 * 100) + tempgerador + 6;
+    b++;
+  }
+  tempgerador = tempgerador / 500;
+  Tgerador = tempgerador;
+  b = 0;
 
 
-
-//Para a medição da tensão do sistema de potência
-b=0;
-tensaoPot=0;
-while(b <= 20){
-tensaoPot = (((analogRead(GPIOtPot)* 3.3) / 4096.0)/ 0.2)+tensaoPot-0.3;
-b++;
-} 
-tPot = tensaoPot/20;
+  //Para a medição da tensão so sistema de controle
+  b = 0;
+  tensaoSis = 0;
+  while (b <= 20) {
+    tensaoSis = (((analogRead(GPIOtSis) * 3.3) / 4096.0) / 0.2) + tensaoSis - 0.3;
+    b++;
+  }
+  tSis = tensaoSis / 20;
 
 
 
-//leitura da posição da nacele
-mediapot();
+  //Para a medição da tensão do sistema de potência
+  b = 0;
+  tensaoPot = 0;
+  while (b <= 20) {
+    tensaoPot = (((analogRead(GPIOtPot) * 3.3) / 4096.0) / 0.2) + tensaoPot - 0.3;
+    b++;
+  }
+  tPot = tensaoPot / 20;
 
 
-//leitura do angulo pitch
-mediapotpitch();
+
+  //leitura da posição da nacele
+  mediapot();
 
 
-//Leitura da RPM 
- if (millis() - timeold >= 250){
+  //leitura do angulo pitch
+  mediapotpitch();
+
+
+  //Leitura da RPM
+  if (millis() - timeold >= 250) {
     //Desabilita interrupcao durante o cálculo
     detachInterrupt(digitalPinToInterrupt(35));
     rpm = (60 * 1000 / pulsos_por_volta ) / (millis() - timeold) * pulsos;
-    rpmRot = rpm/32;
+    rpmRot = rpm / 32;
     timeold = millis();
     pulsos = 0;
     //Reabilitação do AttachInterrupt
-attachInterrupt(digitalPinToInterrupt(35), addcount, FALLING);
+    attachInterrupt(digitalPinToInterrupt(35), addcount, FALLING);
   }
 
-  
- 
+
+
 }
 
 
 //medição da valor do potenciometro de referência do sistema de posicionamento
-void mediapot(){
-  i1=0;
-  potnacele=0;
-  while(i1<20)  {
-  potnacele = potnacele + (map(analogRead(GPIOpotnacele), 3945, 540, 0, 359));
-  i1++;
+void mediapot() {
+  i1 = 0;
+  potnacele = 0;
+  while (i1 < 20)  {
+    potnacele = potnacele + (map(analogRead(GPIOpotnacele), 3945, 540, 0, 359));
+    i1++;
   }
-  medpot = (potnacele/20);
-  i1=0;
+  medpot = (potnacele / 20);
+  i1 = 0;
 
   //para o cálculo da velocidade de rotação da nacele
 
-  
-  if(posicao =! medpot){
-    Vangular = (medpot-posicao)*1000/(millis()-tempo40);
+
+  if (posicao = ! medpot) {
+    Vangular = (medpot - posicao) * 1000 / (millis() - tempo40);
     posicao = medpot;
     tempo40 = millis();
   }
-  
-    if(Vangular < 0){
-      Vangular = Vangular*-1;
-    }
+
+  if (Vangular < 0) {
+    Vangular = Vangular * -1;
+  }
 
 
-    //determinação do ponto cardeal da nacele
-     if(medpot >= 354 & medpot < 5){
-  pontoNacele = "Norte";
- }
-  if(medpot >= 5 & medpot < 16){
- pontoNacele = "Norte";
- }
-  if(medpot >= 16 & medpot < 27){
-  pontoNacele = "Norte";
- }
-  if(medpot >= 27 & medpot < 38){
-  pontoNacele = "Nordeste";
- }
-  if(medpot >= 38 & medpot < 50){
-  pontoNacele = "Nordeste";
- }
-  if(medpot >= 50 & medpot < 61){
-  pontoNacele = "Nordeste";
- }
-  if(medpot >= 61 & medpot < 72){
-  pontoNacele = "Nordeste";
- }
-   if(medpot >= 72 & medpot < 83){
-  pontoNacele = "Leste";
- }
-   if(medpot >= 83 & medpot < 95){
-  pontoNacele = "Leste";
- }
-   if(medpot >= 95 & medpot < 106){
-  pontoNacele = "Leste";
- }
-   if(medpot >= 106 & medpot < 117){
-  pontoNacele = "Leste";
- }
-   if(medpot >= 117 & medpot < 128){
-  pontoNacele = "Sudeste";
- }
-   if(medpot >= 128 & medpot < 140){
-  pontoNacele = "Sudeste";
- }
-   if(medpot >= 140 & medpot < 151){
-  pontoNacele = "Sudeste";
- }
-   if(medpot >= 151 & medpot < 162){
-  pontoNacele = "Sudeste";
- }
-   if(medpot >= 162 & medpot < 173){
-  pontoNacele = "Sul";
- }
-   if(medpot >= 173 & medpot < 185){
-  pontoNacele = "Sul";
- }
-   if(medpot >= 185 & medpot < 196){
-  pontoNacele = "Sul";
- }
-   if(medpot >= 196 & medpot < 207){
-  pontoNacele = "Sul";
- }
-   if(medpot >= 207 & medpot < 218){
-  pontoNacele = "Sudoeste";
- }
-   if(medpot >= 218 & medpot < 230){
-  pontoNacele = "Sudoeste";
- }
-   if(medpot >= 230 & medpot < 241){
-  pontoNacele = "Sudoeste";
- }
-   if(medpot >= 241 & medpot < 252){
-  pontoNacele = "Sudoeste";
- }
-   if(medpot > 252 & medpot < 263){
-  pontoNacele = "Oeste";
- }
-   if(medpot >= 263 & medpot < 275){
-  pontoNacele = "Oeste";
- }
-   if(medpot >= 275 & medpot < 286){
-  pontoNacele = "Oeste";
- }
-   if(medpot >= 286 & medpot < 297){
-  pontoNacele = "Oeste";
- }
-   if(medpot >= 297 & medpot < 308){
-  pontoNacele = "Oeste";
- }
-   if(medpot >= 308 & medpot < 320){
-  pontoNacele = "Noroeste";
- }
-   if(medpot >= 320 & medpot < 331){
-  pontoNacele = "Noroeste";
- }
-   if(medpot >= 331 & medpot < 342){
-  pontoNacele = "Noroeste";
- }
-   if(medpot >= 342 & medpot < 354){
-  pontoNacele = "Norte";
- }
-  
-  
+  //determinação do ponto cardeal da nacele
+  if (medpot >= 354 & medpot < 5) {
+    pontoNacele = "Norte";
+  }
+  if (medpot >= 5 & medpot < 16) {
+    pontoNacele = "Norte";
+  }
+  if (medpot >= 16 & medpot < 27) {
+    pontoNacele = "Norte";
+  }
+  if (medpot >= 27 & medpot < 38) {
+    pontoNacele = "Nordeste";
+  }
+  if (medpot >= 38 & medpot < 50) {
+    pontoNacele = "Nordeste";
+  }
+  if (medpot >= 50 & medpot < 61) {
+    pontoNacele = "Nordeste";
+  }
+  if (medpot >= 61 & medpot < 72) {
+    pontoNacele = "Nordeste";
+  }
+  if (medpot >= 72 & medpot < 83) {
+    pontoNacele = "Leste";
+  }
+  if (medpot >= 83 & medpot < 95) {
+    pontoNacele = "Leste";
+  }
+  if (medpot >= 95 & medpot < 106) {
+    pontoNacele = "Leste";
+  }
+  if (medpot >= 106 & medpot < 117) {
+    pontoNacele = "Leste";
+  }
+  if (medpot >= 117 & medpot < 128) {
+    pontoNacele = "Sudeste";
+  }
+  if (medpot >= 128 & medpot < 140) {
+    pontoNacele = "Sudeste";
+  }
+  if (medpot >= 140 & medpot < 151) {
+    pontoNacele = "Sudeste";
+  }
+  if (medpot >= 151 & medpot < 162) {
+    pontoNacele = "Sudeste";
+  }
+  if (medpot >= 162 & medpot < 173) {
+    pontoNacele = "Sul";
+  }
+  if (medpot >= 173 & medpot < 185) {
+    pontoNacele = "Sul";
+  }
+  if (medpot >= 185 & medpot < 196) {
+    pontoNacele = "Sul";
+  }
+  if (medpot >= 196 & medpot < 207) {
+    pontoNacele = "Sul";
+  }
+  if (medpot >= 207 & medpot < 218) {
+    pontoNacele = "Sudoeste";
+  }
+  if (medpot >= 218 & medpot < 230) {
+    pontoNacele = "Sudoeste";
+  }
+  if (medpot >= 230 & medpot < 241) {
+    pontoNacele = "Sudoeste";
+  }
+  if (medpot >= 241 & medpot < 252) {
+    pontoNacele = "Sudoeste";
+  }
+  if (medpot > 252 & medpot < 263) {
+    pontoNacele = "Oeste";
+  }
+  if (medpot >= 263 & medpot < 275) {
+    pontoNacele = "Oeste";
+  }
+  if (medpot >= 275 & medpot < 286) {
+    pontoNacele = "Oeste";
+  }
+  if (medpot >= 286 & medpot < 297) {
+    pontoNacele = "Oeste";
+  }
+  if (medpot >= 297 & medpot < 308) {
+    pontoNacele = "Oeste";
+  }
+  if (medpot >= 308 & medpot < 320) {
+    pontoNacele = "Noroeste";
+  }
+  if (medpot >= 320 & medpot < 331) {
+    pontoNacele = "Noroeste";
+  }
+  if (medpot >= 331 & medpot < 342) {
+    pontoNacele = "Noroeste";
+  }
+  if (medpot >= 342 & medpot < 354) {
+    pontoNacele = "Norte";
+  }
+
+
 }
 
 
 //medição da valor do potenciometro de referência do sistema de pitch
-void mediapotpitch(){
-  i1=0;
-  potpitch=0;
-  while(i1<20)  {
-  potpitch = potpitch + (map(analogRead(GPIOpotpitch), 110, 3950, 45, 0));
-  i1++;
+void mediapotpitch() {
+  i1 = 0;
+  potpitch = 0;
+  while (i1 < 20)  {
+    potpitch = potpitch + (map(analogRead(GPIOpotpitch), 110, 3950, 45, 0));
+    i1++;
   }
-  medpotpitch = (potpitch/20);
-  i1=0;
+  medpotpitch = (potpitch / 20);
+  i1 = 0;
 }
 
 
 //Função que Incrementa o contador para a RPM
-void addcount(){
+void addcount() {
   pulsos++;
-} 
+}
 
 
 
 
 
 //Função de leitura dos dados via I2C da minimet
-void readminimet(){
+void readminimet() {
 
-  if((millis()-time7) >= 2000){
-
-    
-   outData=1;
-   while(outData <= 4){
-//Serial.print("Dados enviados ao slave==> ");
-
-Wire.beginTransmission(8); //transmitir dados para o slave com endereço #8
-Wire.write("Request");     //envia uma string
-Wire.write(outData);       //enviar uma variável numérica tipo byte
-Wire.endTransmission(8);    //sinaliza o fim da trasnmissão de dados para o slave
-delay(50);
-//Serial.print(outData);
-
-Wire.requestFrom(8, 6);  //requisitando resposta do slave
-inString = "";
-while(Wire.available()){     //loop para receber todos os dados do slave #8
-  char inChar = Wire.read();    //recebe cada byte como caractere
- //if(isAlphaNumeric(inChar)){   //se caractere recebido do slave for alphanumerico concatena string
-    inString += inChar;         //concatenar o caracter receido
-  //}
-  //Serial.print("noWhilw");
-}
-
-//Distribuição dos valores recebidos para as suas respectivas variáveis
-if(outData==1){
- windspeed = inString.toFloat()/2;
-}
+  if ((millis() - time7) >= 2000) {
 
 
-if(outData==3){
-  if(inString.toFloat() >= 0 & inString.toFloat() < 360){  
- //winddirMF = inString.toFloat();
+    outData = 1;
+    while (outData <= 4) {
+      //Serial.print("Dados enviados ao slave==> ");
+
+      Wire.beginTransmission(8); //transmitir dados para o slave com endereço #8
+      Wire.write("Request");     //envia uma string
+      Wire.write(outData);       //enviar uma variável numérica tipo byte
+      Wire.endTransmission(8);    //sinaliza o fim da trasnmissão de dados para o slave
+      delay(50);
+      //Serial.print(outData);
+
+      Wire.requestFrom(8, 6);  //requisitando resposta do slave
+      inString = "";
+      while (Wire.available()) {   //loop para receber todos os dados do slave #8
+        char inChar = Wire.read();    //recebe cada byte como caractere
+        //if(isAlphaNumeric(inChar)){   //se caractere recebido do slave for alphanumerico concatena string
+        inString += inChar;         //concatenar o caracter receido
+        //}
+        //Serial.print("noWhilw");
+      }
+
+      //Distribuição dos valores recebidos para as suas respectivas variáveis
+      if (outData == 1) {
+        windspeed = inString.toFloat() / 2;
+      }
+
+
+      if (outData == 3) {
+        if (inString.toFloat() >= 0 & inString.toFloat() < 360) {
+          //winddirMF = inString.toFloat();
+        }
+      }
+
+
+      if (outData == 2) {
+        if (inString.toFloat() >= 0 & inString.toFloat() < 360) {
+          winddir = inString.toFloat();
+
+          dir = medpot + winddir;
+
+          if (dir > 360) {
+            dir = dir - 360;
+          }
+
+
+
+        }
+
+        if (dir >= 354 & dir < 5) {
+          winddir = 0;
+          ponto = "Norte";
+        }
+        if (dir >= 5 & dir < 16) {
+          winddir = 11.25;
+          ponto = "Norte";
+        }
+        if (dir >= 16 & dir < 27) {
+          winddir = 11.25 * 2;
+          ponto = "Norte";
+        }
+        if (dir >= 27 & dir < 38) {
+          winddir = 11.25 * 3;
+          ponto = "Nordeste";
+        }
+        if (dir >= 38 & dir < 50) {
+          winddir = 11.25 * 4;
+          ponto = "Nordeste";
+        }
+        if (dir >= 50 & dir < 61) {
+          winddir = 11.25 * 5;
+          ponto = "Nordeste";
+        }
+        if (dir >= 61 & dir < 72) {
+          winddir = 11.25 * 6;
+          ponto = "Nordeste";
+        }
+        if (dir >= 72 & dir < 83) {
+          winddir = 11.25 * 7;
+          ponto = "Leste";
+        }
+        if (dir >= 83 & dir < 95) {
+          winddir = 11.25 * 8;
+          ponto = "Leste";
+        }
+        if (dir >= 95 & dir < 106) {
+          winddir = 11.25 * 9;
+          ponto = "Leste";
+        }
+        if (dir >= 106 & dir < 117) {
+          winddir = 11.25 * 10;
+          ponto = "Leste";
+        }
+        if (dir >= 117 & dir < 128) {
+          winddir = 11.25 * 11;
+          ponto = "Sudeste";
+        }
+        if (dir >= 128 & dir < 140) {
+          winddir = 11.25 * 12;
+          ponto = "Sudeste";
+        }
+        if (dir >= 140 & dir < 151) {
+          winddir = 11.25 * 13;
+          ponto = "Sudeste";
+        }
+        if (dir >= 151 & dir < 162) {
+          winddir = 11.25 * 14;
+          ponto = "Sudeste";
+        }
+        if (dir >= 162 & dir < 173) {
+          winddir = 11.25 * 15;
+          ponto = "Sul";
+        }
+        if (dir >= 173 & dir < 185) {
+          winddir = 11.25 * 16;
+          ponto = "Sul";
+        }
+        if (dir >= 185 & dir < 196) {
+          winddir = 11.25 * 17;
+          ponto = "Sul";
+        }
+        if (dir >= 196 & dir < 207) {
+          winddir = 11.25 * 18;
+          ponto = "Sul";
+        }
+        if (dir >= 207 & dir < 218) {
+          winddir = 11.25 * 19;
+          ponto = "Sudoeste";
+        }
+        if (dir >= 218 & dir < 230) {
+          winddir = 11.25 * 20;
+          ponto = "Sudoeste";
+        }
+        if (dir >= 230 & dir < 241) {
+          winddir = 11.25 * 21;
+          ponto = "Sudoeste";
+        }
+        if (dir >= 241 & dir < 252) {
+          winddir = 11.25 * 22;
+          ponto = "Sudoeste";
+        }
+        if (dir > 252 & dir < 263) {
+          winddir = 11.25 * 23;
+          ponto = "Oeste";
+        }
+        if (dir >= 263 & dir < 275) {
+          winddir = 11.25 * 24;
+          ponto = "Oeste";
+        }
+        if (dir >= 275 & dir < 286) {
+          winddir = 11.25 * 25;
+          ponto = "Oeste";
+        }
+        if (dir >= 286 & dir < 297) {
+          winddir = 11.25 * 26;
+          ponto = "Oeste";
+        }
+        if (dir >= 297 & dir < 308) {
+          winddir = 11.25 * 27;
+          ponto = "Oeste";
+        }
+        if (dir >= 308 & dir < 320) {
+          winddir = 11.25 * 28;
+          ponto = "Noroeste";
+        }
+        if (dir >= 320 & dir < 331) {
+          winddir = 11.25 * 29;
+          ponto = "Noroeste";
+        }
+        if (dir >= 331 & dir < 342) {
+          winddir = 11.25 * 30;
+          ponto = "Noroeste";
+        }
+        if (dir >= 342 & dir < 354) {
+          dir = 11.25 * 31;
+          ponto = "Norte";
+        }
+
+
+      }
+
+
+      outData++;
+    }
+
+
+    //fim da comunicação I2C como a meteo
+
+    time7 = millis();
   }
-}
 
 
-if(outData==2){
-  if(inString.toFloat() >= 0 & inString.toFloat() < 360){
- winddir = inString.toFloat();
+  //análise da direção de maior ocorrencia
+  if ((millis() - tempo32) >= 240000) {
 
-dir = medpot + winddir;
-
-if(dir > 360){
-  dir = dir - 360;
-}
-
-
-
-  }
-
-  if(dir >= 354 & dir < 5){
-  winddir = 0;
-  ponto = "Norte";
- }
-  if(dir >= 5 & dir < 16){
-  winddir = 11.25;
- ponto = "Norte";
- }
-  if(dir >= 16 & dir < 27){
-  winddir = 11.25*2;
-  ponto = "Norte";
- }
-  if(dir >= 27 & dir < 38){
-  winddir = 11.25*3;
-  ponto = "Nordeste";
- }
-  if(dir >= 38 & dir < 50){
-  winddir = 11.25*4;
-  ponto = "Nordeste";
- }
-  if(dir >= 50 & dir < 61){
-  winddir = 11.25*5;
-  ponto = "Nordeste";
- }
-  if(dir >= 61 & dir < 72){
-  winddir = 11.25*6;
-  ponto = "Nordeste";
- }
-   if(dir >= 72 & dir < 83){
-  winddir = 11.25*7;
-  ponto = "Leste";
- }
-   if(dir >= 83 & dir < 95){
-  winddir = 11.25*8;
-  ponto = "Leste";
- }
-   if(dir >= 95 & dir < 106){
-  winddir = 11.25*9;
-  ponto = "Leste";
- }
-   if(dir >= 106 & dir < 117){
-  winddir = 11.25*10;
-  ponto = "Leste";
- }
-   if(dir >= 117 & dir < 128){
-  winddir = 11.25*11;
-  ponto = "Sudeste";
- }
-   if(dir >= 128 & dir < 140){
-  winddir = 11.25*12;
-  ponto = "Sudeste";
- }
-   if(dir >= 140 & dir < 151){
-  winddir = 11.25*13;
-  ponto = "Sudeste";
- }
-   if(dir >= 151 & dir < 162){
-  winddir = 11.25*14;
-  ponto = "Sudeste";
- }
-   if(dir >= 162 & dir < 173){
-  winddir = 11.25*15;
-  ponto = "Sul";
- }
-   if(dir >= 173 & dir < 185){
-  winddir = 11.25*16;
-  ponto = "Sul";
- }
-   if(dir >= 185 & dir < 196){
-  winddir = 11.25*17;
-  ponto = "Sul";
- }
-   if(dir >= 196 & dir < 207){
-  winddir = 11.25*18;
-  ponto = "Sul";
- }
-   if(dir >= 207 & dir < 218){
-  winddir = 11.25*19;
-  ponto = "Sudoeste";
- }
-   if(dir >= 218 & dir < 230){
-  winddir = 11.25*20;
-  ponto = "Sudoeste";
- }
-   if(dir >= 230 & dir < 241){
-  winddir = 11.25*21;
-  ponto = "Sudoeste";
- }
-   if(dir >= 241 & dir < 252){
-  winddir = 11.25*22;
-  ponto = "Sudoeste";
- }
-   if(dir > 252 & dir < 263){
-  winddir = 11.25*23;
-  ponto = "Oeste";
- }
-   if(dir >= 263 & dir < 275){
-  winddir = 11.25*24;
-  ponto = "Oeste";
- }
-   if(dir >= 275 & dir < 286){
-  winddir = 11.25*25;
-  ponto = "Oeste";
- }
-   if(dir >= 286 & dir < 297){
-  winddir = 11.25*26;
-  ponto = "Oeste";
- }
-   if(dir >= 297 & dir < 308){
-  winddir = 11.25*27;
-  ponto = "Oeste";
- }
-   if(dir >= 308 & dir < 320){
-  winddir = 11.25*28;
-  ponto = "Noroeste";
- }
-   if(dir >= 320 & dir < 331){
-  winddir = 11.25*29;
-  ponto = "Noroeste";
- }
-   if(dir >= 331 & dir < 342){
-  winddir = 11.25*30;
-  ponto = "Noroeste";
- }
-   if(dir >= 342 & dir < 354){
-  dir = 11.25*31;
-  ponto = "Norte";
- }
-
- 
-}
-
-
-  outData++;
-}
-
-
-//fim da comunicação I2C como a meteo
-
-time7=millis();
-  }
-
-
-//análise da direção de maior ocorrencia
-  if((millis()-tempo32) >= 240000){
-   
-    pass=0;
-  while(pass <= 32){
-   ocorr[pass]=0;
-   classespeeds[pass]=0.0;
-  pass++;
-  //Serial.println("travou 7 ");
-}
+    pass = 0;
+    while (pass <= 32) {
+      ocorr[pass] = 0;
+      classespeeds[pass] = 0.0;
+      pass++;
+      //Serial.println("travou 7 ");
+    }
     tempo32 = millis();
   }
 
@@ -2482,202 +2562,202 @@ time7=millis();
 
 
 //aqui toman-se as decisøes com base nos sensores e operação
-void operation(){
+void operation() {
 
-//Elevação da RPM por angulo de pitch
-if(rpm < rpmmax1 & autopitch == 1 & operationMode == 3){
-  if(pitchReq < 45 & (millis()-tempo11) > 500){
-pitchReq = pitchReq + 1;
-tempo11 = millis();
-}
+  //Elevação da RPM por angulo de pitch
+  if (rpm < rpmmax1 & autopitch == 1 & operationMode == 3) {
+    if (pitchReq < 45 & (millis() - tempo11) > 500) {
+      pitchReq = pitchReq + 1;
+      tempo11 = millis();
+    }
 
-//direcionamento para a melhor velocidade de vento
-if(operationMode != 4 & operationMode != 6 & velposimf >= cutIn){
-  deg = winddirMF;
-  //deg = 180;
-}
+    //direcionamento para a melhor velocidade de vento
+    if (operationMode != 4 & operationMode != 6 & velposimf >= cutIn) {
+      deg = winddirMF;
+      //deg = 180;
+    }
 
-}
-
-if(operationMode != 4){
-//ativação automática do arrefecimento
-if(tempgerador >= temparref & a == 0){
-  onarref();
-  a=1;
-}
-if(tempgerador <= 40.0 & a == 1){
-offarref();
-a=0;
-}
-}
-
-
-//liberação do rotor
-if(operationMode != 1 & operationMode != 4 & operationMode != 6 & brake == 1 & a1 == 0 & velposimf >= cutIn & windspeed <= cutOff2){ 
-  freerotor();
-}
-
-//aviso de rpm para a conexão do gerador com a carga
-if(rpm >= rpmcarga & operationMode == 3){
-  digitalWrite(sinalRPM, HIGH);
-}
-if(rpm < rpmcarga & operationMode != 5){
-  digitalWrite(sinalRPM, LOW);
-}
-
-//desativação do sisetema
-if(operationMode == 4){
-  pitchReq = 0;
-  ajustepitch();
-
-  if(brake == 0 & rpm < rpmBrake){
-    braking=1;
   }
-}
 
-//bloqueio da necele em offline
-if(operationMode == 4 & a10 == 0){
-  brakenacele();
-}
-
-
-
-
-//retomada de operação após normalização de parâmetros
-if((millis()-tempo16) >= temporet & rpm < 50 & velposimf < cutOff2 & tSis >= 11.0 & tPot >= 11.5 & tempgerador <= 40.0 & tempsistema <= 60.0){
-  a3=0; //permite novamente a entrada no bloqueio do rotor em autosafe e baixa velocidade
-  a5 = 0; //impede a entrada rechamada do autosafe
-  a7=0; //entrada no modo online
-operationMode = 3; //online
-}
+  if (operationMode != 4) {
+    //ativação automática do arrefecimento
+    if (tempgerador >= temparref & a == 0) {
+      onarref();
+      a = 1;
+    }
+    if (tempgerador <= 40.0 & a == 1) {
+      offarref();
+      a = 0;
+    }
+  }
 
 
+  //liberação do rotor
+  if (operationMode != 1 & operationMode != 4 & operationMode != 6 & brake == 1 & a1 == 0 & velposimf >= cutIn & windspeed <= cutOff2) {
+    freerotor();
+  }
 
-//*************************************************************************************************
-//Rotinas de segurança do sistema
+  //aviso de rpm para a conexão do gerador com a carga
+  if (rpm >= rpmcarga & operationMode == 3) {
+    digitalWrite(sinalRPM, HIGH);
+  }
+  if (rpm < rpmcarga & operationMode != 5) {
+    digitalWrite(sinalRPM, LOW);
+  }
 
+  //desativação do sisetema
+  if (operationMode == 4) {
+    pitchReq = 0;
+    ajustepitch();
 
-//Redução do angulo de pitch em altas rotações
-if(rpm > rpmmax1 & millis()-tempo10 > 5000 & operationMode != 6 & operationMode != 5){
+    if (brake == 0 & rpm < rpmBrake) {
+      braking = 1;
+    }
+  }
 
-if(pitchReq >= 5){
-pitchReq = pitchReq - 5;
-
-}
-if(pitchReq < 5 & pitchReq >= 1){
-pitchReq = pitchReq - 1;
-
-}
- tempo10 = millis();
-  
-}
-
-
-//Auto-Safe por alta rpm - rpmmax2
-if(rpm >= rpmmax2){
-operationMode = 1;
-tempo16 = millis();
-}
-
-//Auto-Safe por cutOff de vento
-if(windspeed >= cutOff){
-operationMode = 1;
-tempo16 = millis();
-}
-
-//Auto-Safe por alta temperaura do gerador
-if(tempgerador >= 55.0){
-  operationMode = 1;
-}
-
-//Auto-Safe por alta temperaura do sistema
-if(tempsistema >= 65.0){
-  operationMode = 1;
-}
-
-//Auto-Safe por baixa tensão no sistema de controle
-if(tSis <= 10.0){
-  operationMode = 1;
-}
-
-//Auto-Safe por baixa tensão no sistema de potência
-if(tPot <= 8.0){
-  operationMode = 1;
-}
-
-
-//Freagem do sistema após redução da rpm
-if(rpm <= rpmBrake & a3 == 0 & operationMode == 1){
-  braking=1;
-  a3=1;
-}
-
-
-//bloqueio automático do rotor com base em alta rpm - condição crítica - para entrar nesta função o pitch deve ter falhado.
-if(rpm >= rpmmax3 & brake == 0){
-  braking = 1;
-  tempo16 = millis();
-  noti = "Condição Crítica do sistema - Velocidade extrema!";
-  datalog();
-  noti = "Possível falha no sistema de pitch";
-  datalog();
-  noti = "Possível falha no sistema de freios";
-  datalog();
-}
-
-//para entrar na freagem automática do rotor
-if(braking == 1){
-  brakerotor();
-}
+  //bloqueio da necele em offline
+  if (operationMode == 4 & a10 == 0) {
+    brakenacele();
+  }
 
 
 
-//rotina de definição do status do sistema
 
-//Modo Auto-safe
-if(operationMode == 1 & a5 == 0){
- AutoSafeMode();
-}
-
-//Modo IDLE
-if(operationMode == 2 & a6 == 0){
-  IdleMode();
-}
-
-//Modo Online
-if(operationMode == 3 & a7 == 0){
-  onlineMode();
-}
-
-//Modo Offline
-if(operationMode == 4 & a8 == 0){
-  offlineMode();
-}
-
-//Modo Manual
-if(operationMode == 5 & a9 == 0){
-  manualMode();
-}
-
-//modo parada de emergencia
-if(operationMode == 6 & a11 == 0){
-  emergenciMode();
-}
+  //retomada de operação após normalização de parâmetros
+  if ((millis() - tempo16) >= temporet & rpm < 50 & velposimf < cutOff2 & tSis >= 11.0 & tPot >= 11.5 & tempgerador <= 40.0 & tempsistema <= 60.0) {
+    a3 = 0; //permite novamente a entrada no bloqueio do rotor em autosafe e baixa velocidade
+    a5 = 0; //impede a entrada rechamada do autosafe
+    a7 = 0; //entrada no modo online
+    operationMode = 3; //online
+  }
 
 
-if(autopitch == 1){
 
-//Ajuste no sistema de pitch
-ajustepitch();
+  //*************************************************************************************************
+  //Rotinas de segurança do sistema
 
-}
 
-//para o ajuste manual
-if(operationMode == 5){
-  ajustepitch();
-  //deg = winddirMF; //colocar o valor lido na serial
-  ajustenacele();
-}
+  //Redução do angulo de pitch em altas rotações
+  if (rpm > rpmmax1 & millis() - tempo10 > 5000 & operationMode != 6 & operationMode != 5) {
+
+    if (pitchReq >= 5) {
+      pitchReq = pitchReq - 5;
+
+    }
+    if (pitchReq < 5 & pitchReq >= 1) {
+      pitchReq = pitchReq - 1;
+
+    }
+    tempo10 = millis();
+
+  }
+
+
+  //Auto-Safe por alta rpm - rpmmax2
+  if (rpm >= rpmmax2) {
+    operationMode = 1;
+    tempo16 = millis();
+  }
+
+  //Auto-Safe por cutOff de vento
+  if (windspeed >= cutOff) {
+    operationMode = 1;
+    tempo16 = millis();
+  }
+
+  //Auto-Safe por alta temperaura do gerador
+  if (tempgerador >= 55.0) {
+    operationMode = 1;
+  }
+
+  //Auto-Safe por alta temperaura do sistema
+  if (tempsistema >= 65.0) {
+    operationMode = 1;
+  }
+
+  //Auto-Safe por baixa tensão no sistema de controle
+  if (tSis <= 10.0) {
+    operationMode = 1;
+  }
+
+  //Auto-Safe por baixa tensão no sistema de potência
+  if (tPot <= 8.0) {
+    operationMode = 1;
+  }
+
+
+  //Freagem do sistema após redução da rpm
+  if (rpm <= rpmBrake & a3 == 0 & operationMode == 1) {
+    braking = 1;
+    a3 = 1;
+  }
+
+
+  //bloqueio automático do rotor com base em alta rpm - condição crítica - para entrar nesta função o pitch deve ter falhado.
+  if (rpm >= rpmmax3 & brake == 0) {
+    braking = 1;
+    tempo16 = millis();
+    noti = "Condição Crítica do sistema - Velocidade extrema!";
+    datalog();
+    noti = "Possível falha no sistema de pitch";
+    datalog();
+    noti = "Possível falha no sistema de freios";
+    datalog();
+  }
+
+  //para entrar na freagem automática do rotor
+  if (braking == 1) {
+    brakerotor();
+  }
+
+
+
+  //rotina de definição do status do sistema
+
+  //Modo Auto-safe
+  if (operationMode == 1 & a5 == 0) {
+    AutoSafeMode();
+  }
+
+  //Modo IDLE
+  if (operationMode == 2 & a6 == 0) {
+    IdleMode();
+  }
+
+  //Modo Online
+  if (operationMode == 3 & a7 == 0) {
+    onlineMode();
+  }
+
+  //Modo Offline
+  if (operationMode == 4 & a8 == 0) {
+    offlineMode();
+  }
+
+  //Modo Manual
+  if (operationMode == 5 & a9 == 0) {
+    manualMode();
+  }
+
+  //modo parada de emergencia
+  if (operationMode == 6 & a11 == 0) {
+    emergenciMode();
+  }
+
+
+  if (autopitch == 1) {
+
+    //Ajuste no sistema de pitch
+    ajustepitch();
+
+  }
+
+  //para o ajuste manual
+  if (operationMode == 5) {
+    ajustepitch();
+    //deg = winddirMF; //colocar o valor lido na serial
+    ajustenacele();
+  }
 
 
 }//fim do operation()
@@ -2685,55 +2765,55 @@ if(operationMode == 5){
 
 
 
-void ajustepitch(){
+void ajustepitch() {
 
   mediapotpitch();
 
   //ajuste no sentido horário
-  if(medpotpitch > pitchReq & tent3 < 2){
-   
-   //aumenta a pwm
-   if((millis()-tempo9) >= (pwmpitch/50) & pwmpitch < 255){
-    pwmpitch++;
-    tempo9 = millis();
-   }
+  if (medpotpitch > pitchReq & tent3 < 2) {
 
-   
+    //aumenta a pwm
+    if ((millis() - tempo9) >= (pwmpitch / 50) & pwmpitch < 255) {
+      pwmpitch++;
+      tempo9 = millis();
+    }
+
+
     ledcWrite(0, pwmpitch);
   }
 
 
-    //ajuste no sentido Anti-horário
-  if(medpotpitch < pitchReq & tent3 < 2){
-   
-   //aumenta a pwm
-   if((millis()-tempo9) >= (pwmpitch/50) & pwmpitch < 255){
-    pwmpitch++;
-    tempo9 = millis();
-   }
+  //ajuste no sentido Anti-horário
+  if (medpotpitch < pitchReq & tent3 < 2) {
 
-   
+    //aumenta a pwm
+    if ((millis() - tempo9) >= (pwmpitch / 50) & pwmpitch < 255) {
+      pwmpitch++;
+      tempo9 = millis();
+    }
+
+
     ledcWrite(1, pwmpitch);
   }
 
-  if(medpotpitch == pitchReq){
+  if (medpotpitch == pitchReq) {
 
     pwmpitch = 0;
     ledcWrite(1, pwmpitch);
     ledcWrite(0, pwmpitch);
-    
-    if(tent3 < 11){
+
+    if (tent3 < 11) {
       tent3++;
     }
 
   }
-  if(medpotpitch != pitchReq & tent3 > 0){
-    tent3=0;
+  if (medpotpitch != pitchReq & tent3 > 0) {
+    tent3 = 0;
   }
 
 
 
-  
+
 }
 
 
@@ -2741,167 +2821,167 @@ void ajustepitch(){
 //entrada dos modos de operação do sistema
 
 //Modo Auto-Safe - aqui é feito o rastreamento constante do vento com rotor bloqueado, e pitch em 0, até que as condições de normalidade sejam reestabelecidas
-void AutoSafeMode(){
-//1-levar o amgulo de pitch para 0
-pitchReq=0;
-//2-alinhar a nacele com a origem do vento ou mantê-la nesta posição
-deg = winddirMF;
-    //*as ações 1 e 2 devem ser executadas simultaneamente 
-//3-bloqueia rotação da nacele - esta função é executada automaticamente no final do posicionamento.
+void AutoSafeMode() {
+  //1-levar o amgulo de pitch para 0
+  pitchReq = 0;
+  //2-alinhar a nacele com a origem do vento ou mantê-la nesta posição
+  deg = winddirMF;
+  //*as ações 1 e 2 devem ser executadas simultaneamente
+  //3-bloqueia rotação da nacele - esta função é executada automaticamente no final do posicionamento.
 
-autoposi=1;
+  autoposi = 1;
 
-Status = "Auto-Safe";
+  Status = "Auto-Safe";
 
-a5=1;
+  a5 = 1;
 }
 
-//Modo Idle - aqui é feito o constante rastreamento da melhor velocidade do vento, mas o pitch se mantem em 0, o sistema está pronto para operar em qualquer intante 
-void IdleMode(){
-pitchReq=0;
-autoposi = 1;
-autopitch = 0;
+//Modo Idle - aqui é feito o constante rastreamento da melhor velocidade do vento, mas o pitch se mantem em 0, o sistema está pronto para operar em qualquer intante
+void IdleMode() {
+  pitchReq = 0;
+  autoposi = 1;
+  autopitch = 0;
 
-Status = "Idle";
+  Status = "Idle";
 
-a6=1;
+  a6 = 1;
 }
 
 //Modo Online - aqui a torre eólica opera normalmente, rodando todas as funcões simultanemanete
-void onlineMode(){
-autoposi = 1;
-autopitch = 1; 
+void onlineMode() {
+  autoposi = 1;
+  autopitch = 1;
 
-Status = "Online";
+  Status = "Online";
 
-a7=1;
+  a7 = 1;
 }
 
 //Modo Offline - aqui a torre eólica se mantém completamente desativada, apena as rotinas de segurança pode rodar, é importnate ressaltar que a melhor direcão de vento nao é rastreada aqui,
-void offlineMode(){
-automatico = 0;
-autopitch = 0;
-autoposi = 0; 
+void offlineMode() {
+  automatico = 0;
+  autopitch = 0;
+  autoposi = 0;
 
-Status = "Offline";
+  Status = "Offline";
 
-a8=1;
+  a8 = 1;
 }
 
 //Modo Manual - aqui a torre eólica so pode ter sua condição física alterada manualmente via terminal apenas as rotinas de segurança se mantem acessiveis automáticamente
-void manualMode(){
-automatico = 1;
-autopitch = 0; 
-autoposi = 0; 
+void manualMode() {
+  automatico = 1;
+  autopitch = 0;
+  autoposi = 0;
 
-Status = "Manual";
+  Status = "Manual";
 
-a9=1;
+  a9 = 1;
 }
 
-//Modo Parada de emegência - aqui todos o sistemas da torre são desativados, ou seja, todas as portas do ESP32 são desativadas em termos de ativação e ela permanece em um loop constante 
-void emergenciMode(){
-automatico = 0;
-autopitch = 0; 
-autoposi = 0; 
+//Modo Parada de emegência - aqui todos o sistemas da torre são desativados, ou seja, todas as portas do ESP32 são desativadas em termos de ativação e ela permanece em um loop constante
+void emergenciMode() {
+  automatico = 0;
+  autopitch = 0;
+  autoposi = 0;
 
-Status = "Emergencia";
-a11=1;
+  Status = "Emergencia";
+  a11 = 1;
 
-while(a11 == 1){
-  digitalWrite(arref, HIGH);
-  digitalWrite(ncBrake, HIGH);
-  digitalWrite(ncFree, HIGH);
-  digitalWrite(rtBrake, LOW);
-  digitalWrite(rtFree, LOW);
+  while (a11 == 1) {
+    digitalWrite(arref, HIGH);
+    digitalWrite(ncBrake, HIGH);
+    digitalWrite(ncFree, HIGH);
+    digitalWrite(rtBrake, LOW);
+    digitalWrite(rtFree, LOW);
 
-ledcWrite(0, 0);
-ledcWrite(1, 0);
-ledcWrite(2, 0);
-ledcWrite(3, 0);
-ledcWrite(4, 0);
-ledcWrite(5, 0);
+    ledcWrite(0, 0);
+    ledcWrite(1, 0);
+    ledcWrite(2, 0);
+    ledcWrite(3, 0);
+    ledcWrite(4, 0);
+    ledcWrite(5, 0);
 
-}
+  }
 }
 
 
 //Ativação do sistema de arrefecimento geral
-void onarref(){  
-Serial.println("Arrefecimento ativado");
-arrefState = "on";
-digitalWrite(arref, LOW);
+void onarref() {
+  Serial.println("Arrefecimento ativado");
+  arrefState = "on";
+  digitalWrite(arref, LOW);
 }
 
 //Desativação do sistema de Arrefecimento geral
-void offarref(){  
-Serial.println("Arrefecimento desativado");
-arrefState = "off";
-digitalWrite(arref, HIGH);
+void offarref() {
+  Serial.println("Arrefecimento desativado");
+  arrefState = "off";
+  digitalWrite(arref, HIGH);
 }
 
 //function to brake the nacele rotation
-void brakenacele(){
-digitalWrite(ncBrake, LOW); 
-delay(200); 
-digitalWrite(ncBrake, HIGH);
-delay(200);
-digitalWrite(ncBrake, LOW); 
-delay(700); 
-digitalWrite(ncBrake, HIGH);
-ncState = "locked";
-a10 = 1; 
+void brakenacele() {
+  digitalWrite(ncBrake, LOW);
+  delay(200);
+  digitalWrite(ncBrake, HIGH);
+  delay(200);
+  digitalWrite(ncBrake, LOW);
+  delay(700);
+  digitalWrite(ncBrake, HIGH);
+  ncState = "locked";
+  a10 = 1;
 }
 
 //function to free the nacele rotation
-void freenacele(){
-digitalWrite(ncFree, LOW); 
-delay(200); 
-digitalWrite(ncFree, HIGH);
-delay(200);
-digitalWrite(ncFree, LOW); 
-delay(400); 
-digitalWrite(ncFree, HIGH);
-ncState = "liberate"; 
-a10 = 0;
+void freenacele() {
+  digitalWrite(ncFree, LOW);
+  delay(200);
+  digitalWrite(ncFree, HIGH);
+  delay(200);
+  digitalWrite(ncFree, LOW);
+  delay(400);
+  digitalWrite(ncFree, HIGH);
+  ncState = "liberate";
+  a10 = 0;
 }
 
 //function to brake the rotor rotation
-void brakerotor(){
+void brakerotor() {
 
 
-if((millis() - tempo3) >= (800/(pwmbrake+1)) & pwmbrake < 255){
-  pwmbrake++; 
-  tempo3 = millis();
-  rtState = "locking";
-}
+  if ((millis() - tempo3) >= (800 / (pwmbrake + 1)) & pwmbrake < 255) {
+    pwmbrake++;
+    tempo3 = millis();
+    rtState = "locking";
+  }
 
-if(pwmbrake == 255 & (millis()-tempo3) >= 200){
-  ledcWrite(2, 0);
-  braking=0;
-  brake=1;
-  rtState = "locked";
-  pwmbrake=0;
-  a1=0;
-}
-   ledcWrite(2, pwmbrake);
+  if (pwmbrake == 255 & (millis() - tempo3) >= 200) {
+    ledcWrite(2, 0);
+    braking = 0;
+    brake = 1;
+    rtState = "locked";
+    pwmbrake = 0;
+    a1 = 0;
+  }
+  ledcWrite(2, pwmbrake);
 
- 
+
 }
 
 //function to free the rotor rotation
-void freerotor(){
+void freerotor() {
 
-ledcWrite(3, 255);
-delay(500);
-ledcWrite(3, 0);
-delay(100);
-ledcWrite(3, 255);
-delay(200);
-ledcWrite(3, 0);
-a1=1;
-brake=0;  
-rtState = "liberate"; 
+  ledcWrite(3, 255);
+  delay(500);
+  ledcWrite(3, 0);
+  delay(100);
+  ledcWrite(3, 255);
+  delay(200);
+  ledcWrite(3, 0);
+  a1 = 1;
+  brake = 0;
+  rtState = "liberate";
 
 
 }
@@ -2910,411 +2990,411 @@ rtState = "liberate";
 //botões do terminal
 
 
-void ajustenacele(){
-//Def de ajuste normal -- ajusta o valor de intervalo para não ficar negativo
-mediapot();
-if(deg > medpot){ 
-  inter = deg - medpot;
-}
-if(deg < medpot){
-  inter = medpot - deg;
-}
+void ajustenacele() {
+  //Def de ajuste normal -- ajusta o valor de intervalo para não ficar negativo
+  mediapot();
+  if (deg > medpot) {
+    inter = deg - medpot;
+  }
+  if (deg < medpot) {
+    inter = medpot - deg;
+  }
 
-//Renovação do tent e tent1
-if(deg != olddeg){
-  tent=0;
-  tent1=0; 
-}
+  //Renovação do tent e tent1
+  if (deg != olddeg) {
+    tent = 0;
+    tent1 = 0;
+  }
 
-//quando não é um ajuste de precisão -> inter > 10
-if(deg != medpot & tent <= 1 & inter > 4){
-
-
-mediapot();
-posi = medpot;//guarda o valor para fins de fer. no aumento da pwm
-olddeg=deg;
-tent++; // permite 2 ajustes de posição
-valpwm = 30;
-ultimointer = 0;
-
-//ajusta o valor de intervalo para não ficar negativo
-if(deg > medpot){ 
-  inter = deg - medpot;
-}
-if(deg < medpot){
-  inter = medpot - deg;
-}
-
-if(a10 == 1 & inter < 10){
-  freenacele();
-}
-
-tempo14 = millis();
-//inicia a rotação o aumento de pwm no sentido Anti-horário
-while(olddeg > medpot){
-
-if(a10 == 1 & valpwm > 38){
-  freenacele();
-}
-  Serial.println("          entrou no while horario");
-
-mediapot();//atualiza os valores de posição
-
-//ajuste do valor da pwm - aceleração
-if((medpot-posi) < (inter*0.90)  & (millis()-tempo1) > 30){
-   tempo1 = millis();
-  if(valpwm < 210){
-    valpwm++;
-     }
-}
-
-//ajuste do valor da pwm - desacelaração
-if((medpot-posi) > (inter*0.10) & (millis()-tempo1) >= 1){
-  tempo1 = millis();
-  if(valpwm > 90){
-   valpwm=valpwm-3;
-     }
-}
+  //quando não é um ajuste de precisão -> inter > 10
+  if (deg != medpot & tent <= 1 & inter > 4) {
 
 
-ledcWrite(4, valpwm);//envia os dados para a pontencia
+    mediapot();
+    posi = medpot;//guarda o valor para fins de fer. no aumento da pwm
+    olddeg = deg;
+    tent++; // permite 2 ajustes de posição
+    valpwm = 30;
+    ultimointer = 0;
+
+    //ajusta o valor de intervalo para não ficar negativo
+    if (deg > medpot) {
+      inter = deg - medpot;
+    }
+    if (deg < medpot) {
+      inter = medpot - deg;
+    }
+
+    if (a10 == 1 & inter < 10) {
+      freenacele();
+    }
+
+    tempo14 = millis();
+    //inicia a rotação o aumento de pwm no sentido Anti-horário
+    while (olddeg > medpot) {
+
+      if (a10 == 1 & valpwm > 38) {
+        freenacele();
+      }
+      Serial.println("          entrou no while horario");
+
+      mediapot();//atualiza os valores de posição
+
+      //ajuste do valor da pwm - aceleração
+      if ((medpot - posi) < (inter * 0.90)  & (millis() - tempo1) > 30) {
+        tempo1 = millis();
+        if (valpwm < 210) {
+          valpwm++;
+        }
+      }
+
+      //ajuste do valor da pwm - desacelaração
+      if ((medpot - posi) > (inter * 0.10) & (millis() - tempo1) >= 1) {
+        tempo1 = millis();
+        if (valpwm > 90) {
+          valpwm = valpwm - 3;
+        }
+      }
 
 
-//anula o loop se passar de 4 min
- if((millis()-tempo14) > 80000){
- ledcWrite(4, 0);
- ledcWrite(5, 0);
- tent=10;
- tent1=10;
- lcd.clear();
- lcd.setCursor(0, 0);
- lcd.print("Tempo max. Atingido");
- lcd.setCursor(1, 1);
- lcd.print("--Anulando Rotacao--");
- delay(5000);
-  break;
- }
-
- //retorno de funções 
- readsensors(); 
-
-readminimet(); 
-
-operation();
-
-Display();
- 
-}
- ledcWrite(4, 0);
- ledcWrite(5, 0);
+      ledcWrite(4, valpwm);//envia os dados para a pontencia
 
 
-mediapot();//atualiza os valores de posição
+      //anula o loop se passar de 4 min
+      if ((millis() - tempo14) > 80000) {
+        ledcWrite(4, 0);
+        ledcWrite(5, 0);
+        tent = 10;
+        tent1 = 10;
+        lcd.clear();
+        lcd.setCursor(0, 0);
+        lcd.print("Tempo max. Atingido");
+        lcd.setCursor(1, 1);
+        lcd.print("--Anulando Rotacao--");
+        delay(5000);
+        break;
+      }
+
+      //retorno de funções
+      readsensors();
+
+      readminimet();
+
+      operation();
+
+      Display();
+
+    }
+    ledcWrite(4, 0);
+    ledcWrite(5, 0);
 
 
-tempo14 = millis();
-//inicia a rotação e aumento de pwm no sentido Horário
-while(olddeg < medpot){
-
-if(a10 == 1 & valpwm > 38){
-  freenacele();
-} 
-Serial.println("         entrou no while antihorario");
+    mediapot();//atualiza os valores de posição
 
 
-mediapot();//atualiza os valores de posição
+    tempo14 = millis();
+    //inicia a rotação e aumento de pwm no sentido Horário
+    while (olddeg < medpot) {
 
-//ajuste do valor da pwm - aceleração
-if((posi-medpot) < (inter*0.90)  & (millis()-tempo1) > 30){
-   tempo1 = millis();
-  if(valpwm < 255){
-    valpwm++;
-     }
-}
-
-//ajuste do valor da pwm - desacelaração
-if((posi-medpot) > (inter*0.10) & (millis()-tempo1) >= 1){
-  if(valpwm > 90){
-   valpwm=valpwm-3;
-     }
-}
+      if (a10 == 1 & valpwm > 38) {
+        freenacele();
+      }
+      Serial.println("         entrou no while antihorario");
 
 
-ledcWrite(5, valpwm);//envia os dados para a pontencia
+      mediapot();//atualiza os valores de posição
+
+      //ajuste do valor da pwm - aceleração
+      if ((posi - medpot) < (inter * 0.90)  & (millis() - tempo1) > 30) {
+        tempo1 = millis();
+        if (valpwm < 255) {
+          valpwm++;
+        }
+      }
+
+      //ajuste do valor da pwm - desacelaração
+      if ((posi - medpot) > (inter * 0.10) & (millis() - tempo1) >= 1) {
+        if (valpwm > 90) {
+          valpwm = valpwm - 3;
+        }
+      }
 
 
-//anula o loop se passar de 2.5 min
- if((millis()-tempo14) > 80000){
- ledcWrite(4, 0);
- ledcWrite(5, 0);
- tent=10;
- tent1=10;
- lcd.clear();
- lcd.setCursor(0, 0);
- lcd.print("Tempo max. Atingido");
- lcd.setCursor(1, 1);
- lcd.print("--Anulando Rotacao--");
- delay(5000);
-  break;
- }
+      ledcWrite(5, valpwm);//envia os dados para a pontencia
 
- //retorno de funções 
-readsensors(); 
 
-readminimet(); 
+      //anula o loop se passar de 2.5 min
+      if ((millis() - tempo14) > 80000) {
+        ledcWrite(4, 0);
+        ledcWrite(5, 0);
+        tent = 10;
+        tent1 = 10;
+        lcd.clear();
+        lcd.setCursor(0, 0);
+        lcd.print("Tempo max. Atingido");
+        lcd.setCursor(1, 1);
+        lcd.print("--Anulando Rotacao--");
+        delay(5000);
+        break;
+      }
 
-operation();
+      //retorno de funções
+      readsensors();
 
-Display();
+      readminimet();
 
- 
-}
- ledcWrite(4, 0);
- ledcWrite(5, 0);
+      operation();
 
-}//fim do ajuste normal
+      Display();
 
-if(a10 == 0 & (tent1 > 0 | deg == medpot)){
-  brakenacele();
-}
 
-if(valpwm == 0 & a10 == 0){
-  brakenacele();
-}
+    }
+    ledcWrite(4, 0);
+    ledcWrite(5, 0);
+
+  }//fim do ajuste normal
+
+  if (a10 == 0 & (tent1 > 0 | deg == medpot)) {
+    brakenacele();
+  }
+
+  if (valpwm == 0 & a10 == 0) {
+    brakenacele();
+  }
 
 
 }
 
 //para a análise de vento
-void analizwind(){
-  
-  if((millis()-tempo30) >= 5000){
+void analizwind() {
+
+  if ((millis() - tempo30) >= 5000) {
     //distribuis as variáveis nos vetores
     winddirs[numposi] = winddir;
     windspeeds[numposi] = windspeed;
-        //reinicio do ajuste de variáveis
-    if(numposi == 49){
-      numposi=0;
-      }
-    else{
-       numposi++;
+    //reinicio do ajuste de variáveis
+    if (numposi == 49) {
+      numposi = 0;
+    }
+    else {
+      numposi++;
     }
     //Serial.println("renonvar................................................................................... ");
-  
-  tempo30 = millis();
-  
+
+    tempo30 = millis();
+
   }
 
-  pass=0;
-  pass1=0;
+  pass = 0;
+  pass1 = 0;
 
-  
+
   //análise dos dados contidos nos vetores
-if((millis()-tempo31) > 25000){
- 
+  if ((millis() - tempo31) > 25000) {
 
-//contagem de ocorrências e tirando as médias de velocidade para cada posição.
-  pass=0;
-  pass1=0;
-while(pass <= 31){
 
-  ocorr[pass]=0; //zera o vetor na posição pass, para não somar com o anterior
-  while(pass1 <= 49){ //aqui etava numposi no lugar de 49
-    if(classes[pass] == winddirs[pass1]){
-              // Serial.print("vetor windspeeds/;");
-         //Serial.println(windspeeds[pass1]);
-         if(ocorr[pass] == 0){
-          classespeeds[pass]=0;
-         }
-      classespeeds[pass] = windspeeds[pass1] + classespeeds[pass];
-      ocorr[pass]++; 
+    //contagem de ocorrências e tirando as médias de velocidade para cada posição.
+    pass = 0;
+    pass1 = 0;
+    while (pass <= 31) {
+
+      ocorr[pass] = 0; //zera o vetor na posição pass, para não somar com o anterior
+      while (pass1 <= 49) { //aqui etava numposi no lugar de 49
+        if (classes[pass] == winddirs[pass1]) {
+          // Serial.print("vetor windspeeds/;");
+          //Serial.println(windspeeds[pass1]);
+          if (ocorr[pass] == 0) {
+            classespeeds[pass] = 0;
+          }
+          classespeeds[pass] = windspeeds[pass1] + classespeeds[pass];
+          ocorr[pass]++;
+        }
+        pass1++;
+      }
+      if (ocorr[pass] != 0) {
+        ///Serial.print("vetor classesspeeds/;");
+        //Serial.println(classespeeds[pass]);
+
+        classespeeds[pass] = classespeeds[pass] / ocorr[pass];
+
+      }
+
+      //Serial.print("Classe: ");
+      //Serial.println(classes[pass]);
+      //Serial.print("média de velocidade da classe: ");
+      //Serial.println(classespeeds[pass]);
+      //Serial.print("ocorrencias: ");
+      //Serial.println(ocorr[pass]);
+
+
+      pass++;
+      pass1 = 0;
     }
-    pass1++;
-  }
-  if(ocorr[pass] != 0){
-         ///Serial.print("vetor classesspeeds/;");
-         //Serial.println(classespeeds[pass]);
-       
-  classespeeds[pass] = classespeeds[pass]/ocorr[pass];
-  
-  }
- 
-  //Serial.print("Classe: ");
-  //Serial.println(classes[pass]);
-  //Serial.print("média de velocidade da classe: ");
-  //Serial.println(classespeeds[pass]);
-  //Serial.print("ocorrencias: ");
-  //Serial.println(ocorr[pass]);
-  
+    pass = 0;
+    pass1 = 0;
 
-  pass++;
-  pass1=0;
-}
-  pass=0;
-  pass1=0;
 
-  
-//verificação da maior ocorrência e se é cut-in
- maiorocorr=0;
-  while(pass <= 31){//verifica qual o mais recorrente
-    //Serial.print("entrou no ultimo while -> velocidade: ");
-    //Serial.println(classespeeds[pass]);
-    if(ocorr[pass] > maiorocorr & classespeeds[pass] >= cutin){
-      maiorocorr = ocorr[pass];
-      posimf = classes[pass];
-      velposimf = classespeeds[pass];
+    //verificação da maior ocorrência e se é cut-in
+    maiorocorr = 0;
+    while (pass <= 31) { //verifica qual o mais recorrente
+      //Serial.print("entrou no ultimo while -> velocidade: ");
+      //Serial.println(classespeeds[pass]);
+      if (ocorr[pass] > maiorocorr & classespeeds[pass] >= cutin) {
+        maiorocorr = ocorr[pass];
+        posimf = classes[pass];
+        velposimf = classespeeds[pass];
+      }
+      pass++;
     }
-    pass++;
-   }
-   //deg = posimf;
-   winddirMF = posimf;
-   
-pass1=0;
-pass=0;
+    //deg = posimf;
+    winddirMF = posimf;
 
- tempo31 = millis();
-}
+    pass1 = 0;
+    pass = 0;
+
+    tempo31 = millis();
+  }
 
 }//fim da função analzwind
 
 
-void settozero(){
+void settozero() {
   //zerando os vetores
-  while(pass <= 49){
-   winddirs[pass]=1;
-  pass++;
-  //Serial.println("travou 6 :  ");
-  //Serial.print(pass);
-}
-pass=0;
-  while(pass <= 31){
-   ocorr[pass]=0;
-   classespeeds[pass]=0.0;
-  pass++;
-  ///Serial.println("travou 7 ");
-}
-pass=0;
-
-  while(pass <= 49){
-   windspeeds[pass]=0;
-  pass++;
-  //Serial.println("travou 8 ");
-}
-pass=0;
-//fim do zeramento dos vetores
-
-  pass=0;
-  pass1=0;
-  numposi=0;
-}
-
-
-
-  void Display(){
-    //print 1 no display
-if((millis()-time2) >= 1500 & b1 == 1){
-lcd.clear();
-lcd.setCursor(0, 0);
-lcd.print("LAZZARUS_Eolica V2.1");
-
-  if(medpotpitch != pitchReq){
-lcd.setCursor(0, 1);
-lcd.print("Pitch At:");
-lcd.print(medpotpitch);
-lcd.print(" ");
-
-lcd.setCursor(11, 1);
-lcd.print("Req:");
-lcd.setCursor(11, 1);
-lcd.print("      ");
-lcd.print(pitchReq);
-    
-  }else{//se o pitch nao está sendo usado printa os dados de temperatura
-lcd.setCursor(0, 1);
-lcd.print("TGer:");
-lcd.print(tempgerador,1);
-lcd.print("C");
-
-lcd.setCursor(11, 1);
-lcd.print("Ts:");
-lcd.print(tempsistema,2);
-lcd.print("C");
-}
-
-lcd.setCursor(11, 2);
-lcd.print("ts:");
-lcd.print(tSis,1);
-lcd.print("V");
-
-lcd.setCursor(0, 2);
-lcd.print("tPot:");
-lcd.print(tPot,1);
-lcd.print("V");  
-
-
-lcd.setCursor(0, 3);
-lcd.print("U");
-lcd.setCursor(1, 3);
-lcd.print(windspeed,1);
-lcd.setCursor(6, 3);
-lcd.print("D");
-lcd.setCursor(7, 3);
-lcd.print(winddir,1);
-lcd.setCursor(13, 3);
-lcd.print("MF");
-lcd.setCursor(15, 3);
-lcd.print(winddirMF,1);
-
-b1 = 0; 
-time2 = millis(); 
-}
-
-    //print 2 no display
-if((millis()-time2) >= 1500 & b1 == 0){
-lcd.clear();
-lcd.setCursor(0, 0);
-lcd.print("LAZZARUS_Eolica V2.1");
-
-lcd.setCursor(0, 1);
-lcd.print("Status: ");
-lcd.print(Status); 
-
-lcd.setCursor(0, 2);
-lcd.print("Pitch At:");
-lcd.print(medpotpitch);
-lcd.print(" ");
-
-lcd.setCursor(12, 2);
-lcd.print("Req:");
-lcd.setCursor(16, 2);
-lcd.print(pitchReq);
-
-lcd.setCursor(0, 3);
-lcd.print("RPM");
-lcd.setCursor(3, 3);
-lcd.print(rpm);
-
-lcd.setCursor(7, 3);
-lcd.print("At");
-lcd.setCursor(9, 3);
-lcd.print(medpot);
-
-lcd.setCursor(14, 3);
-lcd.print("Dr");
-lcd.setCursor(16, 3);
-lcd.print(deg);
-
-  time2 = millis();
-  b1=1;  
-}
-    
+  while (pass <= 49) {
+    winddirs[pass] = 1;
+    pass++;
+    //Serial.println("travou 6 :  ");
+    //Serial.print(pass);
   }
+  pass = 0;
+  while (pass <= 31) {
+    ocorr[pass] = 0;
+    classespeeds[pass] = 0.0;
+    pass++;
+    ///Serial.println("travou 7 ");
+  }
+  pass = 0;
+
+  while (pass <= 49) {
+    windspeeds[pass] = 0;
+    pass++;
+    //Serial.println("travou 8 ");
+  }
+  pass = 0;
+  //fim do zeramento dos vetores
+
+  pass = 0;
+  pass1 = 0;
+  numposi = 0;
+}
+
+
+
+void Display() {
+  //print 1 no display
+  if ((millis() - time2) >= 1500 & b1 == 1) {
+    lcd.clear();
+    lcd.setCursor(0, 0);
+    lcd.print("LAZZARUS_Eolica V2.1");
+
+    if (medpotpitch != pitchReq) {
+      lcd.setCursor(0, 1);
+      lcd.print("Pitch At:");
+      lcd.print(medpotpitch);
+      lcd.print(" ");
+
+      lcd.setCursor(11, 1);
+      lcd.print("Req:");
+      lcd.setCursor(11, 1);
+      lcd.print("      ");
+      lcd.print(pitchReq);
+
+    } else { //se o pitch nao está sendo usado printa os dados de temperatura
+      lcd.setCursor(0, 1);
+      lcd.print("TGer:");
+      lcd.print(tempgerador, 1);
+      lcd.print("C");
+
+      lcd.setCursor(11, 1);
+      lcd.print("Ts:");
+      lcd.print(tempsistema, 2);
+      lcd.print("C");
+    }
+
+    lcd.setCursor(11, 2);
+    lcd.print("ts:");
+    lcd.print(tSis, 1);
+    lcd.print("V");
+
+    lcd.setCursor(0, 2);
+    lcd.print("tPot:");
+    lcd.print(tPot, 1);
+    lcd.print("V");
+
+
+    lcd.setCursor(0, 3);
+    lcd.print("U");
+    lcd.setCursor(1, 3);
+    lcd.print(windspeed, 1);
+    lcd.setCursor(6, 3);
+    lcd.print("D");
+    lcd.setCursor(7, 3);
+    lcd.print(winddir, 1);
+    lcd.setCursor(13, 3);
+    lcd.print("MF");
+    lcd.setCursor(15, 3);
+    lcd.print(winddirMF, 1);
+
+    b1 = 0;
+    time2 = millis();
+  }
+
+  //print 2 no display
+  if ((millis() - time2) >= 1500 & b1 == 0) {
+    lcd.clear();
+    lcd.setCursor(0, 0);
+    lcd.print("LAZZARUS_Eolica V2.1");
+
+    lcd.setCursor(0, 1);
+    lcd.print("Status: ");
+    lcd.print(Status);
+
+    lcd.setCursor(0, 2);
+    lcd.print("Pitch At:");
+    lcd.print(medpotpitch);
+    lcd.print(" ");
+
+    lcd.setCursor(12, 2);
+    lcd.print("Req:");
+    lcd.setCursor(16, 2);
+    lcd.print(pitchReq);
+
+    lcd.setCursor(0, 3);
+    lcd.print("RPM");
+    lcd.setCursor(3, 3);
+    lcd.print(rpm);
+
+    lcd.setCursor(7, 3);
+    lcd.print("At");
+    lcd.setCursor(9, 3);
+    lcd.print(medpot);
+
+    lcd.setCursor(14, 3);
+    lcd.print("Dr");
+    lcd.setCursor(16, 3);
+    lcd.print(deg);
+
+    time2 = millis();
+    b1 = 1;
+  }
+
+}
 
 
 //aqui serão printadas no dataloguer todas as decisões tomadas pelo sistema
-  void datalog(){
-    
-  }
+void datalog() {
+
+}
 
 
 //******************
@@ -3348,28 +3428,34 @@ void updateWifiCode()
   // ArduinoOTA.setPasswordHash("21232f297a57a5a743894a0e4a801fc3");
 
   ArduinoOTA
-      .onStart([]()
-               {
-      String type;
-      if (ArduinoOTA.getCommand() == U_FLASH)
-        type = "sketch";
-      else // U_SPIFFS
-        type = "filesystem";
+  .onStart([]()
+  {
+    String type;
+    if (ArduinoOTA.getCommand() == U_FLASH)
+      type = "sketch";
+    else // U_SPIFFS
+      type = "filesystem";
 
-      // NOTE: if updating SPIFFS this would be the place to unmount SPIFFS using SPIFFS.end()
-      Serial.println("Start updating " + type); })
-      .onEnd([]()
-             { Serial.println("\nEnd"); })
-      .onProgress([](unsigned int progress, unsigned int total)
-                  { Serial.printf("Progress: %u%%\r", (progress / (total / 100))); })
-      .onError([](ota_error_t error)
-               {
-      Serial.printf("Error[%u]: ", error);
-      if (error == OTA_AUTH_ERROR) Serial.println("Auth Failed");
-      else if (error == OTA_BEGIN_ERROR) Serial.println("Begin Failed");
-      else if (error == OTA_CONNECT_ERROR) Serial.println("Connect Failed");
-      else if (error == OTA_RECEIVE_ERROR) Serial.println("Receive Failed");
-      else if (error == OTA_END_ERROR) Serial.println("End Failed"); });
+    // NOTE: if updating SPIFFS this would be the place to unmount SPIFFS using SPIFFS.end()
+    Serial.println("Start updating " + type);
+  })
+  .onEnd([]()
+  {
+    Serial.println("\nEnd");
+  })
+  .onProgress([](unsigned int progress, unsigned int total)
+  {
+    Serial.printf("Progress: %u%%\r", (progress / (total / 100)));
+  })
+  .onError([](ota_error_t error)
+  {
+    Serial.printf("Error[%u]: ", error);
+    if (error == OTA_AUTH_ERROR) Serial.println("Auth Failed");
+    else if (error == OTA_BEGIN_ERROR) Serial.println("Begin Failed");
+    else if (error == OTA_CONNECT_ERROR) Serial.println("Connect Failed");
+    else if (error == OTA_RECEIVE_ERROR) Serial.println("Receive Failed");
+    else if (error == OTA_END_ERROR) Serial.println("End Failed");
+  });
 
   ArduinoOTA.begin();
 
