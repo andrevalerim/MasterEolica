@@ -315,6 +315,11 @@ int valueParam3Int = 0; // Valor do input (numerico)
 String inputParam4; // Nome do input
 int modoParam5Int = 0; // Valor do modo (numerico)
 String modoParam5; // Qual modo de operacao
+String inputParam7; // Nome do input
+String valueParam6; // Valor do input
+int valueParam6Int = 0; // Valor do input (numerico)
+
+
 
 // Receber o estado dos botoes
 int btnParam2Int = 0;
@@ -329,6 +334,7 @@ int btnAcionaAutosafe = 0;
 int btnArrefecimento = 0;
 int btnLiberaBotoes = 0;
 int btnAtualizasoftware = 0;
+int btnResetaESP = 0;
 
 // Controle webpage
 const char *PARAM_INPUT_1 = "output";
@@ -338,6 +344,9 @@ const char *PARAM_INPUT_3 = "value";
 const char *PARAM_INPUT_4 = "input";
 
 const char *PARAM_INPUT_5 = "modo";
+
+const char *PARAM_INPUT_6 = "value";
+const char *PARAM_INPUT_7 = "input";
 
 
 
@@ -919,13 +928,21 @@ const char index_html[] PROGMEM = R"rawliteral(
                     <!-- Titulo secao -->
                     <h2>Seguranca</h2>
                     <hr class="hr">
-                    <!-- Primeira Parte -->
-                    <div>
+                    <div class="wrapper grid-col-2">
+                        <!-- Primeira Parte -->
                         <div>
-                            %BOTAOATUALIZASOFTWARE%
+                            <div>
+                                %BOTAOATUALIZASOFTWARE%
+                            </div>
+                            <div>
+                                %BOTAOACIONAARREFECIMENTO%
+                            </div>
                         </div>
+                        <!-- Segunda Parte -->
                         <div>
-                            %BOTAOACIONAARREFECIMENTO%
+                            <div>
+                                %BOTAORESETAESP%
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -1437,6 +1454,41 @@ const verificaPrimeiraRequisicao = function(modo){
         }
         console.log("OPERACAO APÓS TRATAR: " + modo)
     }
+
+    //DELAY RECEBE COM LIBERA BOTAO ATIVO
+    function syncDelay(milliseconds){
+        var start = new Date().getTime();
+        var end=0;
+        ativaIntervalo();
+        while( (end-start) < milliseconds){
+            end = new Date().getTime();
+        }
+        controladorBuscaOperacao = 1;
+    }
+    
+    function delayCounter(milliseconds){
+        var start = new Date().getTime();
+        var end=0;
+        while( (end-start) < milliseconds){
+            end = new Date().getTime();
+        }
+    } 
+
+    //FUNÇÕES DE AÇÃO
+    //=================================
+    const resetaESP = function(id){
+        var btn = id;
+        var valor = 1;
+        var xhr = new XMLHttpRequest();
+
+        mudaEstado("btnResetaESP");
+        toggleBtn("btnResetaESP");
+        
+        xhr.open("GET", "/resetaESP?value=" + valor + "&input=" + btn, true);
+        
+        delayCounter(10000)
+
+    }
     
     document.addEventListener("DOMContentLoaded", function () {
         if (document.getElementById("btnLiberaBotoes").classList.contains("button-off") == true) {
@@ -1450,11 +1502,13 @@ const verificaPrimeiraRequisicao = function(modo){
             liberaBloqueaBotoes();
             
         }else{
-            controladorBuscaOperacao = 1;
+//            controladorBuscaOperacao = 1;
+            syncDelay(3000);
             var xhttp = new XMLHttpRequest();
             xhttp.onreadystatechange = function () { if (this.readyState == 4 && this.status == 200) { modo = this.responseText; modoInt = parseInt(modo); console.log("MUDOU OPERACAO:" + modoInt); verificaPrimeiraRequisicao(modoInt); } }
             xhttp.open("GET", "/status_modo_operacao", true);
-            xhttp.send();
+            xhttp.send();   
+             
         }
     });
 
@@ -1560,6 +1614,9 @@ String processor(const String &var)
       btns = + "<div class=\"mt-105\"><p class=\"p-col-title\">Freio Rotor </p><button id=\"freioRotor\" onclick='mudaEstado(\"freioRotor\");toggleBtn(\"freioRotor\");' class=\"button button-on\">ON</button></div>";
     }
     return btns;
+
+    /*INICIAL MODOS
+    ===========================*/
   } else if (var == "BOTAOACIONAMANUAL") {
     String btns = "";
 
@@ -1620,31 +1677,45 @@ String processor(const String &var)
 //      btns = + "<div class=\"mt-105\"><p class=\"p-col-title\">Modo Parada Emergência</p><button id=\"btnParadaEmergencia\" onclick='enviaModoAtual(\"btnParadaEmergencia\",6,0)' class=\"button button-on\">ON</button></div>";
     }
     return btns;
+    /*FINAL MODOS
+    ===========================*/
+    
   } else if (var == "BOTAOLIBERABOTOES") {
     String btns = "";
 
-    if (btnLiberaBotoes == 0 || btnLiberaBotoes == 1) {
+    if (btnLiberaBotoes == 0) {
       btns = + "<div class=\"mt-105\"><p class=\"p-col-title\">Liberar Botoes</p><button id=\"btnLiberaBotoes\" onclick='capturaElemento(\"btnLiberaBotoes\");alerta()' class=\"button button-off\">OFF</button></div>";
-    } else /*if (btnLiberaBotoes == 1)*/ {
-//      btns = + "<div class=\"mt-105\"><p class=\"p-col-title\">Liberar Botoes</p><button id=\"btnLiberaBotoes\" onclick='capturaElemento(\"btnLiberaBotoes\");alerta()' class=\"button button-on\">ON</button></div>";
+    } else if (btnLiberaBotoes == 1) {
+      btns = + "<div class=\"mt-105\"><p class=\"p-col-title\">Liberar Botoes</p><button id=\"btnLiberaBotoes\" onclick='capturaElemento(\"btnLiberaBotoes\");alerta()' class=\"button button-on\">ON</button></div>";
     }
     return btns;
+
   } else if (var == "BOTAOATUALIZASOFTWARE") {
     String btns = "";
 
-    if (btnAtualizasoftware == 0 || btnAtualizasoftware == 1) {
+    if (btnAtualizasoftware == 0) {
       btns = + "<div class=\"mt-105\"><p class=\"p-col-title\">Atualiza Soft.</p><button id=\"btnAtualizasoftware\" onclick='mudaEstado(\"btnAtualizasoftware\");toggleBtn(\"btnAtualizasoftware\");' class=\"button button-off\">OFF</button></div>";
-    } else /*if (btnAtualizasoftware == 1)*/ {
-//      btns = + "<div class=\"mt-105\"><p class=\"p-col-title\">Atualiza Soft.</p><button id=\"btnAtualizasoftware\" onclick='mudaEstado(\"btnAtualizasoftware\");toggleBtn(\"btnAtualizasoftware\");' class=\"button button-on\">ON</button></div>";
+    } else if (btnAtualizasoftware == 1){
+      btns = + "<div class=\"mt-105\"><p class=\"p-col-title\">Atualiza Soft.</p><button id=\"btnAtualizasoftware\" onclick='mudaEstado(\"btnAtualizasoftware\");toggleBtn(\"btnAtualizasoftware\");' class=\"button button-on\">ON</button></div>";
     }
     return btns;
   } else if (var == "BOTAOACIONAARREFECIMENTO") {
     String btns = "";
 
-    if (btnArrefecimento == 0 || (btnArrefecimento == 1)) {
+    if (btnArrefecimento == 0) {
       btns = + "<div class=\"mt-105\"><p class=\"p-col-title\">Arrefecimento</p><button id=\"btnArrefecimento\" onclick='mudaEstado(\"btnArrefecimento\");toggleBtn(\"btnArrefecimento\");' class=\"button button-off\">OFF</button></div>";
-    } else /*if ( btnArrefecimento == 1)*/ {
-//      btns = + "<div class=\"mt-105\"><p class=\"p-col-title\">Arrefecimento</p><button id=\"btnArrefecimento\" onclick='mudaEstado(\"btnArrefecimento\");toggleBtn(\"btnArrefecimento\");' class=\"button button-on\">ON</button></div>";
+    } else if ( btnArrefecimento == 1) {
+      btns = + "<div class=\"mt-105\"><p class=\"p-col-title\">Arrefecimento</p><button id=\"btnArrefecimento\" onclick='mudaEstado(\"btnArrefecimento\");toggleBtn(\"btnArrefecimento\");' class=\"button button-on\">ON</button></div>";
+    }
+    return btns;
+
+  }else if (var == "BOTAORESETAESP") {
+    String btns = "";
+
+    if (btnResetaESP == 0) {
+      btns = + "<div class=\"mt-105\"><p class=\"p-col-title\">Reset ESP</p><button id=\"btnResetaESP\" onclick='resetaESP(\"btnResetaESP\");' class=\"button button-off\">OFF</button></div>";
+    } else if ( btnResetaESP == 1) {
+      btns = + "<div class=\"mt-105\"><p class=\"p-col-title\">Reset ESP</p><button id=\"btnResetaESP\" onclick='resetaESP(\"btnResetaESP\");' class=\"button button-on\">ON</button></div>";
     }
     return btns;
   } else {
@@ -2071,6 +2142,29 @@ void setup()
     }
     request->send(200, "text/plain", "OK");
   });
+
+
+  // REINICIA ESP
+
+  server.on("/resetaESP", HTTP_GET, [](AsyncWebServerRequest * request) {
+    // GET input1 value on <ESP_IP>/atualizaBtn?output=<btnNaceleMsg1>&state=<btnNaceleMsg2>
+    if (request->hasParam(PARAM_INPUT_6) && request->hasParam(PARAM_INPUT_7)) {
+
+      //Captura os valores do request
+      valueParam6 = request->getParam(PARAM_INPUT_6)->value();
+      inputParam7 = request->getParam(PARAM_INPUT_7)->value();
+
+      valueParam6Int = valueParam6.toInt();
+
+      if (inputParam7 == "btnResetaESP") {
+        if (valueParam6Int == 1){
+          reiniciaESP();
+        }
+      }
+    }
+    request->send(200, "text/plain", "OK");
+  });
+  
 
   //---------------------------
 
