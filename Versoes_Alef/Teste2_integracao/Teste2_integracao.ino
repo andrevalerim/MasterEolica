@@ -49,6 +49,9 @@ const char *password = "casa092614";
 // const char *ssid = "PlusEnergy_Control - Host1";
 // const char *password = "diaqueohomemfoiemdirecaoalua16";
 
+// const char *ssid = "Plus Energy";
+// const char *password = "plusedemais2022";
+
 //===============================================
 // PINOS
 //===============================================
@@ -306,6 +309,7 @@ int controle0 = 0;
 int controle1 = 0;
 int controle2 = 0;
 int controle3 = 0;
+int pocahontas = 0; // Contador Wifi
 
 // Captura dos parametros
 String btnParam1; // Nome do botao
@@ -1477,16 +1481,20 @@ const verificaPrimeiraRequisicao = function(modo){
     //FUNÇÕES DE AÇÃO
     //=================================
     const resetaESP = function(id){
-        var btn = id;
         var valor = 1;
         var xhr = new XMLHttpRequest();
 
         mudaEstado("btnResetaESP");
         toggleBtn("btnResetaESP");
         
-        xhr.open("GET", "/resetaESP?value=" + valor + "&input=" + btn, true);
-        
-        delayCounter(10000)
+        xhr.open("GET", "/resetaESP?value=" + valor + "&input=" + id, true);
+        xhr.send();
+        delayCounter(3000)
+
+        mudaEstado("btnResetaESP");
+        toggleBtn("btnResetaESP");
+
+        location.reload();
 
     }
     
@@ -1860,10 +1868,17 @@ void setup()
 
   // Connect to Wi-Fi
   WiFi.begin(ssid, password);
+  pocahontas = 0;
   while (WiFi.status() != WL_CONNECTED)
   {
     delay(1000);
     Serial.println("Connecting to WiFi..");
+
+    pocahontas++;
+
+    if(pocahontas == 10){
+      reiniciaESP();
+    }
   }
 
   // Print ESP32 Local IP Address
@@ -2156,9 +2171,11 @@ void setup()
 
       valueParam6Int = valueParam6.toInt();
 
-      if (inputParam7 == "btnResetaESP") {
-        if (valueParam6Int == 1){
+      if(inputParam7 == "btnResetaESP"){
+        if(valueParam6Int == 1){
           reiniciaESP();
+          Serial.println("RESETOU");
+          btnResetaESP = 0;      
         }
       }
     }
@@ -2227,6 +2244,7 @@ void randomizaOperacao() {
 
 void reiniciaESP() {
   ESP.restart();
+  
 }
 
 //aquisição dos dasos dos sensores
