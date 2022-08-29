@@ -37,8 +37,8 @@ int randomico = 0;
 //const char *ssid = "Consultorio";
 //const char *password = "terapiaCris";
 
-const char *ssid = "Valter 2.4Ghz";
-const char *password = "casa092614";
+//const char *ssid = "Valter 2.4Ghz";
+//const char *password = "casa092614";
 
 // const char *ssid = "Quantum Team";
 // const char *password = "amotolia_oleosa";
@@ -49,8 +49,8 @@ const char *password = "casa092614";
 // const char *ssid = "PlusEnergy_Control - Host1";
 // const char *password = "diaqueohomemfoiemdirecaoalua16";
 
-// const char *ssid = "Plus Energy";
-// const char *password = "plusedemais2022";
+ const char *ssid = "Plus Energy";
+ const char *password = "plusedemais2022";
 
 //===============================================
 // PINOS
