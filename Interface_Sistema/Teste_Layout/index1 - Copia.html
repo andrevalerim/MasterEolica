@@ -1,0 +1,1000 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- Icone barra-->
+    <!-- <link rel="icon" href="img/plus energy png em baixo.png"> -->
+    <title>Sistema de Gerenciamento Torre Eolica - Plus Energy</title>
+    
+    <style type="text/css">
+        html {font-family: Helvetica;font-size: 16px;text-align: left;background-color: #bff1fa;background-repeat: repeat-y;background-size: cover;}
+        input {padding: 2.5px 2.5px;font-size: 1.5rem;width: 7rem;height: 2.5rem;text-align: center;border: #666666 solid 2px;border-radius: 15px 50px;background-color: #e4e4e4;}
+        input#status_sistema {padding: 2.5px 2.5px;font-size: 1.3rem;margin: 3rem 0.5rem;width: 7rem;height: 2.5rem;text-align: center;border: #666666 dotted 2px;border-radius: 15px 50px;box-shadow: #747474 -1px 1px 7px;background-color: #e4e4e4;}
+        input#status_sistema.status_sistema_online {background-color: #4CAF50;color: white;}
+        input#status_sistema.status_sistema_offline {background-color: #1f1e1e;color: white;}
+        input#status_sistema.status_sistema_idle {background-color: #e4e4e4;color: rgb(88, 88, 88);}
+        input#status_sistema.status_sistema_manual {background-color: #471e7c;color: white;}
+        input#status_sistema.status_sistema_autosafe {background-color: #ffbb00;color: white;}
+        input#status_sistema.status_sistema_parada_emergencia {background-color: #be0000;color: white;}
+        input#status_atual_nacele {padding: 2.5px 2.5px;font-size: 1.5rem;text-align: center;border: #666666 dotted 2px;border-radius: 15px 50px;box-shadow: #747474 -1px 1px 7px;background-color: #e4e4e4;}
+        input#status_atual_nacele.status_atual_nacele_desbloqueada {background-color: #4CAF50;color: white;}
+        input#status_atual_freio_nacele {background-color: #4CAF50;color: white;font-size: 1.2rem;}
+        input#status_atual_freio_nacele.status_atual_freio_nacele_freado {background-color: #d47800;color: white;}
+        input#status_atual_freio_rotor {background-color: #4CAF50;color: white;font-size: 1.2rem;}
+        input#status_atual_freio_rotor.status_atual_freio_rotor_freado {background-color: #d47800;color: white;}
+        input#status_atual_pitch {padding: 2.5px 2.5px;font-size: 1.5rem;text-align: center;border: #666666 dotted 2px;border-radius: 15px 50px;box-shadow: #747474 -1px 1px 7px;background-color: #e4e4e4;}
+        input#status_atual_pitch.status_atual_pitch_desbloqueado {background-color: #4CAF50;color: white;}
+        input.mostra_info {padding: 2.5px 2.5px;font-size: 1.5rem;margin: 1rem 0.5rem;width: 7rem;height: 2.5rem;text-align: center;border: #666666 solid 2px;border-radius: 10px 40px;background-color: #e4e4e4;}
+        h2 {color: #00777e;margin: 0.5rem 0rem;font-weight: 500;}
+        body::-webkit-scrollbar {width: 12px;}
+        body::-webkit-scrollbar-track {background: #00AAB4;}
+        body::-webkit-scrollbar-thumb {background-color: #b1ffb1;border-radius: 20px;border: 3px solid #00AAB4;}
+        .hide {display: none;}
+        .show {display: block;}
+        .button {color: white;padding: 0.5rem 1rem;text-decoration: none;font-size: 1.5rem;margin: 0.1rem;cursor: pointer;text-align: center;border: #969595 solid 3px;}
+        .button:hover {background-color: #4CAF50;border: #dfdddd solid 3px;}
+        .button:disabled:hover {background-color: #afafaf;}
+        .button-off {background-color: #afafaf;}
+        .button-on {background-color: #348137;border: #dfdddd solid 3px;}
+        .title-container {background-color: #2377a2;text-align: center;margin-top: -0.01rem;margin-left: -0.1rem;margin-right: -0.1rem;margin-bottom: 0.6rem;position: sticky;top: 0;border: 2px solid #ffffff;padding-left: 0.5rem;padding-right: 0.5rem;}
+        .wrapper {display: grid;}
+        .column-gap {column-gap: 0.5rem;}
+        .grid-titulo {grid-template-columns: 1fr 9fr;}
+        .grid-col-2-8-4 {grid-template-columns: 2fr 8fr 4fr;}
+        .grid-col-8-2 {grid-template-columns: 8fr 2fr;}
+        .grid-col {grid-template-columns: 1fr;}
+        .grid-col-2 {grid-template-columns: 1fr 1fr;}
+        .grid-col-3-repeat {grid-template-columns: repeat(3, 3fr);}
+        .grid-col-4-repeat {grid-template-columns: repeat(2, 2fr) 3fr 3fr;}
+        .bloco-col {border-right: #7c7c7c7c groove 0.1rem;text-align: center;padding-top: 0.5rem;padding-bottom: 0.5rem;}
+        .border-row {border: #00AAB4 solid 0.2rem;border-radius: 5px;}
+        .border-none {border: none;}
+        .img-title {margin-top: 0.5rem;}
+        .background-img {background-color: #fff;margin-left: -0.6rem;}
+        .mx-1 {margin-left: 1rem;margin-right: 1rem;}
+        .mt-05 {margin-top: 0.5rem;}
+        .mt-1 {margin-top: 1rem;}
+        .mt-105 {margin-top: 1.5rem;}
+        .mb-05 {margin-bottom: 0.5rem;}
+        .mb-1 {margin-bottom: 1rem;}
+        .mb-105 {margin-bottom: 1.5rem;}
+        .pt-1 {padding-top: 1rem;}
+        .pt-2 {padding-top: 1.5rem;}
+        .py-2 {padding-top: 3rem;padding-bottom: 2rem;}
+        .align-center {text-align: center;}
+        .center {align-self: center;}
+        .background-rows {background-color: #f8f8ff;}
+        .p-col-title {color: #00AAB4;text-align: center;font-size: 1.2rem;margin-bottom: 0.2rem;margin-top: 0.2rem;}
+        .p-dado-sensor {color: #666666;text-align: center;font-size: 1.2rem;}
+        #h1-title {font-size: 2.0rem;text-align: center;color: #fff;text-transform: uppercase;padding-right: 1.5rem;}
+    </style>
+</head>
+<body>
+     <!-- (CASO NECESSÁRIO) PLACEHOLDER BOTOES COL1_LIN1_1 Freio Nacele (COL = Coluna | LIN = Linha | Número = Parte)-->
+     <!--%BOTOES_COL1_LIN_1% -> é um placeholder que é subtituido ao processar o codigo-->
+     <!--%BOTOES_COL1_LIN1_1%-->
+    <div class="wrapper display-sticky title-container">
+        <div>
+            <h1 id="h1-title" class="">Sistema de Controle - Torre Eolica</h1>
+        </div>
+    </div>
+
+    <!-- Linha 1 -->
+    <div class="wrapper grid-col-8-2 column-gap ">
+
+        <!-- Coluna 1 -->
+        <div class="wrapper grid-col-4-repeat background-rows border-row">
+            <div class="bloco-col pt-1">
+                <div>
+                    <p class="p-col-title">Freio Nacele</p>
+                    <input type="text" name=" " id="status_atual_freio_nacele"
+                         value="Desacoplado" disabled>
+                </div>
+                <div class="mt-105 pt-1">
+                    <p class="p-col-title">Freio Rotor</p>
+                    <input type="text" name="status_atual_freio_rotor" id="status_atual_freio_rotor"
+                         value="Desacoplado" disabled>
+                </div>
+            </div>
+            <div class="bloco-col pt-1">       
+               <div>
+                    <p class="p-col-title">RPM Rotor</p>
+                    <p class="p-dado-sensor">
+                        <span id="rpmrotor">%RPMROTOR%</span>
+                        <sup class="units">RPM</sup>
+                    </p>
+                </div>
+                <div class="mt-105 pt-1">
+                    <p class="p-col-title">RPM Gerador</p>
+                    <p class="p-dado-sensor">
+                        <span id="rpm_gerador">%RPMGERADOR%</span>
+                        <sup class="units">RPM</sup>
+                    </p>
+                </div>
+            </div>
+            <div class="bloco-col pt-1">
+                <div>
+                    <p class="p-col-title">Temperatura Sistema</p>
+                    <p class="p-dado-sensor">
+                        <span id="temp_externa">%TEMPEXTERNA%</span>
+                        <sup class="units">&deg;C</sup>
+                    </p>
+                </div>
+                <div class="mt-105 pt-1">
+                    <p class="p-col-title">Temperatura Gerador</p>
+                    <p class="p-dado-sensor">
+                        <span id="temp_gerador">%TEMPGERADOR%</span>
+                        <sup class="units">&deg;C</sup>
+                    </p>
+                </div>
+            </div>
+            <div class="bloco-col pt-1 border-none">
+              <div>
+                    <p class="p-col-title">Tensao Sistema</p>
+                    <p class="p-dado-sensor">
+                        <span id="tensao_sistema">%TENSAOSISTEMA%</span>
+                        <sup class="units">V</sup>
+                    </p>
+                </div>
+                <div class="mt-105 pt-1">
+                    <p class="p-col-title">Tensao Sis. Potencia</p>
+                    <p class="p-dado-sensor">
+                        <span id="tensao_sistema_potencia">%TENSAOSISTEMAPOTENCIA%</span>
+                        <sup class="units">V</sup>
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Coluna 2 -->
+        <div class="bloco-col pt-1 background-rows border-row">
+            <p class="p-col-title">Status Sistema</p>
+            <input class="status_sistema_online" type="text" name="status_sistema" id="status_sistema" value="ONLINE" disabled>
+        </div>
+    </div>
+
+    <!-- Linha 2 -->
+    <div class="wrapper grid-col background-rows border-row mt-1">
+        <div class="wrapper grid-col-3-repeat">
+        
+            <!-- Primeira coluna-->
+            <div class="bloco-col">
+
+                <!-- Titulo secao -->
+                <h2>Estacao Metereologica</h2>
+                <hr class="hr">
+
+                <div class="wrapper grid-col-2">
+                    <!-- Primeira Parte -->
+                    <div>
+                        <div>
+                            <p class="p-col-title">Velocidade</p>
+                            <p class="p-dado-sensor">
+                                <span id="velocidade_met">%VELOCIDADE%</span>
+                                <sup class="units">m/s</sup>
+                            </p>
+                        </div>
+                        <div class="mt-105 pt-1">
+                            <p class="p-col-title">Direcao Atual</p>
+                            <p class="p-dado-sensor">
+                                <span id="direcao_atual_met">%DIRECAOATUALMET%</span>
+                                <sup id="direcao_biruta" class="units">/ %DIRECAOCARDIALBIRUTA%</sup>
+                            </p>
+                        </div>
+                    </div>
+
+                    <!-- Segunda Parte -->
+                    <div>
+                        <div>
+                            <p class="p-col-title">Velocidade Media</p>
+                            <p class="p-dado-sensor">
+                                <span id="velocidade_media_met">%VELOCIDADEMEDIAMET%</span>
+                                <sup class="units">m/s</sup>
+                            </p>
+                        </div>
+                        <div class="mt-105 pt-1">
+                            <p class="p-col-title">Direcao MF</p>
+                            <p class="p-dado-sensor">
+                                <span id="direcao_final_met">%DIRECAOFINALMET%</span>
+                                <sup class="units">&deg;</sup>
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Segunda Coluna -->
+            <div class="bloco-col">
+
+                <!-- Titulo secao -->
+                <h2>Posicionamento da Nacele</h2>
+                <hr class="hr">
+
+                <div class="wrapper grid-col-2">
+
+                    <!-- Primeira Parte -->
+                    <div class="center">
+                        <div>
+                            <p class="p-col-title">Posicao Atual</p>
+                            <p class="p-dado-sensor">
+                                <span id="posicao_atual_nacele">%POSICAOATUALNACELE%</span>
+                                <sup id="direcao_nacele" class="units">/ %DIRECAOCARDIALNACELE%</sup>
+                            </p>
+                        </div>
+                    </div>
+
+                    <!-- Segunda Parte -->
+                    <div>
+                        <div>
+                            <p class="p-col-title">Modo</p>
+                            <input type="text" name="modo_nacele" id="modo_nacele" class="mostra_info" placeholder=""
+                                disabled>
+                        </div>
+                        <div>
+                            <p class="p-col-title">Status Atual</p>
+                            <input type="text" name="status_atual_nacele" id="status_atual_nacele"
+                                class="status_atual_nacele_desbloqueada" placeholder="OK" disabled>
+                        </div>
+                    </div>
+                </div>
+            </div>
+             <!-- Terceira Coluna -->
+            <div class="bloco-col">
+
+                <!-- Titulo secao -->
+                <h2>Posicionamento Controle de Pitch</h2>
+                <hr class="hr">
+
+                <div class="wrapper grid-col-2">
+
+                    <!-- Primeira Parte -->
+                    <div class="center">
+                        <p class="p-col-title">Angulo Atual</p>
+                        <p class="p-dado-sensor">
+                            <span id="angulo_atual_pitch">%ANGULOATUALPITCH%</span>
+                            <sup class="units">&deg;</sup>
+                        </p>
+                    </div>
+
+                    <!-- Segunda Parte -->
+                    <div>
+                        <div>
+                            <p class="p-col-title">Modo</p>
+                            <input type="text" name="modo_atual_pitch" id="modo_atual_pitch" class="mostra_info"
+                                placeholder="" disabled>
+                        </div>
+                        <div>
+                            <p class="p-col-title">Status Atual</p>
+
+                            <input type="text" name="status_atual_pitch" id="status_atual_pitch"
+                                class="status_atual_pitch_desbloqueado" placeholder="OK" disabled>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Linha 3 -->
+    <div class="wrapper grid-col-2-8-4 column-gap mt-1">
+
+        <!-- Coluna 1 -->
+        <div class="background-rows border-row">
+
+            <div class="bloco-col border-none">
+
+                <!-- Titulo secao -->
+                <h2>Ativa menu botao</h2>
+                <hr class="hr">
+
+                %BOTAOLIBERABOTOES%
+                
+             </div>
+         </div>
+         
+         <!-- Coluna 2 -->
+         <div class="wrapper grid-col background-rows border-row">
+            <div class="bloco-col border-none">
+
+                <!-- Titulo secao -->
+                <h2>Modos de Funcionamento</h2>
+                <hr class="hr">
+
+                <div class="wrapper grid-col-3-repeat">
+
+                    <!-- Primeira Parte -->
+                    <div>
+                        <div>
+                            %BOTAOACIONAOFFLINE%
+                        </div>
+                        <div>
+                            %BOTAOACIONAONLINE%
+                        </div>
+                    </div>
+
+                    <!-- Segunda Parte -->
+                    <div>
+                        <div>
+                            %BOTAOACIONAMANUAL%
+                        </div>
+                        <div>
+                            %BOTAOACIONAPARADAEMERGENCIA%
+                        </div>
+                    </div>
+
+                    <!-- Terceira Parte -->
+                    <div>
+                        <div>
+                            %BOTAOACIONAIDLE%
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Coluna 3 -->
+        <div class="background-rows border-row wrapper ">
+            <div class="bloco-col border-none">
+
+                <!-- Titulo secao -->
+                <h2>Autosafe</h2>
+                <hr class="hr">
+
+                <!-- Primeira Parte -->
+                <div>
+                    <div>
+                        %BOTAOACIONAAUTOSAFE%
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+ <!-- Linha 4 -->
+    <div id="modosManuais" class="hide">
+        <div class="wrapper grid-col-2-8-4 column-gap mt-1">
+            <!-- Coluna 1 -->
+            <div class="background-rows border-row">
+                <div class="bloco-col border-none">
+                    <!-- Titulo secao -->
+                    <h2>Freios</h2>
+                    <hr class="hr">
+                    <!-- Primeira Parte -->
+                    <div>
+                        <div>
+                            %BOTAOFREIONACELE%
+                        </div>
+                        <div>
+                            %BOTAOFREIOROTOR%
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- Coluna 2 -->
+            <div class="wrapper grid-col background-rows border-row">
+                <div class="bloco-col border-none">
+                    <!-- Titulo secao -->
+                    <h2>Ajuste angular</h2>
+                    <hr class="hr">
+                    <!-- Primeira Parte -->
+                    <div>
+                        <div id="formNacele" class="mt-105">
+                            <p class="p-col-title">Posicionamento Manual Nacele</p>
+                            <input type="number" min="0" max="360" id="posicaoManualGraus" name="posicaoManualGraus"
+                                onkeyup='controlaGrau("posicao")' placeholder="0º">
+                            <button id="modoManualPosicaoEnviar" class="button button-off"
+                                onclick='enviaGrausManual("posicaoManualGraus")'>Enviar</button>
+                            <!-- <button id="modoManual" class="button button-off" onclick='capturaElemento("modoManual");alerta();'>OFF</button> -->
+                        </div>
+                    </div>
+                    <!-- Segunda Parte -->
+                    <div>
+                        <div id="formPitch" class="mt-105">
+                            <p class="p-col-title">Posicionamento Manual Pitch</p>
+                            <input type="number" min="0" max="360" id="pitchManualGraus" name="pitchManualGraus"
+                                onkeyup='controlaGrau("pitch")' placeholder="0º">
+                            <button id="modoManualPitchEnviar" class="button button-off"
+                                onclick='enviaGrausManual("pitchManualGraus")'>Enviar</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- Coluna 3 -->
+            <div class="background-rows border-row wrapper ">
+                <div class="bloco-col border-none">
+                    <!-- Titulo secao -->
+                    <h2>Seguranca</h2>
+                    <hr class="hr">
+                    <div class="wrapper grid-col-2">
+                        <!-- Primeira Parte -->
+                        <div>
+                            <div>
+                                %BOTAOATUALIZASOFTWARE%
+                            </div>
+                            <div>
+                                %BOTAOACIONAARREFECIMENTO%
+                            </div>
+                        </div>
+                        <!-- Segunda Parte -->
+                        <div>
+                            <div>
+                                %BOTAORESETAESP%
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+
+<!-- JavaScript
+    ================ -->
+    
+<script>
+
+//Declarando as funcoes criadas (Declarar as funcoes usando - const = *nome funcao* function(){} - pq ele nao reconhce o function)
+//Declarando as variaveis
+    const locker = "pluseamelhor";
+    var elemento = "", armazenaUltimoModo, controladorBuscaOperacao = 1;
+
+//INTERVALOS DE 0.5 SEGUNDO
+    //RPMS
+    setInterval(function () {
+        var xhttp = new XMLHttpRequest();
+        
+        xhttp.onreadystatechange = function () {if (this.readyState == 4 && this.status == 200) {document.getElementById("rpmrotor").innerHTML = this.responseText;}};
+        xhttp.open("GET", "/rpmrotor", true);
+        xhttp.send();
+        
+    }, 500);
+    setInterval(function () {
+        var xhttp = new XMLHttpRequest();
+        
+        xhttp.onreadystatechange = function () {if (this.readyState == 4 && this.status == 200) {document.getElementById("rpm_gerador").innerHTML = this.responseText;}};
+        xhttp.open("GET", "/rpm_gerador", true);
+        xhttp.send();
+        
+    }, 500);
+
+    //TENSOES
+    setInterval(function () {
+        var xhttp = new XMLHttpRequest();
+        
+        xhttp.onreadystatechange = function () {if (this.readyState == 4 && this.status == 200) {document.getElementById("tensao_sistema").innerHTML = this.responseText;}};
+        xhttp.open("GET", "/tensao_sistema", true);
+        xhttp.send();
+        
+    }, 500);
+    setInterval(function () {
+        var xhttp = new XMLHttpRequest();
+        
+        xhttp.onreadystatechange = function () {if (this.readyState == 4 && this.status == 200) {document.getElementById("tensao_sistema_potencia").innerHTML = this.responseText;}};
+        xhttp.open("GET", "/tensao_sistema_potencia", true);
+        xhttp.send();
+        
+    }, 500);
+
+    //ANGULOS
+    setInterval(function () {
+        var xhttp = new XMLHttpRequest();
+        
+        xhttp.onreadystatechange = function () {if (this.readyState == 4 && this.status == 200) {document.getElementById("angulo_atual_pitch").innerHTML = this.responseText;}};
+        xhttp.open("GET", "/angulo_atual_pitch", true);
+        xhttp.send();
+        
+    }, 500);
+    setInterval(function () {
+        var xhttp = new XMLHttpRequest();
+
+        xhttp.onreadystatechange = function () {if (this.readyState == 4 && this.status == 200) {document.getElementById("posicao_atual_nacele").innerHTML = this.responseText;}};
+        xhttp.open("GET", "/posicao_atual_nacele", true);
+        xhttp.send();
+        
+    }, 500);
+
+    //VELOCIDADE VENTO
+    setInterval(function () {
+        var xhttp = new XMLHttpRequest();        
+
+        xhttp.onreadystatechange = function () {if (this.readyState == 4 && this.status == 200) {document.getElementById("velocidade_met").innerHTML = this.responseText;}};
+        xhttp.open("GET", "/velocidade_met", true);
+        xhttp.send();
+        
+    }, 500);
+
+
+    //INTERVALOS DE 1 SEGUNDO
+    //TEMPERATURAS
+    setInterval(function () {
+        var xhttp = new XMLHttpRequest();        
+        xhttp.onreadystatechange = function () {if (this.readyState == 4 && this.status == 200) {document.getElementById("temp_gerador").innerHTML = this.responseText;}};
+        xhttp.open("GET", "/temp_gerador", true);
+        xhttp.send();
+        
+    }, 1000);
+    setInterval(function () {
+        var xhttp = new XMLHttpRequest();        
+        xhttp.onreadystatechange = function () {if (this.readyState == 4 && this.status == 200) {document.getElementById("temp_externa").innerHTML = this.responseText;}};
+        xhttp.open("GET", "/temp_externa", true);
+        xhttp.send();
+        
+    }, 1000);
+
+    //ESTACAO METEREOLOGICA
+    setInterval(function () {
+        var xhttp = new XMLHttpRequest();        
+        xhttp.onreadystatechange = function () {if (this.readyState == 4 && this.status == 200) {document.getElementById("direcao_atual_met").innerHTML = this.responseText;}};
+        xhttp.open("GET", "/direcao_atual_met", true);
+        xhttp.send();
+        
+    }, 1000);
+    setInterval(function () {
+        var xhttp = new XMLHttpRequest();        
+        xhttp.onreadystatechange = function () {if (this.readyState == 4 && this.status == 200) {document.getElementById("direcao_final_met").innerHTML = this.responseText;}};
+        xhttp.open("GET", "/direcao_final_met", true);
+        xhttp.send();
+        
+    }, 1000);
+    setInterval(function () {
+        var xhttp = new XMLHttpRequest();        
+        xhttp.onreadystatechange = function () {if (this.readyState == 4 && this.status == 200) {document.getElementById("velocidade_media_met").innerHTML = this.responseText;}};
+        xhttp.open("GET", "/velocidade_media_met", true);
+        xhttp.send();
+        
+    }, 1000);
+
+    //FREIOS
+    setInterval(function () {
+        var xhttp = new XMLHttpRequest();        
+        xhttp.onreadystatechange = function () {if (this.readyState == 4 && this.status == 200) {var modo = this.responseText; mudaCorFreioNacele(modo)}};
+        xhttp.open("GET", "/freio_nacele", true);
+        xhttp.send();
+        
+    }, 1000);
+    setInterval(function () {
+        var xhttp = new XMLHttpRequest();        
+        xhttp.onreadystatechange = function () {if (this.readyState == 4 && this.status == 200) {var modo = this.responseText; mudaCorFreioRotor(modo)}};
+        xhttp.open("GET", "/freio_rotor", true);
+        xhttp.send();
+        
+    }, 1000);
+
+    //ADICOINAR ARREFECIMENTO 
+    //INTERVALOS DE 3 SEGUNDOS
+    
+    //MODO DE OPERAÇÃO 3segundos
+      //DEFINE FUNCAO DO INTERVALO
+      // ATIVA BUSCA SE controladorBuscaOperacao == 0
+      const buscaOperacao  = function () {
+        var xhttp = new XMLHttpRequest();
+         xhttp.onreadystatechange = function () { if (this.readyState == 4 && this.status == 200) { modo = this.responseText; modoInt = parseInt(modo); console.log("MUDOU OPERACAO:" + modoInt); trataDados(modoInt); } }
+         xhttp.open("GET", "/status_modo_operacao", true);
+         xhttp.send();
+        
+        if (controladorBuscaOperacao == 1){
+            clearInterval(intervaloOperacao)
+            desativouUmaVez = 1;
+          }
+      }
+      //ATIVA INTERVALO
+      //var intervaloOperacao = setInterval(buscaOperacao, 3000)
+      // FUNCAO PARA ATIVAR O INTERVALO
+      const ativaIntervalo = function(){
+        controladorBuscaOperacao = 0
+        intervaloOperacao = setInterval(buscaOperacao,3000);
+        //console.log("Ativou essa merda")
+      }
+    // DIRECAO BIRUTA
+    setInterval(function () {
+        var xhttp = new XMLHttpRequest();        
+
+        xhttp.onreadystatechange = function () {if (this.readyState == 4 && this.status == 200) {document.getElementById("direcao_biruta").innerHTML = "/" + this.responseText;}};
+        xhttp.open("GET", "/direcao_biruta", true);
+        xhttp.send(); 
+        
+    }, 3000);
+
+    //DIRECAO NACELE
+    setInterval(function () {
+        var xhttp = new XMLHttpRequest();        
+
+        xhttp.onreadystatechange = function () {if (this.readyState == 4 && this.status == 200) {document.getElementById("direcao_nacele").innerHTML = "/" + this.responseText;}};
+        xhttp.open("GET", "/direcao_nacele", true);
+        xhttp.send(); 
+        
+    }, 3000);    
+
+    //ARREFECIMENTO
+   /* setInterval(function () {
+        var xhttp = new XMLHttpRequest(),modo, modoInt;
+
+        xhttp.onreadystatechange = function () {if (this.readyState == 4 && this.status == 200) { document.getElementById("direcao_nacele").innerHTML = this.responseText;}};
+        xhttp.open("GET", "/arrefecimento", true);
+        xhttp.send();
+        
+    }, 3000);
+    */
+   
+    //NOVO
+    const mudaStatusSistema = function (status) {
+        var input = document.getElementById("status_sistema"),inputContainsOffline = input.classList.contains("offline"),inputContainsOnline = input.classList.contains("online");
+        if (status == 4) {input.value = "OFFLINE";document.getElementById("status_sistema").classList.remove("status_sistema_offline", "status_sistema_online", "status_sistema_idle", "status_sistema_manual", "status_sistema_autosafe", "status_sistema_parada_emergencia");document.getElementById("status_sistema").classList.add("status_sistema_offline");mudaEstado("btnAcionaOffline");toggleBtn("btnAcionaOffline");armazenaUltimoModo = 4;
+        } else if (status == 3) {input.value = "ONLINE";document.getElementById("status_sistema").classList.remove("status_sistema_offline", "status_sistema_online", "status_sistema_idle", "status_sistema_manual", "status_sistema_autosafe", "status_sistema_parada_emergencia");document.getElementById("status_sistema").classList.add("status_sistema_online");mudaEstado("btnAcionaOnline");toggleBtn("btnAcionaOnline");armazenaUltimoModo = 3;
+        } else if (status == 2) {input.value = "IDLE";document.getElementById("status_sistema").classList.remove("status_sistema_offline", "status_sistema_online", "status_sistema_idle", "status_sistema_manual", "status_sistema_autosafe", "status_sistema_parada_emergencia");document.getElementById("status_sistema").classList.add("status_sistema_idle");mudaEstado("btnAcionaIdle");toggleBtn("btnAcionaIdle");armazenaUltimoModo = 2;
+        } else if (status == 5) {input.value = "MANUAL";document.getElementById("status_sistema").classList.remove("status_sistema_offline", "status_sistema_online", "status_sistema_idle", "status_sistema_manual", "status_sistema_autosafe", "status_sistema_parada_emergencia");document.getElementById("status_sistema").classList.add("status_sistema_manual");mudaEstado("btnAcionaModoManual");toggleBtn("btnAcionaModoManual");habilitaManual();armazenaUltimoModo = 5;
+        } else if (status == 1) {input.value = "AUTOSAFE";document.getElementById("status_sistema").classList.remove("status_sistema_offline", "status_sistema_online", "status_sistema_idle", "status_sistema_manual", "status_sistema_autosafe", "status_sistema_parada_emergencia");document.getElementById("status_sistema").classList.add("status_sistema_autosafe");mudaEstado("btnAutosafe");toggleBtn("btnAutosafe");armazenaUltimoModo = 1;
+        } else if (status == 6) {input.value = "P.E.";document.getElementById("status_sistema").classList.remove("status_sistema_offline", "status_sistema_online", "status_sistema_idle", "status_sistema_manual", "status_sistema_autosafe", "status_sistema_parada_emergencia");document.getElementById("status_sistema").classList.add("status_sistema_parada_emergencia");mudaEstado("btnParadaEmergencia");toggleBtn("btnParadaEmergencia");armazenaUltimoModo = 6;
+        } else if (status == armazenaUltimoModo) { /*input.value = "ONLINE";document.getElementById("status_sistema").classList.remove("status_sistema_offline", "status_sistema_online", "status_sistema_idle", "status_sistema_manual", "status_sistema_autosafe", "status_sistema_parada_emergencia");// document.getElementById("status_sistema").classList.add("status_sistema_online")*/;}
+    }
+    const mudaStatusSistemaCameServer = function (status) {
+        var input = document.getElementById("status_sistema"),inputContainsOffline = input.classList.contains("offline"),inputContainsOnline = input.classList.contains("online");
+        if (status == 4) {input.value = "OFFLINE";document.getElementById("status_sistema").classList.remove("status_sistema_offline", "status_sistema_online", "status_sistema_idle", "status_sistema_manual", "status_sistema_autosafe", "status_sistema_parada_emergencia");mudaEstado("btnAcionaOffline");toggleBtn("btnAcionaOffline");armazenaUltimoModo = 4;
+        } else if (status == 3) {input.value = "ONLINE";document.getElementById("status_sistema").classList.remove("status_sistema_offline", "status_sistema_online", "status_sistema_idle", "status_sistema_manual", "status_sistema_autosafe", "status_sistema_parada_emergencia");mudaEstado("btnAcionaOnline");toggleBtn("btnAcionaOnline");armazenaUltimoModo = 3;
+        } else if (status == 2) {input.value = "IDLE";document.getElementById("status_sistema").classList.remove("status_sistema_offline", "status_sistema_online", "status_sistema_idle", "status_sistema_manual", "status_sistema_autosafe", "status_sistema_parada_emergencia");mudaEstado("btnAcionaIdle");toggleBtn("btnAcionaIdle");armazenaUltimoModo = 2;
+        } else if (status == 5) {input.value = "MANUAL";document.getElementById("status_sistema").classList.remove("status_sistema_offline", "status_sistema_online", "status_sistema_idle", "status_sistema_manual", "status_sistema_autosafe", "status_sistema_parada_emergencia");mudaEstado("btnAcionaModoManual");toggleBtn("btnAcionaModoManual");habilitaManual();armazenaUltimoModo = 5;
+        } else if (status == 1) {input.value = "AUTOSAFE";document.getElementById("status_sistema").classList.remove("status_sistema_offline", "status_sistema_online", "status_sistema_idle", "status_sistema_manual", "status_sistema_autosafe", "status_sistema_parada_emergencia");mudaEstado("btnAutosafe");toggleBtn("btnAutosafe");armazenaUltimoModo = 1;
+        } else if (status == 6) {input.value = "P.E.";document.getElementById("status_sistema").classList.remove("status_sistema_offline", "status_sistema_online", "status_sistema_idle", "status_sistema_manual", "status_sistema_autosafe", "status_sistema_parada_emergencia");mudaEstado("btnParadaEmergencia");toggleBtn("btnParadaEmergencia");armazenaUltimoModo = 6;
+        } else if (status == armazenaUltimoModo) { /*input.value = "ONLINE";document.getElementById("status_sistema").classList.remove("status_sistema_offline", "status_sistema_online", "status_sistema_idle", "status_sistema_manual", "status_sistema_autosafe", "status_sistema_parada_emergencia");// document.getElementById("status_sistema").classList.add("status_sistema_online")*/;}
+    }
+    
+    const liberaBloqueaBotoes = function () {
+        vetorId = ["btnAcionaModoManual", "btnAcionaOnline", "btnAcionaOffline", "btnAcionaIdle", "btnParadaEmergencia", "btnAutosafe"];
+        var contAtivo = 0, contDesativado = 0, divId = "";
+        
+        for (i = 0; i < vetorId.length; i++) {divId = document.getElementById(vetorId[i]).hasAttribute("disabled")
+            if (divId == false) {contAtivo++;
+            }else{contDesativado++;}
+        }
+        if (vetorId.length == contAtivo) {
+            for (i = 0; i < contAtivo; i++) {document.getElementById(vetorId[i]).setAttribute("disabled", "disabled");}
+            controladorBuscaOperacao = 0;
+        } else if (vetorId.length == contDesativado) {
+            for (i = 0; i < contDesativado; i++) {document.getElementById(vetorId[i]).removeAttribute("disabled");}
+            controladorBuscaOperacao = 1;
+        }
+
+       
+    }
+    const pedeSenha = function () {
+        var senha = prompt("Digite a senha para continuar")
+        if (senha != null) {
+            if (senha == "pluseamelhor") {alert("Deu bom!");mudaEstado(elemento);toggleBtn(elemento);liberaBloqueaBotoes();
+            }else {alert("Senha Incorreta!");}
+        }
+    }
+    const alerta = function () {
+        var verifica = document.getElementById(elemento).classList.contains("button-on");
+        if (verifica == false) {
+            var escolha = confirm("Essa operacao pode comprometer o sistema, deseja continuar?")
+            if (escolha == true) {pedeSenha();}
+        } else {
+            mudaEstado(elemento);
+            liberaBloqueaBotoes();
+            toggleBtn(elemento);
+            ativaIntervalo();
+            console.log("Deifiniu controlador" + controladorBuscaOperacao);
+        }
+    }
+    const capturaElemento = function (e) {elemento = e;}
+    const mudaEstado = function (elemento) {
+        var verifica = document.getElementById(elemento).classList.contains("button-on")
+        if (verifica == false) {
+            document.getElementById(elemento).classList.remove("button-off");
+            document.getElementById(elemento).classList.add("button-on");
+            document.getElementById(elemento).innerHTML = "ON"
+        } else {
+            document.getElementById(elemento).classList.remove("button-on");
+            document.getElementById(elemento).classList.add("button-off");
+            document.getElementById(elemento).innerHTML = "OFF"
+        }
+    }
+    const controlaGrau = function (id) {
+        var input = "#" + id + "ManualGraus",inputGrau = document.querySelector(input),valor = inputGrau.value,attrMax = inputGrau.getAttribute("max"),attrMin = inputGrau.getAttribute("min");
+        // inputGrau.onkeyup = function(){}
+        console.log(inputGrau);console.log(valor);console.log(attrMax);console.log(attrMin);
+        //Se for maior que o max altera para o min
+        if (valor > attrMax) {inputGrau.value = 360;}
+        //Se for menor que o min ele muda para o max
+        if (valor < attrMin) {inputGrau.value = 360;}
+        //Se for vazio atribui vazio
+        if (valor == "") {inputGrau.value = "";}
+        //Se for valor certo forca ser certo 
+        if ((valor >= 0) && (valor <= 359)) {inputGrau.value = valor;}
+    }
+
+    const toggleBtn = function (botao) {
+        //variaveis da funcao
+        var botao = botao
+        var classeAtiva = document.getElementById(botao).classList.contains("button-on")
+        var classeDesligada = document.getElementById(botao).classList.contains("button-off")
+        var xhr = new XMLHttpRequest();
+
+        //Verifica se ta ativo ou nao
+        if (classeAtiva == true) { xhr.open("GET", "/atualizaBtn?output=" + botao + "&state=1", true); console.log("Enviou:" + botao + "| Estado: 1"); }
+        else if (classeDesligada == true) { xhr.open("GET", "/atualizaBtn?output=" + botao + "&state=0", true); console.log("Enviou:" + botao + "| Estado: 0"); }
+        xhr.send();
+
+    }
+
+    const enviaGrausManual = function (id) {
+        var valor = document.getElementById(id).value;
+        var input = id;
+        var xhr = new XMLHttpRequest();
+
+        var escolha = confirm("Deseja enviar esse grau?");
+
+        if (escolha == true) {
+            xhr.open("GET", "/atualizaGrau?value=" + valor + "&input=" + input, true); console.log("Enviou grau:" + valor);
+            xhr.send();
+        }
+        else if (escolha == false) {
+            if (id = "pitchManualGraus") {
+                mudaEstado("modoManualPitch");
+                toggleBtn("modoManualPitch");
+            } else if (id = "posicaoManualGraus") {
+                mudaEstado("modoManualPosicao");
+                toggleBtn("modoManualPosicao");
+            }
+        }
+    }
+
+    const trataDados = function(modo){
+        var btn ="";
+        verificaUltimoModo(modo);
+
+        ultimoModo = modo%10
+        modo = Math.floor(modo/10)
+
+//        console.log(modo);
+//        console.log(ultimoModo);
+        
+        if(modo == 1){
+            btn = "btnAutosafe";
+            enviaModoAtual(btn,modo,1);
+        }else if(modo == 2){
+            btn = "btnAcionaIdle";
+            enviaModoAtual(btn,modo,1);
+        }else if(modo == 4){
+            btn = "btnAcionaOffline";
+            enviaModoAtual(btn,modo,1);
+        }else if(modo == 3){
+            btn = "btnAcionaOnline";
+            enviaModoAtual(btn,modo,1);
+        }else if(modo == 5){
+            btn = "btnAcionaManual";
+            enviaModoAtual(btn,modo,1);
+        }else if(modo == 6){
+            btn = "btnParadaEmergencia";
+            enviaModoAtual(btn,modo,1);
+        }
+    }
+
+    const verificaUltimoModo = function(modo){
+//        if(armazenaUltimoModo == 0){
+//            armazenaUltimoModo = 3;
+//        }
+    }
+
+    const enviaModoAtual = function (btn, modo, comeFromServer) {
+        var escolha,
+            repetido = 0,
+            xhr = new XMLHttpRequest(),
+            input = document.getElementById(btn);
+
+        console.log("armazenaUltimoModo:" + armazenaUltimoModo)
+       // if ((armazenaUltimoModo == 5) && (modo != 5)) {
+        //    habilitaManual()
+        //}
+
+        if(comeFromServer == 0){
+          console.log("Entrou não server")
+            if (input.classList.contains("button-off")) {
+                escolha = confirm("Deseja ativar esse modo?");
+            } else if (input.classList.contains("button-on")) {
+                escolha = confirm("Deseja desativar esse modo?")
+            }
+
+            if (escolha == true) {
+
+                if ((modo == armazenaUltimoModo)) {
+                    if (modo == 3) {
+
+                    } else {
+                        mudaStatusSistema(modo)
+
+                        modo = 3    
+                        // xhr.open("GET", "/atualizaModo?value=" + modo, true);
+                        // xhr.send();
+                        mudaStatusSistema(modo)
+                    }
+                } else {
+                    // xhr.open("GET", "/atualizaModo?value=" + modo, true);
+                    // xhr.send();
+                    //Verifica se deu certo e já altera o atual estado do sistema
+
+                    mudaStatusSistema(armazenaUltimoModo)
+                    mudaStatusSistema(modo)
+                    //xhr.addEventListener("load", mudaStatusSistema(modo), false)
+                }
+            }else if (escolha == false) {}
+        }else if(comeFromServer == 1){
+          //primeira request
+          if(modo == 31){
+            modo = 3;
+            mudaStatusSistema(modo); 
+          }else if ((0 == armazenaUltimoModo)) {
+                    if (modo == 3) {
+                        
+                    } else {
+                        mudaStatusSistema(modo)
+
+                        //modo = 3    
+                        // xhr.open("GET", "/atualizaModo?value=" + modo, true);
+                        // xhr.send();
+                        //mudaStatusSistema(modo)
+                    }
+            }else if(modo == armazenaUltimoModo){
+                      
+            }else {
+                    // xhr.open("GET", "/atualizaModo?value=" + modo, true);
+                    // xhr.send();
+                    //Verifica se deu certo e já altera o atual estado do sistema
+
+                    mudaStatusSistemaCameServer(armazenaUltimoModo)
+                    mudaStatusSistema(modo)
+                    //xhr.addEventListener("load", mudaStatusSistema(modo), false)
+                }
+        }  
+    }
+
+    const habilitaManual = function () {
+        modosManuais = document.getElementById("modosManuais").classList.contains("hide");
+
+        if (modosManuais == true) {
+            document.getElementById("modosManuais").classList.toggle("hide");
+            document.getElementById("modosManuais").classList.toggle("show");
+        } else if (modosManuais == false) {
+            document.getElementById("modosManuais").classList.toggle("show");
+            document.getElementById("modosManuais").classList.toggle("hide");
+        }
+    }
+
+  const mudaCorFreioNacele = function (modo) {
+        var modoInt = parseInt(modo),
+            id = document.getElementById("status_atual_freio_nacele"),
+            contain = document.getElementById("status_atual_freio_nacele").classList.contains("status_atual_freio_nacele_freado"),
+            adiciona = document.getElementById("status_atual_freio_nacele").classList.add("status_atual_freio_nacele_freado");
+
+        if (modoInt == 0) {
+            if (contain == true) {
+                id.value = "Desacoplado";
+                document.getElementById("status_atual_freio_nacele").classList.remove("status_atual_freio_nacele_freado")
+            }
+        } else if (modoInt == 1) {
+            if (contain == false) {
+                adiciona;
+                id.value = "Acoplado"
+            } 
+        }
+    }
+
+    const mudaCorFreioRotor = function (modo) {
+        var modoInt = parseInt(modo),
+            id = document.getElementById("status_atual_freio_rotor"),
+            contain = document.getElementById("status_atual_freio_rotor").classList.contains("status_atual_freio_rotor_freado"),
+            adiciona = document.getElementById("status_atual_freio_rotor").classList.add("status_atual_freio_rotor_freado");
+
+        if (modoInt == 0) {
+            if (contain == true) {
+                id.value = "Desacoplado";
+                document.getElementById("status_atual_freio_rotor").classList.remove("status_atual_freio_rotor_freado")
+            } 
+        } else if (modoInt == 1) {
+            if (contain == false) {
+                adiciona;
+                id.value = "Acoplado"
+            } 
+        }
+    }
+
+const verificaPrimeiraRequisicao = function(modo){
+        
+        ultimoModo = modo%10
+        modo = Math.floor(modo/10)
+
+//        console.log(modo);
+//        console.log(ultimoModo);
+
+        if(modo == 1){
+//            armazenaUltimoModo = modo
+            trataDados(modo);
+        }else if(modo == 2){
+//            armazenaUltimoModo = modo
+            trataDados(modo);
+        }else if(modo == 4){
+//            armazenaUltimoModo = modo
+            trataDados(modo);
+        }else if(modo == 3){
+//            armazenaUltimoModo = modo
+            trataDados(modo);
+        }else if(modo == 5){
+//            armazenaUltimoModo = modo
+            trataDados(modo);
+        }else if(modo == 6){
+//            armazenaUltimoModo = modo
+            trataDados(modo);
+        }else if(modo == 0){
+//            armazenaUltimoModo = 3;
+            modo = 31
+            trataDados(modo);
+        }
+        console.log("OPERACAO APÓS TRATAR: " + modo)
+    }
+
+    //DELAY RECEBE COM LIBERA BOTAO ATIVO
+    function syncDelay(milliseconds){
+        var start = new Date().getTime();
+        var end=0;
+        ativaIntervalo();
+        while( (end-start) < milliseconds){
+            end = new Date().getTime();
+        }
+        controladorBuscaOperacao = 1;
+    }
+    
+    function delayCounter(milliseconds){
+        var start = new Date().getTime();
+        var end=0;
+        while( (end-start) < milliseconds){
+            end = new Date().getTime();
+        }
+    } 
+
+    //FUNÇÕES DE AÇÃO
+    //=================================
+    const resetaESP = function(id){
+        var valor = 1;
+        var xhr = new XMLHttpRequest();
+
+        mudaEstado("btnResetaESP");
+        toggleBtn("btnResetaESP");
+        
+        xhr.open("GET", "/resetaESP?value=" + valor + "&input=" + id, true);
+        xhr.send();
+        delayCounter(3000)
+
+        mudaEstado("btnResetaESP");
+        toggleBtn("btnResetaESP");
+
+        location.reload();
+
+    }
+    
+    document.addEventListener("DOMContentLoaded", function () {
+        if (document.getElementById("btnLiberaBotoes").classList.contains("button-off") == true) {
+            
+            var xhttp = new XMLHttpRequest();
+            xhttp.onreadystatechange = function () { if (this.readyState == 4 && this.status == 200) { modo = this.responseText; modoInt = parseInt(modo); console.log("ENTROU OPERACAO:" + modoInt); verificaPrimeiraRequisicao(modoInt); } }
+            xhttp.open("GET", "/status_modo_operacao", true);
+            xhttp.send();
+
+            ativaIntervalo();
+            liberaBloqueaBotoes();
+            
+        }else{
+//            controladorBuscaOperacao = 1;
+            syncDelay(3000);
+            var xhttp = new XMLHttpRequest();
+            xhttp.onreadystatechange = function () { if (this.readyState == 4 && this.status == 200) { modo = this.responseText; modoInt = parseInt(modo); console.log("MUDOU OPERACAO:" + modoInt); verificaPrimeiraRequisicao(modoInt); } }
+            xhttp.open("GET", "/status_modo_operacao", true);
+            xhttp.send();   
+             
+        }
+    });
+
+</script>
+
+</html>

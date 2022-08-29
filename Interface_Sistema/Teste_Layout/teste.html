@@ -1,0 +1,27 @@
+<script>
+    controladorBuscaOperacao = 0, desativouUmaVez = 0;
+    //MODO DE OPERAÇÃO 3segundos
+    //MODO DE OPERAÇÃO
+
+    const buscaOperacao  = function () {
+        var xhttp = new XMLHttpRequest();
+        // xhttp.onreadystatechange = function () { if (this.readyState == 4 && this.status == 200) { modo = this.responseText; modoInt = parseInt(modo); console.log("MUDOU OPERACAO:" + modoInt); trataDados(modoInt); } }
+        // xhttp.open("GET", "/status_modo_operacao", true);
+        // xhttp.send();
+        console.log("INTERVALO TA ON")
+        if (controladorBuscaOperacao == 1){
+            clearInterval(intervaloOperacao)
+            desativouUmaVez = 1;
+        }
+    }
+
+    var intervaloOperacao = setInterval( buscaOperacao,2000);
+
+    const ativaIntervalo = function(){
+        controladorBuscaOperacao = 0
+        intervaloOperacao = setInterval(buscaOperacao,2000);
+        console.log("Ativou essa merda")
+    }
+  
+
+</script>
