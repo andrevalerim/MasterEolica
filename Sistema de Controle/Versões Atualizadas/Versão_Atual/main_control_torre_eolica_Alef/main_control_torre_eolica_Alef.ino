@@ -1777,7 +1777,7 @@ void setup()
   //-----------------------
   // Initialize the output variables as outputs
 
-  /*  //OUTPUTs
+   //OUTPUTs
 
     pinMode(arref, OUTPUT);
     pinMode(ncBrake, OUTPUT);
@@ -1858,9 +1858,9 @@ void setup()
     lcd.print("Wait..........");
 
     //freenacele();
-    //brakenacele();
+    brakenacele();
     ////braking = 1;
-    //freerotor();
+    freerotor();
 
     // ATUALIZA O CÓDIGO VIA WIFI
     updateWifiCode();
@@ -1885,8 +1885,8 @@ void setup()
      // delay(500);
     //}*/
 
-    //settozero();
-  */
+    settozero();
+  
 
   // CRIANDO O WEBSERVER
   //-----------------------
@@ -2229,7 +2229,7 @@ void setup()
 
 void loop()
 {
-  /*  // INICIA AS FUNÇÕES
+    // INICIA AS FUNÇÕES
     //------------------------
     readsensors();
 
@@ -2247,7 +2247,7 @@ void loop()
       ledcWrite(5, 0);
 
     }
-  */
+  
 
   if(pitchReq >= 0 & pitchReq <= 45 & seg2 == 0){
   
