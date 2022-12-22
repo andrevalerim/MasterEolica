@@ -1634,9 +1634,9 @@ String processor(const String &var)
     String btns = "";
 
     if (btnFreioNacele == 0) {
-      btns = + "<div><p class=\"p-col-title\">Freio Nacele</p><button id=\"freioNacele\" class=\"button button-off\" onclick='mudaEstado(\"freioNacele\");toggleBtn(\"freioNacele\");' >OFF</button></div>";
+      btns = + "<div><p class=\"p-col-title\">Freio Nacele</p><button id=\"freioNacele\" class=\"button button-off\" onclick='mudaEstado(\"freioNacele\");toggleBtn(\"freioNacele\");' disabled >OFF</button></div>";
     } else if (btnFreioNacele == 1) {
-      btns = + "<div><p class=\"p-col-title\">Freio Nacele</p><button id=\"freioNacele\" class=\"button button-on\" onclick='mudaEstado(\"freioNacele\");toggleBtn(\"freioNacele\");'>ON</button></div>";
+      btns = + "<div><p class=\"p-col-title\">Freio Nacele</p><button id=\"freioNacele\" class=\"button button-on\" onclick='mudaEstado(\"freioNacele\");toggleBtn(\"freioNacele\");'disabled >ON</button></div>";
     }
     return btns;
 
@@ -1644,9 +1644,9 @@ String processor(const String &var)
     String btns = "";
 
     if (btnFreioRotor == 0) {
-      btns = + "<div class=\"mt-105\"><p class=\"p-col-title\">Freio Rotor </p><button id=\"freioRotor\" onclick='mudaEstado(\"freioRotor\");toggleBtn(\"freioRotor\");' class=\"button button-off\">OFF</button></div>";
+      btns = + "<div class=\"mt-105\"><p class=\"p-col-title\">Freio Rotor </p><button id=\"freioRotor\" onclick='mudaEstado(\"freioRotor\");toggleBtn(\"freioRotor\");' class=\"button button-off\" disabled>OFF</button></div>";
     } else if (btnFreioRotor == 1) {
-      btns = + "<div class=\"mt-105\"><p class=\"p-col-title\">Freio Rotor </p><button id=\"freioRotor\" onclick='mudaEstado(\"freioRotor\");toggleBtn(\"freioRotor\");' class=\"button button-on\">ON</button></div>";
+      btns = + "<div class=\"mt-105\"><p class=\"p-col-title\">Freio Rotor </p><button id=\"freioRotor\" onclick='mudaEstado(\"freioRotor\");toggleBtn(\"freioRotor\");' class=\"button button-on\" disabled>ON</button></div>";
     }
     return btns;
 
@@ -1777,7 +1777,7 @@ void setup()
   //-----------------------
   // Initialize the output variables as outputs
 
-   //OUTPUTs
+    //OUTPUTs
 
     pinMode(arref, OUTPUT);
     pinMode(ncBrake, OUTPUT);
@@ -1858,9 +1858,9 @@ void setup()
     lcd.print("Wait..........");
 
     //freenacele();
-    brakenacele();
+    //brakenacele();
     ////braking = 1;
-    freerotor();
+    //freerotor();
 
     // ATUALIZA O CÓDIGO VIA WIFI
     updateWifiCode();
@@ -1883,10 +1883,10 @@ void setup()
      // lcd.setCursor(0, 0);
      // lcd.print(analogRead(GPIOpotnacele));
      // delay(500);
-    //}*/
+    //}
 
-    settozero();
-  
+    //settozero();
+  */
 
   // CRIANDO O WEBSERVER
   //-----------------------
@@ -3163,42 +3163,31 @@ digitalWrite(arref, HIGH);
 
 //function to brake the nacele rotation
 void brakenacele(){
-digitalWrite(ncBrake, LOW); 
-delay(100); 
-digitalWrite(ncBrake, HIGH);
-delay(100);
-digitalWrite(ncBrake, LOW); 
-delay(100); 
-digitalWrite(ncBrake, HIGH);
-delay(100);
-digitalWrite(ncBrake, LOW); 
-delay(100); 
-digitalWrite(ncBrake, HIGH);
-delay(100);
-digitalWrite(ncBrake, LOW); 
-delay(700); 
-digitalWrite(ncBrake, HIGH);
+pwmbrake=0;
+while(pwmbrake < 255){
+  pwmbrake++; 
+  ledcWrite(2, pwmbrake);
+  delay(12);
+}
+
+delay(500);
+pwmbrake=0;
+ledcWrite(2, 0);
+
 ncState = "locked";
-a10 = 1; 
+a10 = 1;  
 }
 
 //function to free the nacele rotation
 void freenacele(){
-digitalWrite(ncFree, LOW); 
-delay(100); 
-digitalWrite(ncFree, HIGH);
+ledcWrite(3, 255);
+delay(500);
+ledcWrite(3, 0);
 delay(100);
-digitalWrite(ncFree, LOW); 
-delay(100); 
-digitalWrite(ncFree, HIGH);
-delay(100);
-digitalWrite(ncFree, LOW); 
-delay(100); 
-digitalWrite(ncFree, HIGH);
-delay(100);
-digitalWrite(ncFree, LOW); 
-delay(300); 
-digitalWrite(ncFree, HIGH);
+ledcWrite(3, 255);
+delay(200);
+ledcWrite(3, 0);
+
 ncState = "liberate"; 
 a10 = 0;
 }
@@ -3207,21 +3196,21 @@ a10 = 0;
 void brakerotor(){
 
 
-if((millis() - tempo3) >= (800/(pwmbrake+1)) & pwmbrake < 255){
-  pwmbrake++; 
-  tempo3 = millis();
-  rtState = "locking";
-}
-
-if(pwmbrake == 255 & (millis()-tempo3) >= 200){
-  ledcWrite(2, 0);
-  braking=0;
-  brake=1;
-  rtState = "locked";
-  pwmbrake=0;
-  a1=0;
-}
-   ledcWrite(2, pwmbrake);
+//if((millis() - tempo3) >= (800/(pwmbrake+1)) & pwmbrake < 255){
+//  pwmbrake++; 
+//  tempo3 = millis();
+//  rtState = "locking";
+//}
+//
+//if(pwmbrake == 255 & (millis()-tempo3) >= 200){
+//  ledcWrite(2, 0);
+//  braking=0;
+//  brake=1;
+//  rtState = "locked";
+//  pwmbrake=0;
+//  a1=0;
+//}
+//   ledcWrite(2, pwmbrake);
 
  
 }
@@ -3229,16 +3218,16 @@ if(pwmbrake == 255 & (millis()-tempo3) >= 200){
 //function to free the rotor rotation
 void freerotor(){
 
-ledcWrite(3, 255);
-delay(500);
-ledcWrite(3, 0);
-delay(100);
-ledcWrite(3, 255);
-delay(200);
-ledcWrite(3, 0);
-a1=1;
-brake=0;  
-rtState = "liberate"; 
+//ledcWrite(3, 255);
+//delay(500);
+//ledcWrite(3, 0);
+//delay(100);
+//ledcWrite(3, 255);
+//delay(200);
+//ledcWrite(3, 0);
+//a1=1;
+//brake=0;  
+//rtState = "liberate"; 
 
 
 }
@@ -3600,7 +3589,156 @@ pass=0;
 
 
 
+ void Display(){
+    //print 1 no display
+if((millis()-time2) >= 1500 & b1 == 1){
+  auxiliar();
+lcd.clear();
+lcd.setCursor(0, 0);
+lcd.print("LAZZARUS_Eolica V2.1");
 
+  if(medpotpitch != pitchReq){
+lcd.setCursor(0, 1);
+lcd.print("Pitch At:");
+lcd.print(medpotpitch);
+lcd.print(" ");
+
+lcd.setCursor(11, 1);
+lcd.print("Req:");
+lcd.setCursor(11, 1);
+lcd.print("      ");
+lcd.print(pitchReq);
+    
+  }else{//se o pitch nao está sendo usado printa os dados de temperatura
+lcd.setCursor(0, 1);
+lcd.print("TGer:");
+lcd.print(tempgerador,1);
+lcd.print("C");
+
+lcd.setCursor(11, 1);
+lcd.print("Ts:");
+lcd.print(tempsistema,2);
+lcd.print("C");
+}
+
+lcd.setCursor(11, 2);
+lcd.print("ts:");
+lcd.print(tSis,1);
+lcd.print("V");
+
+lcd.setCursor(0, 2);
+lcd.print("tPot:");
+lcd.print(tPot,1);
+lcd.print("V");  
+
+
+lcd.setCursor(0, 3);
+lcd.print("U");
+lcd.setCursor(1, 3);
+lcd.print(windspeed,1);
+lcd.setCursor(6, 3);
+lcd.print("D");
+lcd.setCursor(7, 3);
+lcd.print(winddir,1);
+lcd.setCursor(13, 3);
+lcd.print("MF");
+lcd.setCursor(15, 3);
+lcd.print(winddirMF,1);
+
+b1 = 0; 
+time2 = millis(); 
+}
+
+    //print 2 no display
+if((millis()-time2) >= 1500 & b1 == 0){
+lcd.clear();
+lcd.setCursor(0, 0);
+lcd.print("LAZZARUS_Eolica V2.1");
+
+lcd.setCursor(0, 1);
+lcd.print("Status: ");
+lcd.print(Status); 
+
+lcd.setCursor(0, 2);
+lcd.print("Pitch At:");
+lcd.print(medpotpitch);
+lcd.print(" ");
+
+lcd.setCursor(12, 2);
+lcd.print("Req:");
+lcd.setCursor(16, 2);
+lcd.print(pitchReq);
+
+lcd.setCursor(0, 3);
+lcd.print("RPM");
+lcd.setCursor(3, 3);
+lcd.print(rpm);
+
+lcd.setCursor(7, 3);
+lcd.print("At");
+lcd.setCursor(9, 3);
+lcd.print(medpot);
+
+lcd.setCursor(14, 3);
+lcd.print("Dr");
+lcd.setCursor(16, 3);
+lcd.print(deg);
+
+  time2 = millis();
+  b1=1;  
+}
+    
+  }
+
+
+//informações ao sistema auxiliar
+
+void auxiliar(){
+  
+  //delay(1000); //Tempo entre as transmissões
+  if(winddirMF >=0 & winddir <= 360){
+  t = (winddirMF*-10)-1000; //envio de winddir2
+  Serial.print("informação da direção a ser mandada para o nó: ");
+  Serial.println(t);
+  sendinfo();
+  
+  }
+
+  if(windspeed >= 0 & windspeed < 70){
+  t = windspeed*10; //envio da velocidade do vento
+  sendinfo();
+  }
+
+  if(velposimf > 0 & velposimf < 70){
+  t = (velposimf*10) + 800; //envio da temperatura 
+  sendinfo();
+  }
+  
+  if(operationMode >= 0 & operationMode < 8){ 
+  t = operationMode + 2000; //envio da pressão
+  sendinfo();
+  }
+
+  if(alarme == 0 | alarme == 1){
+  t = alarme + 2500; //envio da humidade do ar
+  sendinfo();
+  }
+
+    if(rpm >= 0 & rpm <= 4000){
+  t = rpm + 3000; //envio da humidade do ar
+  sendinfo();
+  }
+
+    if(medpot >= 0 & medpot <= 360){
+  t = medpot + 7000; //envio da humidade do ar
+  sendinfo();
+  }
+
+    if(medpotpitch >= 0 & medpotpitch <= 60){
+  t = medpotpitch + 8000; //envio da humidade do ar
+  sendinfo();
+  }
+  
 
 
 //aqui serão printadas no dataloguer todas as decisões tomadas pelo sistema
