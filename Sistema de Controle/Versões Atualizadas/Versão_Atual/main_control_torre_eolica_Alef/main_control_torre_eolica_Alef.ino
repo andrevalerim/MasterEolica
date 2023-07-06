@@ -61,11 +61,11 @@ int tempo6 = 0; //armazena o tempo entre cada novo envio de informações
 // const char *ssid = "PlusEnergy_Control - Host1";
 // const char *password = "diaqueohomemfoiemdirecaoalua16";
 
- const char *ssid = "Plus Energy ";
- const char *password = "plusedemais2022";
+// const char *ssid = "Plus Energy";
+// const char *password = "plusedemais2022";
 
-//const char *ssid = "Master_Eolica - Host2";
-//const char *password = "diaqueohomemfoiemdirecaoalua16";
+ const char *ssid = "Master_Eolica - Host2";
+ const char *password = "diaqueohomemfoiemdirecaoalua16";
 
 //===============================================
 // PINOS
@@ -456,16 +456,11 @@ String readPosiPitch()
   return String(medpotpitch);
 }
 
-Posição da nacele
+// Posição da nacele
 String readPosiNacele()
 {
   return String(medpot);
 }
-// TESTE
-// String readPosiNacele()
-// {
-//   return String(10);
-// }
 
 // Velocidade do vento
 String readWindspeedAt()
@@ -500,11 +495,6 @@ String readDirecaoNacele()
 {
   return String(pontoNacele);
 }
-// TESTE
-// String readDirecaoNacele()
-// {
-//   return String("Norte");
-// }
 
 //Status do freio nacele
 String readFreioNacele() {
@@ -1787,7 +1777,7 @@ void setup()
   //-----------------------
   // Initialize the output variables as outputs
 
-  /*  //OUTPUTs
+    //OUTPUTs
 
     pinMode(arref, OUTPUT);
     pinMode(ncBrake, OUTPUT);
@@ -1887,16 +1877,16 @@ void setup()
     delay(1000);
 
 
-    //fins de teste para leitura do potenciøemtro de ref da nacele e pitch
+    /*fins de teste para leitura do potenciøemtro de ref da nacele e pitch
     //while(1){
      // lcd.clear();
      // lcd.setCursor(0, 0);
      // lcd.print(analogRead(GPIOpotnacele));
      // delay(500);
-    //}*/
+    //}
 
     //settozero();
-
+  */
 
   // CRIANDO O WEBSERVER
   //-----------------------
@@ -1905,18 +1895,12 @@ void setup()
 
   // Connect to Wi-Fi
   WiFi.begin(ssid, password);
-  // pocahontas = 0;
+  pocahontas = 0;
   while (WiFi.status() != WL_CONNECTED)
   {
     delay(1000);
     Serial.println("Connecting to WiFi..");
-
-    // pocahontas++;
-
-    // if(pocahontas == 10){
-    //   reiniciaESP();
-    // }
-  }
+    }
 
   // Print ESP32 Local IP Address
   Serial.println(WiFi.localIP());
@@ -2239,7 +2223,7 @@ void setup()
 
 void loop()
 {
-  /*  // INICIA AS FUNÇÕES
+    // INICIA AS FUNÇÕES
     //------------------------
     readsensors();
 
@@ -2257,22 +2241,22 @@ void loop()
       ledcWrite(5, 0);
 
     }
-  */
-
-  // if(pitchReq >= 0 & pitchReq <= 45 & seg2 == 0){
   
-  //   //ajuste na posição da nacele
-  //   ajustepitch();
-  //   ledcWrite(1, 0);
-  //   ledcWrite(0, 0);
+
+  if(pitchReq >= 0 & pitchReq <= 45 & seg2 == 0){
+  
+    //ajuste na posição da nacele
+    ajustepitch();
+    ledcWrite(1, 0);
+    ledcWrite(0, 0);
 
 
-  // }
+  }
 
   
-    delay(11000);
-    randomizaOperacao();
-    delay(9000);
+//    delay(11000);
+//    randomizaOperacao();
+//    delay(9000);
 }
 
 //===============================================
@@ -2280,21 +2264,21 @@ void loop()
 //===============================================
 
 ////FUNÇÃO PARA TESTAR A AUTOMOÇÃO SERVER-PAGINA
-void randomizaOperacao() {
- randomico = 1 + ( rand() % 5 );
-
- if (randomico == 3) {
-   operationMode = 3;
- } else if (randomico == 4) {
-   operationMode = 4;
- } else if (randomico == 2) {
-   operationMode = 2;
- } else if (randomico == 1) {
-   operationMode = 1;
- } else if (randomico == 5) {
-   operationMode = 5;
- }
-}
+//void randomizaOperacao() {
+//  randomico = 1 + ( rand() % 5 );
+//
+//  if (randomico == 3) {
+//    operationMode = 3;
+//  } else if (randomico == 4) {
+//    operationMode = 4;
+//  } else if (randomico == 2) {
+//    operationMode = 2;
+//  } else if (randomico == 1) {
+//    operationMode = 1;
+//  } else if (randomico == 5) {
+//    operationMode = 5;
+//  }
+//}
 
 void reiniciaESP() {
   ESP.restart();
@@ -3597,159 +3581,6 @@ pass=0;
 }
 
 
-
-
- void Display(){
-    //print 1 no display
-if((millis()-time2) >= 1500 & b1 == 1){
-  auxiliar();
-lcd.clear();
-lcd.setCursor(0, 0);
-lcd.print("LAZZARUS_Eolica V2.1");
-
-  if(medpotpitch != pitchReq){
-lcd.setCursor(0, 1);
-lcd.print("Pitch At:");
-lcd.print(medpotpitch);
-lcd.print(" ");
-
-lcd.setCursor(11, 1);
-lcd.print("Req:");
-lcd.setCursor(11, 1);
-lcd.print("      ");
-lcd.print(pitchReq);
-    
-  }else{//se o pitch nao está sendo usado printa os dados de temperatura
-lcd.setCursor(0, 1);
-lcd.print("TGer:");
-lcd.print(tempgerador,1);
-lcd.print("C");
-
-lcd.setCursor(11, 1);
-lcd.print("Ts:");
-lcd.print(tempsistema,2);
-lcd.print("C");
-}
-
-lcd.setCursor(11, 2);
-lcd.print("ts:");
-lcd.print(tSis,1);
-lcd.print("V");
-
-lcd.setCursor(0, 2);
-lcd.print("tPot:");
-lcd.print(tPot,1);
-lcd.print("V");  
-
-
-lcd.setCursor(0, 3);
-lcd.print("U");
-lcd.setCursor(1, 3);
-lcd.print(windspeed,1);
-lcd.setCursor(6, 3);
-lcd.print("D");
-lcd.setCursor(7, 3);
-lcd.print(winddir,1);
-lcd.setCursor(13, 3);
-lcd.print("MF");
-lcd.setCursor(15, 3);
-lcd.print(winddirMF,1);
-
-b1 = 0; 
-time2 = millis(); 
-}
-
-    //print 2 no display
-if((millis()-time2) >= 1500 & b1 == 0){
-lcd.clear();
-lcd.setCursor(0, 0);
-lcd.print("LAZZARUS_Eolica V2.1");
-
-lcd.setCursor(0, 1);
-lcd.print("Status: ");
-lcd.print(Status); 
-
-lcd.setCursor(0, 2);
-lcd.print("Pitch At:");
-lcd.print(medpotpitch);
-lcd.print(" ");
-
-lcd.setCursor(12, 2);
-lcd.print("Req:");
-lcd.setCursor(16, 2);
-lcd.print(pitchReq);
-
-lcd.setCursor(0, 3);
-lcd.print("RPM");
-lcd.setCursor(3, 3);
-lcd.print(rpm);
-
-lcd.setCursor(7, 3);
-lcd.print("At");
-lcd.setCursor(9, 3);
-lcd.print(medpot);
-
-lcd.setCursor(14, 3);
-lcd.print("Dr");
-lcd.setCursor(16, 3);
-lcd.print(deg);
-
-  time2 = millis();
-  b1=1;  
-}
-    
-  }
-
-
-//informações ao sistema auxiliar
-
-void auxiliar(){
-  
-  //delay(1000); //Tempo entre as transmissões
-  if(winddirMF >=0 & winddir <= 360){
-  t = (winddirMF*-10)-1000; //envio de winddir2
-  Serial.print("informação da direção a ser mandada para o nó: ");
-  Serial.println(t);
-  sendinfo();
-  
-  }
-
-  if(windspeed >= 0 & windspeed < 70){
-  t = windspeed*10; //envio da velocidade do vento
-  sendinfo();
-  }
-
-  if(velposimf > 0 & velposimf < 70){
-  t = (velposimf*10) + 800; //envio da temperatura 
-  sendinfo();
-  }
-  
-  if(operationMode >= 0 & operationMode < 8){ 
-  t = operationMode + 2000; //envio da pressão
-  sendinfo();
-  }
-
-  if(alarme == 0 | alarme == 1){
-  t = alarme + 2500; //envio da humidade do ar
-  sendinfo();
-  }
-
-    if(rpm >= 0 & rpm <= 4000){
-  t = rpm + 3000; //envio da humidade do ar
-  sendinfo();
-  }
-
-    if(medpot >= 0 & medpot <= 360){
-  t = medpot + 7000; //envio da humidade do ar
-  sendinfo();
-  }
-
-    if(medpotpitch >= 0 & medpotpitch <= 60){
-  t = medpotpitch + 8000; //envio da humidade do ar
-  sendinfo();
-  }
-}
-  
 
 
 //aqui serão printadas no dataloguer todas as decisões tomadas pelo sistema
