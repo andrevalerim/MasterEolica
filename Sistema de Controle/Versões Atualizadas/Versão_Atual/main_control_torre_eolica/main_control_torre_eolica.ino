@@ -61,11 +61,11 @@ int tempo6 = 0; //armazena o tempo entre cada novo envio de informações
 // const char *ssid = "PlusEnergy_Control - Host1";
 // const char *password = "diaqueohomemfoiemdirecaoalua16";
 
-// const char *ssid = "Plus Energy";
-// const char *password = "plusedemais2022";
+ const char *ssid = "Plus Energy ";
+ const char *password = "plusedemais2022";
 
- const char *ssid = "Master_Eolica - Host2";
- const char *password = "diaqueohomemfoiemdirecaoalua16";
+//const char *ssid = "Master_Eolica - Host2";
+//const char *password = "diaqueohomemfoiemdirecaoalua16";
 
 //===============================================
 // PINOS
@@ -456,11 +456,16 @@ String readPosiPitch()
   return String(medpotpitch);
 }
 
-// Posição da nacele
+Posição da nacele
 String readPosiNacele()
 {
   return String(medpot);
 }
+// TESTE
+// String readPosiNacele()
+// {
+//   return String(10);
+// }
 
 // Velocidade do vento
 String readWindspeedAt()
@@ -495,6 +500,11 @@ String readDirecaoNacele()
 {
   return String(pontoNacele);
 }
+// TESTE
+// String readDirecaoNacele()
+// {
+//   return String("Norte");
+// }
 
 //Status do freio nacele
 String readFreioNacele() {
@@ -1877,7 +1887,7 @@ void setup()
     delay(1000);
 
 
-    ///*fins de teste para leitura do potenciøemtro de ref da nacele e pitch
+    //fins de teste para leitura do potenciøemtro de ref da nacele e pitch
     //while(1){
      // lcd.clear();
      // lcd.setCursor(0, 0);
@@ -1886,7 +1896,7 @@ void setup()
     //}*/
 
     //settozero();
-  */
+
 
   // CRIANDO O WEBSERVER
   //-----------------------
@@ -1895,17 +1905,17 @@ void setup()
 
   // Connect to Wi-Fi
   WiFi.begin(ssid, password);
-  pocahontas = 0;
+  // pocahontas = 0;
   while (WiFi.status() != WL_CONNECTED)
   {
     delay(1000);
     Serial.println("Connecting to WiFi..");
 
-    pocahontas++;
+    // pocahontas++;
 
-    if(pocahontas == 10){
-      reiniciaESP();
-    }
+    // if(pocahontas == 10){
+    //   reiniciaESP();
+    // }
   }
 
   // Print ESP32 Local IP Address
@@ -2249,20 +2259,20 @@ void loop()
     }
   */
 
-  if(pitchReq >= 0 & pitchReq <= 45 & seg2 == 0){
+  // if(pitchReq >= 0 & pitchReq <= 45 & seg2 == 0){
   
-    //ajuste na posição da nacele
-    ajustepitch();
-    ledcWrite(1, 0);
-    ledcWrite(0, 0);
+  //   //ajuste na posição da nacele
+  //   ajustepitch();
+  //   ledcWrite(1, 0);
+  //   ledcWrite(0, 0);
 
 
-  }
+  // }
 
   
-//    delay(11000);
-//    randomizaOperacao();
-//    delay(9000);
+    delay(11000);
+    randomizaOperacao();
+    delay(9000);
 }
 
 //===============================================
@@ -2270,21 +2280,21 @@ void loop()
 //===============================================
 
 ////FUNÇÃO PARA TESTAR A AUTOMOÇÃO SERVER-PAGINA
-//void randomizaOperacao() {
-//  randomico = 1 + ( rand() % 5 );
-//
-//  if (randomico == 3) {
-//    operationMode = 3;
-//  } else if (randomico == 4) {
-//    operationMode = 4;
-//  } else if (randomico == 2) {
-//    operationMode = 2;
-//  } else if (randomico == 1) {
-//    operationMode = 1;
-//  } else if (randomico == 5) {
-//    operationMode = 5;
-//  }
-//}
+void randomizaOperacao() {
+ randomico = 1 + ( rand() % 5 );
+
+ if (randomico == 3) {
+   operationMode = 3;
+ } else if (randomico == 4) {
+   operationMode = 4;
+ } else if (randomico == 2) {
+   operationMode = 2;
+ } else if (randomico == 1) {
+   operationMode = 1;
+ } else if (randomico == 5) {
+   operationMode = 5;
+ }
+}
 
 void reiniciaESP() {
   ESP.restart();
@@ -3738,6 +3748,7 @@ void auxiliar(){
   t = medpotpitch + 8000; //envio da humidade do ar
   sendinfo();
   }
+}
   
 
 
