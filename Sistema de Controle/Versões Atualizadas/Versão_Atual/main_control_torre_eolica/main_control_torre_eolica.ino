@@ -55,14 +55,14 @@ int tempo6 = 0; //armazena o tempo entre cada novo envio de informações
 // const char *ssid = "Quantum Team";
 // const char *password = "amotolia_oleosa";
 
-// const char *ssid = "Andre Wifi";
-// const char *password = "gostoso1";
+const char *ssid = "Andre's Galaxy WiFi";
+const char *password = "andre1gostoso";
 
 // const char *ssid = "PlusEnergy_Control - Host1";
 // const char *password = "diaqueohomemfoiemdirecaoalua16";
 
- const char *ssid = "Plus Energy ";
- const char *password = "plusedemais2022";
+//const char *ssid = "Plus Energy ";
+// const char *password = "plusedemais2022";
 
 //const char *ssid = "Master_Eolica - Host2";
 //const char *password = "diaqueohomemfoiemdirecaoalua16";
@@ -456,7 +456,7 @@ String readPosiPitch()
   return String(medpotpitch);
 }
 
-Posição da nacele
+//Posição da nacele
 String readPosiNacele()
 {
   return String(medpot);
